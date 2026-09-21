@@ -101,7 +101,7 @@
 							<button id="modal-exit" class="visible">X</button>
 							<p>CHANGE NICKNAME</p>
 						</div>
-						<span><h3>Pick a display name for this room</h3><input id="modal-text-input" type="text" placeholder="Nickname"><button id="change-nick">CHANGE</button><button id="resetchatcolor">RESET</button></span>
+						<span><div id="broadcast-wrapper"><select id="videoSelect"><option>NONE</option></select><select id="audioSelect"><option>NONE</option></select><p>FRAMERATE:</p><div class="framerate-wrapper"><input class="framerate-options" type="radio" id="framerate1" name="framerate" value="15"><label for="framerate1">15</label><input class="framerate-options" type="radio" id="framerate2" name="framerate" value="30" checked><label for="framerate2">30</label><input class="framerate-options" type="radio" id="framerate3" name="framerate" value="60"><label for="framerate3">60</label></div><p>RESOLUTION:</p><div class="resolution-wrapper"><input type="radio" id="res1" name="res"><label for="res1">352x240 (240p)</label><br><input type="radio" id="res2" name="res" checked><label for="res2">858x480 (480p)</label><br><input type="radio" id="res3" name="res"><label for="res3">1280x720 (720p)</label></div><p>ENHANCEMENTS:</p><div class="enhancement-wrapper"><input type="checkbox" id="echo" checked><label for="echo">Echo Cancellation</label><br><input type="checkbox" id="agc" checked><label for="agc">Auto Gain Control</label></div><button id="broadcastsettings">SAVE</button></div></span>
 					</div>
 				</div>
 			</sc-modal>

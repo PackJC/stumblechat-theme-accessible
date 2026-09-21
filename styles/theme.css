@@ -371,11 +371,13 @@ html.sca11y #media-stop:hover {
   background: var(--sc-danger-hover) !important;
 }
 
-/* Talk / open-mic -> btn-success */
+/* Start broadcast / talk / open-mic -> btn-success */
+html.sca11y #media-broadcast,
 html.sca11y #media-ptt,
 html.sca11y #media-openmic {
   background: var(--sc-success) !important;
 }
+html.sca11y #media-broadcast:hover,
 html.sca11y #media-ptt:hover,
 html.sca11y #media-openmic:hover {
   background: var(--sc-success-hover) !important;
@@ -1536,6 +1538,79 @@ html.sca11y .close {
 html.sca11y .close:hover {
   background: var(--sc-danger) !important;
   color: #ffffff !important;
+}
+
+/* Media options / settings modals: option groups are hard-coded black */
+html.sca11y .framerate-wrapper,
+html.sca11y .resolution-wrapper,
+html.sca11y .enhancement-wrapper,
+html.sca11y #broadcast-wrapper,
+html.sca11y .youtubelist,
+html.sca11y .banlist,
+html.sca11y #moderator-userlist-wrapper {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 500 !important;
+  line-height: 1.6 !important;
+  padding: 0.5rem 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+}
+html.sca11y #broadcast-wrapper {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+html.sca11y .framerate-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  align-items: center;
+}
+html.sca11y .framerate-wrapper label,
+html.sca11y .resolution-wrapper label,
+html.sca11y .enhancement-wrapper label,
+html.sca11y #modal label,
+html.sca11y #modal p,
+html.sca11y #broadcast-wrapper > p {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+}
+html.sca11y #broadcast-wrapper > p,
+html.sca11y #modal > span > p {
+  font-weight: 600 !important;
+  margin: 0.5rem 0 0.25rem 0 !important;
+  text-align: left !important;
+}
+html.sca11y .resolution-wrapper label,
+html.sca11y .enhancement-wrapper label {
+  display: inline-block;
+  margin: 0.15rem 0;
+}
+html.sca11y #modal input[type="radio"],
+html.sca11y #modal input[type="checkbox"] {
+  margin: 0 0.4rem 0 0 !important;
+  vertical-align: middle;
+}
+html.sca11y #modal select,
+html.sca11y #modal input[type="text"],
+html.sca11y #modal input[type="password"],
+html.sca11y #modal input[type="number"],
+html.sca11y #modal input[type="url"] {
+  margin: 0.25rem 0 0.75rem 0 !important;
+}
+html.sca11y #modal button,
+html.sca11y #modal input[type="submit"] {
+  margin-top: 0.25rem;
+}
+html.sca11y #previewvideo {
+  border-radius: var(--sc-radius);
+  background: var(--sc-bg-dark);
+  margin-bottom: 0.5rem;
 }
 
 /* Toggle switch (.switch/.slider): off = grey (4.7:1), on = green */

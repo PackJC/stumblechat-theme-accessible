@@ -1,0 +1,1564 @@
+/* ==========================================================================
+   StumbleChat Accessible — Bootstrap-style light theme + WCAG 2.1 AA fixes
+   Every rule is scoped to html.sca11y so the popup toggle can switch it off.
+   !important is required: the site's own stylesheets and inline styles
+   (user themes) would otherwise win the cascade.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens (all text/background pairs verified >= 4.5:1, see tools/)
+   -------------------------------------------------------------------------- */
+html.sca11y {
+  --sc-scale: 1;
+  --sc-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+
+  --sc-bg: #ffffff;
+  --sc-bg-subtle: #f8f9fa;
+  --sc-bg-muted: #e9ecef;
+  --sc-bg-dark: #212529;
+  --sc-border: #dee2e6;
+  --sc-border-strong: #868e96;
+
+  --sc-text: #212529;
+  --sc-text-muted: #495057;
+  --sc-text-on-dark: #ffffff;
+
+  --sc-link: #0b5ed7;
+  --sc-link-hover: #0a3d91;
+  --sc-primary: #0b5ed7;
+  --sc-primary-hover: #0a58ca;
+  --sc-primary-subtle: #cfe2ff;
+  --sc-primary-subtle-hover: #e7f1ff;
+  --sc-success: #146c43;
+  --sc-success-hover: #0f5132;
+  --sc-danger: #b02a37;
+  --sc-danger-hover: #842029;
+  --sc-secondary: #5c636a;
+  --sc-secondary-hover: #495057;
+  --sc-warning: #ffc107;
+  --sc-warning-text: #212529;
+
+  --sc-alert-warn-bg: #fff3cd;
+  --sc-alert-warn-text: #664d03;
+  --sc-alert-warn-border: #ffe69c;
+  --sc-alert-danger-bg: #f8d7da;
+  --sc-alert-danger-text: #58151c;
+  --sc-alert-danger-border: #f1aeb5;
+
+  --sc-focus: #0b5ed7;
+  --sc-focus-ring: rgba(13, 110, 253, 0.3);
+  --sc-radius: 0.375rem;
+  --sc-radius-lg: 0.5rem;
+  --sc-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --sc-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+
+  --sc-fs-xs: calc(12px * var(--sc-scale));
+  --sc-fs-sm: calc(13px * var(--sc-scale));
+  --sc-fs: calc(14px * var(--sc-scale));
+  --sc-fs-md: calc(16px * var(--sc-scale));
+  --sc-fs-lg: calc(20px * var(--sc-scale));
+  --sc-fs-xl: calc(24px * var(--sc-scale));
+}
+
+/* High-contrast variant (AAA-leaning: 7:1+ text, stronger borders) */
+html.sca11y.sca11y-hc {
+  --sc-text: #000000;
+  --sc-text-muted: #343a40;
+  --sc-link: #052c65;
+  --sc-link-hover: #000000;
+  --sc-primary: #052c65;
+  --sc-primary-hover: #031b3f;
+  --sc-success: #0f5132;
+  --sc-danger: #842029;
+  --sc-secondary: #343a40;
+  --sc-border: #adb5bd;
+  --sc-border-strong: #6c757d;
+  --sc-focus: #000000;
+  --sc-focus-ring: rgba(0, 0, 0, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   2. Global base
+   -------------------------------------------------------------------------- */
+html.sca11y,
+html.sca11y body {
+  background: var(--sc-bg) !important;
+  background-image: none !important;
+  color: var(--sc-text) !important;
+  font-family: var(--sc-font) !important;
+  line-height: 1.5 !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The site fades panel backgrounds over 1s; a half-faded background would
+   fool the contrast fixer, so panels switch colour instantly. */
+html.sca11y body,
+html.sca11y #chat-wrapper,
+html.sca11y #userlist,
+html.sca11y sc-videolist,
+html.sca11y .bar,
+html.sca11y .nav-link {
+  transition: none !important;
+}
+
+/* The site outlines all text with black text-shadows; remove everywhere. */
+html.sca11y *,
+html.sca11y *::before,
+html.sca11y *::after {
+  text-shadow: none !important;
+}
+
+html.sca11y a {
+  color: var(--sc-link) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 0.15em;
+}
+html.sca11y a:hover {
+  color: var(--sc-link-hover) !important;
+}
+
+/* WCAG 2.4.7 Focus Visible — the site sets outline:none on inputs and
+   everything inside #userlist; restore a strong, consistent ring. */
+html.sca11y *:focus {
+  outline: none;
+}
+html.sca11y *:focus-visible,
+html.sca11y #userlist *:focus-visible,
+html.sca11y input:focus-visible,
+html.sca11y textarea:focus-visible,
+html.sca11y select:focus-visible,
+html.sca11y button:focus-visible,
+html.sca11y a:focus-visible,
+html.sca11y [tabindex]:focus-visible {
+  outline: 3px solid var(--sc-focus) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px var(--sc-bg) !important;
+  z-index: 5;
+}
+html.sca11y input:focus-visible,
+html.sca11y textarea:focus-visible,
+html.sca11y select:focus-visible {
+  outline-offset: 0 !important;
+  border-color: var(--sc-focus) !important;
+  box-shadow: 0 0 0 0.25rem var(--sc-focus-ring) !important;
+}
+
+/* Let people select and copy text; the site disables it almost everywhere. */
+html.sca11y .message,
+html.sca11y .content,
+html.sca11y .description,
+html.sca11y .description h4,
+html.sca11y .wrapper,
+html.sca11y .wrapper > p,
+html.sca11y .wrapper li,
+html.sca11y .topic,
+html.sca11y .login-form,
+html.sca11y #modal,
+html.sca11y .footer {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+/* Skip link injected by content.js (WCAG 2.4.1 Bypass Blocks) */
+html.sca11y .sca11y-skip {
+  position: fixed !important;
+  top: -100px;
+  left: 8px;
+  z-index: 10000;
+  padding: 0.5rem 1rem;
+  background: var(--sc-primary) !important;
+  color: #fff !important;
+  border-radius: var(--sc-radius);
+  font: 600 var(--sc-fs) var(--sc-font);
+  text-decoration: none !important;
+  transition: top 0.1s;
+}
+html.sca11y .sca11y-skip:focus,
+html.sca11y .sca11y-skip:focus-visible {
+  top: 8px;
+  outline: 3px solid var(--sc-text) !important;
+}
+html.sca11y .sca11y-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Scrollbars: light track, visible thumb (3:1 against track) */
+html.sca11y ::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+html.sca11y ::-webkit-scrollbar-track {
+  background: var(--sc-bg-subtle) !important;
+  box-shadow: none !important;
+}
+html.sca11y ::-webkit-scrollbar-thumb {
+  background: #6c757d !important;
+  border-radius: 5px;
+  border: 2px solid var(--sc-bg-subtle);
+}
+html.sca11y ::-webkit-scrollbar-thumb:hover {
+  background: var(--sc-secondary-hover) !important;
+}
+/* The site hides the chat/userlist scrollbars completely; show them. */
+html.sca11y .on-white-scroll {
+  scrollbar-width: thin !important;
+  -ms-overflow-style: auto !important;
+}
+html.sca11y .on-white-scroll::-webkit-scrollbar {
+  display: block !important;
+}
+
+/* WCAG 2.3.3 / 2.2.2 — respect reduced motion (OS setting or popup toggle) */
+@media (prefers-reduced-motion: reduce) {
+  html.sca11y *,
+  html.sca11y *::before,
+  html.sca11y *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001s !important;
+    scroll-behavior: auto !important;
+  }
+  html.sca11y .heart {
+    display: none !important;
+  }
+}
+html.sca11y.sca11y-reduce-motion *,
+html.sca11y.sca11y-reduce-motion *::before,
+html.sca11y.sca11y-reduce-motion *::after {
+  animation-duration: 0.001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001s !important;
+  scroll-behavior: auto !important;
+}
+html.sca11y.sca11y-reduce-motion .heart {
+  display: none !important;
+}
+
+/* Icons: the site's SVG glyphs are white. Invert them so they read on white. */
+html.sca11y img[src*="/svg/"],
+html.sca11y .detailbadge,
+html.sca11y .status > .audio_badge,
+html.sca11y .status > .video_badge,
+html.sca11y .status > .audio_badge_hide,
+html.sca11y .status > .video_badge_hide {
+  filter: invert(1) !important;
+}
+html.sca11y .detailbadge {
+  color: #ffffff !important; /* inverted -> black */
+}
+
+/* --------------------------------------------------------------------------
+   3. Shared: buttons and form controls (Bootstrap .btn / .form-control)
+   -------------------------------------------------------------------------- */
+html.sca11y .button,
+html.sca11y .login-form input[type="submit"],
+html.sca11y .wrapper input[type="submit"],
+html.sca11y .file > label,
+html.sca11y .restart,
+html.sca11y .reset,
+html.sca11y .upgradebtn,
+html.sca11y .promotebtn,
+html.sca11y #scrollup,
+html.sca11y #back,
+html.sca11y #videoSelect,
+html.sca11y #audioSelect,
+html.sca11y #broadcastsettings,
+html.sca11y #interact,
+html.sca11y #search,
+html.sca11y #roompassword,
+html.sca11y #broadcastpassword,
+html.sca11y #resetbackground,
+html.sca11y #setbackground,
+html.sca11y #resetchatcolor,
+html.sca11y #setchatcolor,
+html.sca11y #searchtwitch,
+html.sca11y #searchdailymotion,
+html.sca11y #changeroomtopic,
+html.sca11y #changeroompassword,
+html.sca11y #changebroadcastpassword,
+html.sca11y #searchsoundcloud,
+html.sca11y #searchworldstarhiphop,
+html.sca11y #stoptwitch,
+html.sca11y #stopsoundcloud,
+html.sca11y #change-nick,
+html.sca11y #join,
+html.sca11y .giftuser > button,
+html.sca11y #media-broadcast,
+html.sca11y #media-stop,
+html.sca11y #media-ptt,
+html.sca11y #media-screen,
+html.sca11y #media-settings,
+html.sca11y #media-loading {
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+  color: #ffffff !important;
+  background: var(--sc-primary) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--sc-radius) !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  padding: 0.375rem 0.75rem !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  transition: background-color 0.15s ease-in-out;
+}
+html.sca11y .button:hover,
+html.sca11y .login-form input[type="submit"]:hover,
+html.sca11y .wrapper input[type="submit"]:hover,
+html.sca11y .file > label:hover,
+html.sca11y #scrollup:hover,
+html.sca11y #back:hover,
+html.sca11y #broadcastsettings:hover,
+html.sca11y #interact:hover,
+html.sca11y #search:hover,
+html.sca11y #roompassword:hover,
+html.sca11y #broadcastpassword:hover,
+html.sca11y #setbackground:hover,
+html.sca11y #setchatcolor:hover,
+html.sca11y #searchtwitch:hover,
+html.sca11y #searchdailymotion:hover,
+html.sca11y #changeroomtopic:hover,
+html.sca11y #changeroompassword:hover,
+html.sca11y #changebroadcastpassword:hover,
+html.sca11y #searchsoundcloud:hover,
+html.sca11y #searchworldstarhiphop:hover,
+html.sca11y #change-nick:hover,
+html.sca11y #join:hover,
+html.sca11y .giftuser > button:hover,
+html.sca11y #media-broadcast:hover {
+  background: var(--sc-primary-hover) !important;
+  color: #ffffff !important;
+}
+html.sca11y .button:active,
+html.sca11y .login-form input[type="submit"]:active,
+html.sca11y .wrapper input[type="submit"]:active,
+html.sca11y #interact:active,
+html.sca11y #join:active {
+  background: var(--sc-link-hover) !important;
+}
+
+/* Destructive actions -> btn-danger */
+html.sca11y .restart,
+html.sca11y .reset,
+html.sca11y .upgradebtn,
+html.sca11y .promotebtn,
+html.sca11y #stoptwitch,
+html.sca11y #stopsoundcloud,
+html.sca11y #resetchatcolor,
+html.sca11y #resetbackground,
+html.sca11y #media-stop {
+  background: var(--sc-danger) !important;
+}
+html.sca11y .restart:hover,
+html.sca11y .reset:hover,
+html.sca11y .upgradebtn:hover,
+html.sca11y .promotebtn:hover,
+html.sca11y #stoptwitch:hover,
+html.sca11y #stopsoundcloud:hover,
+html.sca11y #resetchatcolor:hover,
+html.sca11y #resetbackground:hover,
+html.sca11y #media-stop:hover {
+  background: var(--sc-danger-hover) !important;
+}
+
+/* Talk / open-mic -> btn-success */
+html.sca11y #media-ptt,
+html.sca11y #media-openmic {
+  background: var(--sc-success) !important;
+}
+html.sca11y #media-ptt:hover,
+html.sca11y #media-openmic:hover {
+  background: var(--sc-success-hover) !important;
+}
+
+/* Neutral -> btn-secondary */
+html.sca11y #back,
+html.sca11y #media-screen,
+html.sca11y #media-settings,
+html.sca11y #media-loading,
+html.sca11y #scrollup {
+  background: var(--sc-secondary) !important;
+}
+html.sca11y #back:hover,
+html.sca11y #media-screen:hover,
+html.sca11y #media-settings:hover,
+html.sca11y #scrollup:hover {
+  background: var(--sc-secondary-hover) !important;
+}
+
+/* Disabled buttons: keep >= 3:1 non-text contrast, show state (WCAG 1.4.11) */
+html.sca11y button:disabled,
+html.sca11y input[type="submit"]:disabled {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-text-muted) !important;
+  border-color: var(--sc-border-strong) !important;
+  cursor: not-allowed !important;
+}
+
+/* Text inputs / selects / textareas -> .form-control */
+html.sca11y .login-form input[type="password"],
+html.sca11y .login-form input[type="text"],
+html.sca11y .login-form input[type="email"],
+html.sca11y .login-form input[type="date"],
+html.sca11y .wrapper input[type="password"],
+html.sca11y .wrapper input[type="text"],
+html.sca11y .wrapper input[type="email"],
+html.sca11y .wrapper input[type="date"],
+html.sca11y .wrapper select,
+html.sca11y .paymentoption > select,
+html.sca11y #room-password,
+html.sca11y #broadcast-password,
+html.sca11y #room-topic,
+html.sca11y #modal-text-input,
+html.sca11y #modal-color-input,
+html.sca11y #modal-bgcolor-input,
+html.sca11y #videoSelect,
+html.sca11y #audioSelect,
+html.sca11y form ul {
+  display: block;
+  width: 100% !important;
+  padding: 0.375rem 0.75rem !important;
+  margin: 0.25rem 0 1rem 0 !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--sc-text) !important;
+  background: var(--sc-bg) !important;
+  border: 1px solid var(--sc-border-strong) !important;
+  border-radius: var(--sc-radius) !important;
+  box-shadow: none !important;
+  text-align: left !important;
+  height: auto !important;
+  min-height: 2.5rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+html.sca11y #videoSelect,
+html.sca11y #audioSelect {
+  cursor: pointer !important;
+}
+html.sca11y input::placeholder,
+html.sca11y textarea::placeholder,
+html.sca11y .login-form input::placeholder,
+html.sca11y .wrapper input::placeholder {
+  color: #6c757d !important; /* 4.68:1 on white */
+  opacity: 1 !important;
+}
+/* The site paints every empty required field red and every valid one neon
+   green on page load. Colour alone must not carry meaning (WCAG 1.4.1), and
+   the glow is distracting; neutralise it and rely on the browser's messages. */
+html.sca11y .login-form input:valid,
+html.sca11y .login-form input:invalid,
+html.sca11y .wrapper input:valid,
+html.sca11y .wrapper input:invalid {
+  border: 1px solid var(--sc-border-strong) !important;
+  box-shadow: none !important;
+}
+html.sca11y .wrapper input[type="text"]:disabled,
+html.sca11y .wrapper input[type="email"]:disabled {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-text-muted) !important;
+  -webkit-text-fill-color: var(--sc-text-muted) !important;
+}
+html.sca11y form label,
+html.sca11y .login-form label,
+html.sca11y .checkbox label {
+  color: var(--sc-text) !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+}
+html.sca11y .checkbox input[type="checkbox"],
+html.sca11y input[type="checkbox"],
+html.sca11y input[type="radio"] {
+  accent-color: var(--sc-primary) !important;
+  width: 1.15em !important;
+  height: 1.15em !important;
+  min-width: 18px;
+  min-height: 18px;
+  cursor: pointer;
+}
+html.sca11y .rememberwrap {
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  line-height: 1.5 !important;
+}
+html.sca11y .rememberwrap > a {
+  position: static !important;
+  float: none !important;
+  margin-left: auto;
+}
+html.sca11y form ul li {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs) !important;
+}
+html.sca11y form ul li:hover {
+  background: var(--sc-primary-subtle-hover) !important;
+}
+html.sca11y .bitrateslider,
+html.sca11y input[type="range"] {
+  accent-color: var(--sc-primary) !important;
+  background: transparent !important;
+  opacity: 1 !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Directory / login / register / settings pages (home.css)
+   -------------------------------------------------------------------------- */
+
+/* Navbar -> .navbar.navbar-light.bg-white */
+html.sca11y .navbar {
+  height: 56px !important;
+  background: var(--sc-bg) !important;
+  background-image: none !important;
+  border-bottom: 1px solid var(--sc-border) !important;
+  box-shadow: var(--sc-shadow) !important;
+  user-select: auto !important;
+}
+html.sca11y .navbar-brand {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-lg) !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  padding: 0.25rem 0;
+}
+html.sca11y .navbar-brand:hover,
+html.sca11y .navbar-brand:focus {
+  color: var(--sc-primary) !important;
+}
+html.sca11y .navbar-nav .nav-link,
+html.sca11y .nav-link {
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 500 !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: var(--sc-radius) !important;
+  text-decoration: none !important;
+  background: transparent !important;
+}
+html.sca11y .nav-link:hover,
+html.sca11y .dropdown-item:hover,
+html.sca11y .text-reset:hover,
+html.sca11y #accbtn:hover {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-text) !important;
+}
+html.sca11y .nav-link:active,
+html.sca11y #accbtn:active {
+  background: var(--sc-primary-subtle) !important;
+}
+html.sca11y .dropdown-menu,
+html.sca11y .dropdown-menu[data-popup] {
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  box-shadow: var(--sc-shadow-lg) !important;
+  font-size: var(--sc-fs) !important;
+}
+html.sca11y .dropdown-item {
+  color: var(--sc-text) !important;
+}
+html.sca11y .notification-bubble {
+  background: var(--sc-danger) !important;
+  color: #fff !important;
+  font-size: 0.75rem !important;
+}
+html.sca11y .fa-shopping-cart:before,
+html.sca11y .fa-bars:before,
+html.sca11y .fa-bell:before {
+  color: var(--sc-text) !important;
+}
+
+/* Page frame */
+html.sca11y .content {
+  height: calc(100% - 100px) !important;
+  bottom: 44px !important;
+  background: var(--sc-bg) !important;
+  padding: 16px !important;
+}
+html.sca11y .footer {
+  height: 44px !important;
+  padding: 4px 8px;
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text-muted) !important;
+  border-top: 1px solid var(--sc-border) !important;
+  font-size: var(--sc-fs-xs) !important;
+  line-height: 1.4 !important;
+  user-select: auto !important;
+}
+html.sca11y .footer-link,
+html.sca11y .footer-link:active,
+html.sca11y .footer-link:visited {
+  color: var(--sc-link) !important;
+  text-decoration: underline !important;
+}
+
+/* Panels -> .card */
+html.sca11y .wrapper,
+html.sca11y .login-form,
+html.sca11y .returnlink,
+html.sca11y .pagination-wrapper,
+html.sca11y .bubble {
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius-lg) !important;
+  box-shadow: var(--sc-shadow) !important;
+  user-select: auto !important;
+}
+html.sca11y .wrapper > h1,
+html.sca11y .wrapper h1,
+html.sca11y .login-form h1 {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-xl) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em;
+  padding: 0.5rem 0 !important;
+}
+html.sca11y .wrapper > p,
+html.sca11y .wrapper > li,
+html.sca11y .wrapper li,
+html.sca11y .normal,
+html.sca11y .faqtext,
+html.sca11y .contacttext,
+html.sca11y .paymentoption,
+html.sca11y .paymentoptionalt {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-md) !important;
+  line-height: 1.6 !important;
+}
+html.sca11y .paymentoption,
+html.sca11y .paymentoptionalt {
+  font-size: var(--sc-fs-lg) !important;
+}
+html.sca11y .yellow {
+  color: #664d03 !important; /* readable replacement for pure yellow */
+  font-weight: 700 !important;
+}
+html.sca11y .modlist {
+  color: var(--sc-text) !important;
+}
+html.sca11y .termstext > a,
+html.sca11y .contacttext > a,
+html.sca11y .link,
+html.sca11y .link2,
+html.sca11y .returnlink > a {
+  color: var(--sc-link) !important;
+  text-decoration: underline !important;
+}
+html.sca11y .termstext > a:hover,
+html.sca11y .contacttext > a:hover,
+html.sca11y .link:hover,
+html.sca11y .link2:hover,
+html.sca11y .returnlink > a:hover {
+  color: var(--sc-link-hover) !important;
+}
+html.sca11y .bubble2 {
+  background: var(--sc-primary-subtle) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-primary) !important;
+  border-radius: var(--sc-radius) !important;
+  font-weight: 600 !important;
+}
+
+/* Login form: centred card */
+html.sca11y .login-form {
+  max-width: 520px !important;
+  padding: 1.5rem !important;
+}
+html.sca11y .login-form form label {
+  display: block;
+  margin-top: 0.5rem;
+}
+html.sca11y .field-inline-block label {
+  display: block;
+}
+html.sca11y .login-form form > br {
+  display: none;
+}
+
+/* Error banner -> .alert.alert-danger (WCAG 4.1.3 handled by content.js) */
+html.sca11y #error {
+  background: var(--sc-alert-danger-bg) !important;
+  border: 1px solid var(--sc-alert-danger-border) !important;
+  border-radius: 0 0 var(--sc-radius) var(--sc-radius);
+  top: 56px !important;
+  max-width: 720px;
+  left: 50% !important;
+  transform: translateX(-50%);
+}
+html.sca11y #error h1 {
+  color: var(--sc-alert-danger-text) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 600 !important;
+  padding: 0.75rem 1rem !important;
+}
+
+/* Room cards on the directory */
+html.sca11y .publicrooms .bubble,
+html.sca11y .centered.bubble {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+html.sca11y .room-wrap {
+  background: var(--sc-bg) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius-lg) !important;
+  box-shadow: var(--sc-shadow) !important;
+  overflow: hidden;
+  transition: box-shadow 0.15s ease-in-out;
+}
+html.sca11y .room-wrap:hover,
+html.sca11y .room-wrap:focus-within {
+  box-shadow: var(--sc-shadow-lg) !important;
+  border-color: var(--sc-border-strong) !important;
+}
+html.sca11y .roomname {
+  background: var(--sc-bg-subtle) !important;
+  background-image: none !important;
+  border-bottom: 1px solid var(--sc-border) !important;
+  border-radius: 0 !important;
+  user-select: auto !important;
+}
+html.sca11y .roomname h3 {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 600 !important;
+  line-height: 28px !important;
+}
+html.sca11y .details {
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-sm) !important;
+  font-weight: 600 !important;
+  align-items: center;
+  padding: 0 6px;
+  width: 100% !important;
+}
+html.sca11y .thumbnail {
+  background: var(--sc-bg-muted) !important;
+  border-top: 1px solid var(--sc-border) !important;
+  border-bottom: 1px solid var(--sc-border) !important;
+  position: relative;
+}
+html.sca11y .no-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 500;
+}
+html.sca11y .no-avatar::after {
+  content: attr(alt);
+}
+html.sca11y .thumbnail a,
+html.sca11y .slideshow a {
+  text-decoration: none !important;
+}
+html.sca11y .description {
+  background: var(--sc-bg) !important;
+  border-radius: 0 !important;
+  text-align: left !important;
+  padding: 8px 10px !important;
+  user-select: auto !important;
+}
+html.sca11y .description h4 {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  overflow-y: auto !important;
+}
+html.sca11y .prev,
+html.sca11y .next {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  margin-top: -18px !important;
+  line-height: 36px !important;
+  text-align: center;
+  font-size: 18px !important;
+  color: #ffffff !important;
+  background: var(--sc-bg-dark) !important;
+  border-radius: 50% !important;
+  opacity: 0.85;
+  text-decoration: none !important;
+}
+html.sca11y .prev {
+  left: 6px !important;
+}
+html.sca11y .next {
+  right: 6px !important;
+}
+html.sca11y .prev:hover,
+html.sca11y .next:hover,
+html.sca11y .prev:focus-visible,
+html.sca11y .next:focus-visible {
+  background: var(--sc-primary) !important;
+  opacity: 1;
+}
+html.sca11y .slides > img:hover {
+  transform: none !important;
+}
+
+/* Pagination -> .pagination */
+html.sca11y .pagination-wrapper {
+  padding: 8px !important;
+  margin: 12px auto 0 auto !important;
+}
+html.sca11y .pagination div {
+  color: var(--sc-link) !important;
+  background: var(--sc-bg) !important;
+  border: 1px solid var(--sc-border) !important;
+  margin-left: -1px;
+  padding: 0.5rem 0.9rem !important;
+  min-width: 44px;
+  min-height: 44px;
+  text-align: center;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 500;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+html.sca11y .pagination div:first-child {
+  border-radius: var(--sc-radius) 0 0 var(--sc-radius);
+}
+html.sca11y .pagination div:last-child {
+  border-radius: 0 var(--sc-radius) var(--sc-radius) 0;
+}
+html.sca11y .pagination div:hover:not(.active) {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-link-hover) !important;
+}
+html.sca11y .pagination div.active {
+  background: var(--sc-primary) !important;
+  border-color: var(--sc-primary) !important;
+  color: #ffffff !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Tabs (settings / shop) */
+html.sca11y .tab {
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  border-bottom: 1px solid var(--sc-border) !important;
+  border-radius: 0 !important;
+}
+html.sca11y .tab button {
+  background: transparent !important;
+  color: var(--sc-link) !important;
+  font-size: var(--sc-fs-md) !important;
+  border: 1px solid transparent !important;
+  border-bottom: none !important;
+  border-radius: var(--sc-radius) var(--sc-radius) 0 0 !important;
+  margin-bottom: -1px;
+}
+html.sca11y .tab button:hover {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-link-hover) !important;
+}
+html.sca11y .tab button.active {
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  border-color: var(--sc-border) var(--sc-border) var(--sc-bg) !important;
+}
+html.sca11y .tabcontent {
+  color: var(--sc-text) !important;
+}
+
+/* Pricing / shop lists */
+html.sca11y .price {
+  border: 1px solid var(--sc-border) !important;
+  box-shadow: var(--sc-shadow) !important;
+  background: var(--sc-bg) !important;
+}
+html.sca11y .price li {
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  border-bottom: 1px solid var(--sc-border) !important;
+}
+html.sca11y .price .header {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+}
+html.sca11y .price .blue {
+  background: var(--sc-primary) !important;
+  color: #ffffff !important;
+}
+html.sca11y .fl-table thead th,
+html.sca11y .fl-table thead th:nth-child(odd) {
+  background: var(--sc-bg-dark) !important;
+  color: #ffffff !important;
+}
+html.sca11y .fl-table {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+}
+html.sca11y .table-wrapper:before {
+  color: var(--sc-text-muted) !important;
+}
+html.sca11y .title {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+}
+html.sca11y .center {
+  color: var(--sc-text) !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. Chat room (style.css)
+   -------------------------------------------------------------------------- */
+html.sca11y #room,
+html.sca11y #room-content {
+  background: var(--sc-bg) !important;
+}
+
+/* User list panel */
+html.sca11y #userlist {
+  background: var(--sc-bg) !important;
+  border-right: 1px solid var(--sc-border) !important;
+  padding: 8px !important;
+}
+html.sca11y sc-userlist h2,
+html.sca11y .room-name,
+html.sca11y .room-stats,
+html.sca11y #userlist > h2 {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  box-shadow: none !important;
+  height: auto !important;
+  min-height: 24px;
+  line-height: 22px !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs-sm) !important;
+  font-weight: 600 !important;
+  padding: 0 6px;
+}
+html.sca11y .room-name {
+  border-radius: var(--sc-radius) var(--sc-radius) 0 0 !important;
+}
+html.sca11y .room-stats {
+  border-top: none !important;
+  border-radius: 0 0 var(--sc-radius) var(--sc-radius) !important;
+}
+html.sca11y #userlist > h2 > img {
+  height: 12px !important;
+  margin-bottom: -1px !important;
+  margin-right: 4px;
+}
+html.sca11y #userlist > h2 > span {
+  font-size: var(--sc-fs-sm) !important;
+}
+html.sca11y .list {
+  margin-top: 8px !important;
+}
+html.sca11y .bar {
+  background: var(--sc-bg-subtle) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  height: auto !important;
+  min-height: 36px;
+  padding: 2px 3px;
+  margin-bottom: 4px !important;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+/* Flex row (site uses floats): avatar, names, then role/status — any badge
+   width fits in the 210px panel and the names column ellipsises instead. */
+html.sca11y .bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+html.sca11y .bar .bar-item {
+  float: none !important;
+  margin-right: 0 !important;
+}
+html.sca11y .bar > .bar-item:not(img):not(.no-image) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+html.sca11y .bar-item span {
+  width: auto !important;
+  max-width: 100%;
+}
+html.sca11y .user-status {
+  float: none !important;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+html.sca11y .bar:hover {
+  background: var(--sc-primary-subtle-hover) !important;
+  border-color: var(--sc-primary) !important;
+}
+html.sca11y .bar:active,
+html.sca11y .bar.selected,
+html.sca11y .selected {
+  background: var(--sc-primary-subtle) !important;
+  border-color: var(--sc-primary) !important;
+}
+html.sca11y .bar > img,
+html.sca11y .bar > .no-image {
+  border: 1px solid var(--sc-border) !important;
+  background: var(--sc-bg-muted);
+}
+html.sca11y .nickname,
+html.sca11y sc-userlist .nickname,
+html.sca11y .list-item > span > .nickname {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-sm) !important;
+  font-weight: 600 !important;
+  line-height: 16px !important;
+}
+html.sca11y .username {
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-xs) !important;
+}
+html.sca11y .bar .role,
+html.sca11y .bar .status {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-xs) !important;
+  font-weight: 600 !important;
+  height: auto !important;
+  line-height: 14px;
+  padding: 1px 5px !important;
+  overflow: visible !important;
+}
+html.sca11y .bar .role:empty {
+  display: none;
+}
+html.sca11y .bar .status {
+  padding: 0 !important;
+}
+/* Role badges: each pair >= 4.5:1 */
+html.sca11y .gold {
+  background: var(--sc-warning) !important;
+  color: var(--sc-warning-text) !important;
+}
+html.sca11y .blue {
+  background: var(--sc-primary) !important;
+  color: #ffffff !important;
+}
+html.sca11y .green {
+  background: var(--sc-success) !important;
+  color: #ffffff !important;
+}
+html.sca11y .red {
+  background: var(--sc-danger) !important;
+  color: #ffffff !important;
+}
+html.sca11y .black {
+  background: var(--sc-bg-dark) !important;
+  color: #ffffff !important;
+}
+html.sca11y .list-item > span:hover {
+  background: var(--sc-primary-subtle-hover) !important;
+}
+html.sca11y .list-item > span > span {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-text) !important;
+}
+html.sca11y .list-item > span:hover > span {
+  box-shadow: none !important;
+}
+html.sca11y .privateMessages > div > span {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-sm) !important;
+}
+html.sca11y .closepm:hover {
+  background: var(--sc-danger) !important;
+  color: #ffffff !important;
+}
+html.sca11y .unreadpm,
+html.sca11y .unreadmessage {
+  background: var(--sc-primary) !important;
+  color: #ffffff !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs-sm) !important;
+  font-weight: 700 !important;
+}
+html.sca11y .unreadmessage {
+  border-radius: var(--sc-radius);
+  height: auto !important;
+  padding: 3px 10px !important;
+  margin: 0 2px;
+}
+
+/* Panel resize handles: keep dark so the white arrow glyph stays visible */
+html.sca11y sc-userlist .resizeuser,
+html.sca11y sc-chat .resizechat,
+html.sca11y sc-videolist .resizetopic {
+  background-color: var(--sc-secondary) !important;
+}
+html.sca11y sc-userlist .resizeuser:hover,
+html.sca11y sc-chat .resizechat:hover,
+html.sca11y sc-videolist .resizetopic:hover {
+  background-color: var(--sc-primary) !important;
+}
+
+/* Room header + option dropdowns */
+html.sca11y .header {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border-bottom: 1px solid var(--sc-border) !important;
+  font-family: var(--sc-font) !important;
+}
+html.sca11y .topic {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-xs) !important;
+  font-weight: 500;
+}
+html.sca11y .directory {
+  color: var(--sc-text) !important;
+  border-radius: var(--sc-radius);
+}
+html.sca11y .directory:hover,
+html.sca11y .directory:focus-visible {
+  background: var(--sc-bg-muted) !important;
+}
+html.sca11y .dropbtn {
+  color: var(--sc-text) !important;
+  border-radius: var(--sc-radius) !important;
+}
+html.sca11y .user-options-dropdown:hover .dropbtn,
+html.sca11y .user-options-dropdown:focus-within .dropbtn {
+  background: var(--sc-bg-muted) !important;
+}
+/* Keyboard users can open the hover-only menus (WCAG 2.1.1) */
+html.sca11y .user-options-dropdown:focus-within .dropdown-content {
+  display: block !important;
+}
+html.sca11y .user-options-dropdown.hidden:focus-within .dropdown-content {
+  display: none !important;
+}
+html.sca11y .dropdown-content {
+  background: var(--sc-bg) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  box-shadow: var(--sc-shadow-lg) !important;
+  padding: 6px 0 !important;
+  min-width: 180px !important;
+  top: 24px !important;
+}
+html.sca11y .dropdown-content a {
+  background: transparent !important;
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+  padding: 6px 14px !important;
+  text-decoration: none !important;
+  text-align: left !important;
+}
+html.sca11y .dropdown-content a:hover,
+html.sca11y .dropdown-content a:focus-visible {
+  background: var(--sc-primary) !important;
+  color: #ffffff !important;
+}
+html.sca11y .dropdown-content a:active {
+  background: var(--sc-primary-hover) !important;
+}
+html.sca11y #buygames {
+  color: var(--sc-success) !important;
+  font-weight: 600;
+}
+html.sca11y .menu-strike {
+  border-color: var(--sc-border) !important;
+}
+html.sca11y .volumebar,
+html.sca11y .volumebarwrap {
+  color: var(--sc-text) !important;
+}
+
+/* Video area: tiles stay dark (video content), surround is light */
+html.sca11y #videos-content,
+html.sca11y #videos {
+  background: var(--sc-bg) !important;
+}
+html.sca11y .video > div {
+  background-color: var(--sc-bg-dark) !important;
+  border: 1px solid var(--sc-border) !important;
+}
+html.sca11y .video > div > .nickname {
+  color: #ffffff !important;
+  background: rgba(33, 37, 41, 0.85) !important;
+  padding: 1px 8px;
+  height: auto !important;
+  line-height: 1.4 !important;
+  width: max-content;
+  max-width: 90%;
+  margin: 0 auto;
+  border-radius: var(--sc-radius);
+}
+html.sca11y #youtube-control,
+html.sca11y #soundcloud-control,
+html.sca11y #worldstarhiphop-control,
+html.sca11y #dailymotion-control,
+html.sca11y #twitch-control {
+  background: var(--sc-bg-dark) !important;
+}
+
+/* Chat panel */
+html.sca11y #chat-wrapper {
+  background: var(--sc-bg) !important;
+  border-left: 1px solid var(--sc-border) !important;
+}
+html.sca11y #chat {
+  padding: 0 6px !important;
+}
+html.sca11y #chat-content {
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs) !important;
+}
+html.sca11y #chat-content > .message {
+  background: transparent !important;
+  opacity: 1 !important;
+  margin-bottom: 6px !important;
+  border-radius: var(--sc-radius) !important;
+}
+html.sca11y #chat-content > .message.common {
+  padding: 2px 4px 0 46px !important;
+}
+html.sca11y #chat-content > .message.noavatar {
+  padding: 2px 4px 0 4px !important;
+}
+html.sca11y #chat-content > div.message.common > .avatar > img {
+  border: 1px solid var(--sc-border) !important;
+  background: var(--sc-bg-muted) !important;
+}
+html.sca11y #chat-content > .message > .content {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  /* content.js sets --sca11y-accent from the user's chosen message colour */
+  border-left: 4px solid var(--sca11y-accent, var(--sc-border)) !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 6px 10px !important;
+  font-size: var(--sc-fs) !important;
+  line-height: 1.45 !important;
+  margin-bottom: 2px !important;
+}
+html.sca11y #chat-content > .message > .nickname {
+  color: var(--sc-text) !important; /* content.js picks black/white on custom bg */
+  font-size: var(--sc-fs-sm) !important;
+  font-weight: 700 !important;
+  border: none !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 0 6px !important;
+  height: auto !important;
+  line-height: 1.6 !important;
+  cursor: default;
+}
+html.sca11y .message,
+html.sca11y .message.common,
+html.sca11y #chat-content .message.common {
+  color: var(--sc-text) !important; /* overridden per-message by content.js */
+  font-size: var(--sc-fs) !important;
+}
+html.sca11y #chat-content > .message.system {
+  background: var(--sc-alert-warn-bg) !important;
+  color: var(--sc-alert-warn-text) !important;
+  border: 1px solid var(--sc-alert-warn-border) !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 6px 10px !important;
+  font-size: var(--sc-fs-sm) !important;
+}
+html.sca11y #chat-content > .message.gift {
+  background: var(--sc-primary-subtle) !important;
+  color: var(--sc-text) !important;
+  border-radius: var(--sc-radius) !important;
+}
+html.sca11y #chat-content > .message > .content:hover > .timestamp,
+html.sca11y #chat-content > .system:hover > .timestamp,
+html.sca11y #chat-content > .message > .timestamp {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-xs) !important;
+  font-weight: 500 !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 0 6px !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+}
+html.sca11y .warning-label {
+  background: var(--sc-danger) !important;
+  color: #ffffff !important;
+  height: auto !important;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+/* Message box -> .form-control */
+html.sca11y #input > textarea {
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border-strong) !important;
+  border-radius: var(--sc-radius) !important;
+  box-shadow: none !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs) !important;
+  line-height: 1.4 !important;
+  padding: 8px 12px !important;
+  margin: 0 2px !important;
+  width: calc(100% - 4px) !important;
+  height: 64px !important;
+}
+html.sca11y #input > textarea:disabled {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-text-muted) !important;
+  cursor: not-allowed;
+}
+
+/* Taskbar buttons: square off so they sit flush */
+html.sca11y sc-taskbar {
+  background: var(--sc-bg-subtle) !important;
+  border-top: 1px solid var(--sc-border) !important;
+  gap: 2px;
+  padding: 2px;
+  box-sizing: border-box;
+}
+html.sca11y #media-broadcast,
+html.sca11y #media-stop,
+html.sca11y #media-ptt,
+html.sca11y #media-screen,
+html.sca11y #media-settings,
+html.sca11y #media-loading {
+  height: 31px !important;
+  padding: 0 0.75rem !important;
+  font-size: var(--sc-fs-sm) !important;
+}
+html.sca11y #media-broadcast,
+html.sca11y #media-ptt,
+html.sca11y #media-loading {
+  flex: 1 1 auto;
+}
+html.sca11y #media-screen,
+html.sca11y #media-settings {
+  flex: 0 0 auto;
+  width: 44px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+html.sca11y #media-screen span,
+html.sca11y #media-settings span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+html.sca11y #media-screen img {
+  width: 20px !important;
+  height: 20px !important;
+}
+html.sca11y #media-screen.hidden,
+html.sca11y #media-settings.hidden,
+html.sca11y #media-broadcast.hidden,
+html.sca11y #media-stop.hidden,
+html.sca11y #media-ptt.hidden,
+html.sca11y #media-loading.hidden {
+  display: none !important;
+}
+html.sca11y #media-openmic:not(.hidden) {
+  border-radius: var(--sc-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+}
+html.sca11y #media-openmic > input {
+  accent-color: #ffffff !important;
+}
+html.sca11y #media-loading {
+  background: var(--sc-bg-muted) !important;
+}
+html.sca11y .dot-floating,
+html.sca11y .dot-floating::before,
+html.sca11y .dot-floating::after {
+  background-color: var(--sc-primary) !important;
+  color: var(--sc-primary) !important;
+}
+html.sca11y .stage {
+  color: var(--sc-text) !important;
+}
+
+/* Modal -> .modal */
+html.sca11y #modal-back {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+html.sca11y #modal {
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  border-radius: var(--sc-radius-lg) !important;
+  box-shadow: var(--sc-shadow-lg) !important;
+  font-family: var(--sc-font) !important;
+  overflow: hidden;
+}
+html.sca11y #modal > #title,
+html.sca11y #modal h1,
+html.sca11y #title > p {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border-bottom: 1px solid var(--sc-border) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  line-height: 1.5 !important;
+  padding: 0.75rem 2.5rem 0.75rem 1rem !important;
+  margin: 0 !important;
+}
+html.sca11y #title > p {
+  border-bottom: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+html.sca11y #modal > span,
+html.sca11y #modal > span h3 {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  padding: 0.75rem 1rem;
+  line-height: 1.5;
+}
+html.sca11y #modal > span {
+  max-height: 60vh !important;
+}
+html.sca11y #modal-exit {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 700 !important;
+  width: 32px !important;
+  height: 32px !important;
+  margin: 4px 6px !important;
+  border-radius: var(--sc-radius) !important;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+html.sca11y #modal-exit:hover,
+html.sca11y #modal-exit:focus-visible {
+  color: #ffffff !important;
+  background: var(--sc-danger) !important;
+}
+html.sca11y span hr {
+  border: none !important;
+  border-top: 1px solid var(--sc-border) !important;
+  margin: 0.75rem 0;
+}
+html.sca11y .optionside {
+  color: var(--sc-text) !important;
+  line-height: 1.5 !important;
+}
+html.sca11y .close {
+  color: var(--sc-text) !important;
+  border-radius: var(--sc-radius);
+}
+html.sca11y .close:hover {
+  background: var(--sc-danger) !important;
+  color: #ffffff !important;
+}
+
+/* Toggle switch (.switch/.slider): off = grey (4.7:1), on = green */
+html.sca11y .slider {
+  background-color: #6c757d !important;
+}
+html.sca11y .slider:before {
+  background-color: #ffffff !important;
+}
+html.sca11y input:checked + .slider {
+  background-color: var(--sc-success) !important;
+}
+html.sca11y input:focus-visible + .slider {
+  outline: 3px solid var(--sc-focus) !important;
+  outline-offset: 2px;
+}
+
+/* User / video context menus -> .dropdown-menu */
+html.sca11y .user-menu,
+html.sca11y .video-menu {
+  background: var(--sc-bg) !important;
+  background-image: none !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  box-shadow: var(--sc-shadow-lg) !important;
+  padding: 6px 0 !important;
+  width: 200px !important;
+  text-align: left !important;
+  font-family: var(--sc-font) !important;
+}
+html.sca11y .user-menu-name,
+html.sca11y .video-menu-name {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-sm) !important;
+  font-weight: 700 !important;
+  padding: 4px 14px 8px 14px;
+  border-bottom: 1px solid var(--sc-border);
+}
+html.sca11y .user-menu-item,
+html.sca11y .video-menu-item {
+  margin-bottom: 0 !important;
+}
+html.sca11y .user-menu-link,
+html.sca11y .video-menu-link {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 500 !important;
+  padding: 6px 14px !important;
+  text-decoration: none !important;
+}
+html.sca11y .user-menu-link:hover,
+html.sca11y .video-menu-link:hover,
+html.sca11y .user-menu-link:focus-visible,
+html.sca11y .video-menu-link:focus-visible {
+  background: var(--sc-primary) !important;
+  color: #ffffff !important;
+}
+html.sca11y .user-menu-link:active,
+html.sca11y .video-menu-link:active {
+  background: var(--sc-primary-hover) !important;
+}
+html.sca11y .modaction,
+html.sca11y .user-menu-item.modaction {
+  background: var(--sc-bg-subtle) !important;
+}
+html.sca11y .volumebar-video,
+html.sca11y .volumebarwrap-video {
+  color: var(--sc-text) !important;
+}
+
+/* Misc */
+html.sca11y .overlay {
+  background: rgba(11, 94, 215, 0.35) !important;
+}
+html.sca11y .youtube_title {
+  color: var(--sc-text) !important;
+}
+html.sca11y .lds-roller div:after {
+  background: var(--sc-primary) !important;
+}
+html.sca11y .large {
+  font-size: var(--sc-fs-md) !important;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+<title>DIRECTORY | StumbleChat.com (fixture)</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=0">
+<meta charset="UTF-8">
+<link type="text/css" rel="stylesheet" href="../styles/home.css">
+<script src="../scripts/masonry.js"></script>
+<script src="../../harness.js"></script>
+</head>
+<body>
+	<nav class="navbar">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/" title="StumbleChat Home">StumbleChat</a>
+		<ul class="navbar-nav">
+			<a class="nav-link" title="StumbleChat Home" href="/">Home</a>
+			<a class="nav-link" href="/login" title="StumbleChat Login">Login</a>
+			<a class="nav-link" href="/register" title="StumbleChat Register">Register</a>
+		</ul>
+	</div>
+</nav>
+
+	<div class="content">
+		<div class="wrapper">
+			<h1 class="centered">PROMOTED ROOMS</h1>
+		</div>
+		<div class="wrapper">
+			<h1>PUBLIC ROOMS</h1>
+		</div>
+		<div class="wrapper publicrooms"><div class="centered bubble"></div></div>
+	</div>
+	<div class="footer">
+	<p>
+		<a class="footer-link" href="/">Home</a> |
+		<a class="footer-link" href="contact">Support</a> |
+		<a class="footer-link" href="https://www.gofundme.com/f/stumblechat">Donate</a> |
+		<a class="footer-link" href="privacy">Privacy Policy</a> |
+		<a class="footer-link" href="terms">Terms Of Service</a>
+	</p>
+	<p>Copyright © 2026 StumbleChat. All Rights Reserved.</p>
+</div>
+<script>
+// Mirrors SpawnRoom() in the site's directory.js with sample data.
+const rooms = [
+  { name: "meatspace", broadcasting_count: 20, watching_count: 38, topic: "Sample room topic for testing", img: true },
+  { name: "nawnsense", broadcasting_count: 17, watching_count: 50, topic: "Why don't you just have a seat right there, just sit down.", img: true },
+  { name: "subbacultcha", broadcasting_count: 17, watching_count: 19, topic: "pillar of learnts", img: false },
+  { name: "shaybaby420", broadcasting_count: 12, watching_count: 16, topic: "♥♥♥ ALL OUTCASTS WELCOME, SPREAD LOVE NO HATE♥♥♥", img: true },
+  { name: "clubmosthated", broadcasting_count: 12, watching_count: 15, topic: "A much longer description that should scroll inside the card when it runs past the fixed height of the description block. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", img: false },
+  { name: "lalaland", broadcasting_count: 10, watching_count: 12, topic: "space case street racing: pick a car and number :)", img: true },
+];
+const placeholder = (name) => "data:image/svg+xml;utf8," + encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="246" height="184"><rect width="100%" height="100%" fill="#6c757d"/><text x="50%" y="50%" fill="#fff" font-family="sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle">${name}</text></svg>`);
+const grid = document.querySelector(".publicrooms>.centered");
+for (const room of rooms) {
+  grid.innerHTML += `<div class="grid-item"> <div class="room-wrap"> <div class="roomname"><h3>${room.name}</h3></div> <div class="details"> <div class="detailbadge broadcast">${room.broadcasting_count}</div> <div class="detailbadge users">${room.watching_count}</div> </div> <div class="thumbnail"> <div class="slideshow" slide-show="${room.name}"> <a href="/room/${room.name}" room-name="${room.name}">${room.img ? `<div class="slides fade" style="display: block;"><img src="${placeholder(room.name)}" alt="Room Broadcast" /></div>` : `<div class="slides" style="display: block;"><div alt="No Broadcasts" class="no-avatar"></div></div>`}</a> <a class="prev">&#10094;</a> <a class="next">&#10095;</a> </div> </div> <div class="description"><h4>${room.topic}</h4></div> </div> </div>`;
+}
+document.querySelector(".publicrooms").innerHTML += `<div class="pagination-wrapper"><div class="pagination"><div page-id="1" class="active">1</div><div page-id="2">2</div><div page-id="3">3</div><div page-id="2">&raquo;</div></div></div>`;
+new Masonry(".publicrooms>.centered", { itemSelector: ".grid-item", columnWidth: 250, gutter: 15, fitWidth: true });
+</script>
+</body></html>

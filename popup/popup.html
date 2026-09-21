@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StumbleChat Accessible</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <h1>StumbleChat Accessible</h1>
+
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="enabled">
+      <label class="form-check-label" for="enabled">Enable light theme</label>
+    </div>
+
+    <div class="field">
+      <label for="fontScale">Text size</label>
+      <select class="form-select" id="fontScale">
+        <option value="100">Default (100%)</option>
+        <option value="115">Large (115%)</option>
+        <option value="130">Larger (130%)</option>
+        <option value="150">Largest (150%)</option>
+      </select>
+    </div>
+
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="highContrast">
+      <label class="form-check-label" for="highContrast">High contrast (7:1 text)</label>
+    </div>
+
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="reduceMotion">
+      <label class="form-check-label" for="reduceMotion">Reduce motion</label>
+      <p class="hint">Animations are already reduced when your OS asks for it.</p>
+    </div>
+
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+    <p class="footer">Changes apply instantly to open stumblechat.com tabs.</p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="webcam_hide.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="28.09375"
+     inkscape:cx="3.0433815"
+     inkscape:cy="3.2925473"
+     inkscape:window-width="1284"
+     inkscape:window-height="1081"
+     inkscape:window-x="853"
+     inkscape:window-y="1243"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:none;stroke:#ffffff"
+       id="path3589"
+       cx="8"
+       cy="6.7897663"
+       rx="5.0367074"
+       ry="4.6362624" />
+    <ellipse
+       style="fill:none;stroke:#ffffff"
+       id="path3729"
+       cx="8"
+       cy="6.7897663"
+       rx="1.5839822"
+       ry="1.5483871" />
+    <rect
+       style="fill:none;stroke:#ffffff;stroke-width:0.936391"
+       id="rect3999"
+       width="11.454041"
+       height="1.985744"
+       x="2.1839917"
+       y="12.818028"
+       ry="0.36995766" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:14.3546px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:#ffffff;stroke-width:0.46687"
+       x="1.7612894"
+       y="14.013898"
+       id="text2040"
+       transform="scale(1.0977023,0.91099381)"><tspan
+         sodipodi:role="line"
+         id="tspan2038"
+         x="1.7612894"
+         y="14.013898"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14.3546px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#ff0000;stroke:#ffffff;stroke-width:0.46687">X</tspan></text>
+  </g>
+</svg>

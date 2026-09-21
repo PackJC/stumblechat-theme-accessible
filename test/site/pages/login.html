@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+<title>LOGIN | StumbleChat.com (fixture)</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=0">
+<meta charset="UTF-8">
+<link type="text/css" rel="stylesheet" href="../styles/home.css">
+<script src="../../harness.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/" title="StumbleChat Home">StumbleChat</a>
+		<ul class="navbar-nav">
+			<a class="nav-link" title="StumbleChat Home" href="/">Home</a>
+			<a class="nav-link" href="/login" title="StumbleChat Login">Login</a>
+			<a class="nav-link" href="/register" title="StumbleChat Register">Register</a>
+            </ul>
+	</div>
+</nav>
+
+    <div class="content">
+      <div id="error" style="display:block">
+        <h1>Invalid username or password (sample error banner)</h1>
+      </div>
+      <div class="login-form">
+        <h1>Login Form</h1>
+        <form name="Auth" onsubmit="return false">
+          <input type="text" name="username" id="username" placeholder="Username" required="" minlength="3" maxlength="24" pattern="^[a-zA-Z0-9]{3,24}$" title="Three or more characters" autocomplete="on">
+          <input type="password" name="password" id="password" placeholder="Password" required="" minlength="8" maxlength="128" title="Eight or more characters" autocomplete="on">
+          <div class="rememberwrap">
+            <input type="checkbox" id="rememberme"><label for="rememberme">Remember Me?</label>
+            <a class="link" href="/recovery"><b>Forgot your password?</b></a>
+          </div>
+            <br><br>
+          <input type="submit" id="login" value="Log In">
+          <br><br>
+          <label>New user? <a class="link2" style="text-decoration:none;" href="/register">Sign up now!</a></label>
+        </form>
+      </div>
+    </div>
+    <div class="footer">
+    <p>
+        <a class="footer-link" href="/">Home</a> |
+        <a class="footer-link" href="contact">Support</a> |
+	<a class="footer-link" href="https://www.gofundme.com/f/stumblechat">Donate</a> |
+        <a class="footer-link" href="privacy">Privacy Policy</a> |
+        <a class="footer-link" href="terms">Terms Of Service</a>
+    </p>
+    <p>Copyright © 2026 StumbleChat. All Rights Reserved.</p>
+</div>
+</body></html>

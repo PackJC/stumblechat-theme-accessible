@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+<title>MEATSPACE | StumbleChat.com (fixture)</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=0">
+<meta charset="UTF-8">
+<link type="text/css" rel="stylesheet" href="../styles/style.css">
+<script src="../../harness.js"></script>
+</head>
+<body style="background: rgb(17, 17, 17);">
+	<div id="room">
+		<div id="room-content">
+			<sc-gamelist></sc-gamelist>
+			<sc-userlist>
+				<div id="userlist" class="on-white-scroll" style="background: rgba(0, 0, 0, 0.58);">
+					<h2 class="room-name">MEATSPACE</h2>
+					<h2 class="hidden">Private Messages</h2>
+					<div class="privateMessages hidden"></div>
+					<h2 class="room-stats"><img alt="Online users" src="../styles/svg/users.svg"><span id="onlinecount">6</span></h2>
+					<ul class="list"></ul>
+				</div>
+				<div class="resizeuser"></div>
+			</sc-userlist>
+			<sc-videolist>
+				<div class="header">
+					<div>
+						<a class="directory" href="/"><img alt="Back to directory" src="../styles/svg/arrow.svg"></a>
+						<div id="user-options">
+							<div class="user-options-dropdown">
+								<button id="games" class="dropbtn"><img alt="Games" src="../styles/svg/games.svg"></button>
+								<div class="dropdown-content">
+									<a id="buygames" href="/shop?opt=roomgames" target="_blank">Purchase More</a>
+								</div>
+							</div>
+							<div class="user-options-dropdown">
+								<button id="media" class="dropbtn"><img alt="Media" src="../styles/svg/media.svg"></button>
+								<div class="dropdown-content">
+									<a id="twitch">Twitch</a>
+									<a id="youtube">YouTube</a>
+									<a id="soundcloud">SoundCloud</a>
+									<a id="dailymotion">DailyMotion</a>
+									<a id="worldstarhiphop">WSHH</a>
+								</div>
+							</div>
+							<div class="user-options-dropdown">
+								<button class="dropbtn"><img alt="Options" src="../styles/svg/options.svg"></button>
+								<div class="dropdown-content">
+									<div class="volumebar">
+										<div class="volumebarwrap">
+											<input type="range" min="0" max="100" value="100" class="RoomVolume">
+										</div>
+									</div>
+									<a id="room-settings">Room Settings</a>
+									<a id="theme-settings">Theme Settings</a>
+									<a id="client-settings">Client Settings</a>
+									<a id="user-settings" href="/settings" target="_blank">User Settings</a>
+									<a id="banlist">Ban List</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="header roomdesc">
+					<div class="topic">Welcome to the fixture room — this is the topic line</div>
+					<div class="resizetopic"></div>
+				</div>
+				<div id="videos-content">
+					<div id="videos" class="row">
+						<div id="embeddedvideos" class="videos-items hidden" style="padding: 0px;"></div>
+						<div id="regularvideos" class="videos-items" style="padding: 0px;"></div>
+					</div>
+				</div>
+				<sc-taskbar>
+					<button id="media-screen"><span><img alt="Broadcast screen" src="../styles/svg/screenshare.svg"></span></button>
+					<button id="media-broadcast"><span>START BROADCAST</span></button>
+					<button id="media-stop" class="hidden"><span>STOP</span></button>
+					<button id="media-ptt" class="hidden">TALK</button>
+					<div id="media-openmic" class="hidden"><input type="checkbox"></div>
+					<button id="media-settings"><span>▲</span></button>
+					<div id="media-loading" class="hidden"><div class="stage"><div class="dot-floating"></div></div></div>
+				</sc-taskbar>
+			</sc-videolist>
+			<sc-chat>
+				<div id="chat-wrapper" style="background: rgba(0, 0, 0, 0.58);">
+					<div id="chat-position">
+						<div href="#" id="back"></div>
+						<div id="chat">
+							<div id="chat-content"></div>
+						</div>
+						<div class="unreadmessage">3 unread messages</div>
+						<form id="input" onsubmit="return false">
+							<textarea id="textarea" class="on-white-scroll" form="input" placeholder="Type a message" maxlength="500"></textarea>
+						</form>
+					</div>
+				</div>
+				<div class="resizechat"></div>
+			</sc-chat>
+			<sc-modal>
+				<div id="modal-back" class="">
+					<div id="modal" style="margin-top: 200px;">
+						<div id="title">
+							<button id="modal-exit" class="visible">X</button>
+							<p>CHANGE NICKNAME</p>
+						</div>
+						<span><h3>Pick a display name for this room</h3><input id="modal-text-input" type="text" placeholder="Nickname"><button id="change-nick">CHANGE</button><button id="resetchatcolor">RESET</button></span>
+					</div>
+				</div>
+			</sc-modal>
+			<nav id="user-menu" class="user-menu">
+				<div class="user-menu-items">
+					<a class="user-menu-name">CoolCat</a>
+					<div class="user-menu-item"><a class="user-menu-link" data-action="nickname">Change Nickname</a></div>
+					<div class="user-menu-item"><a class="user-menu-link" data-action="profile">Profile</a></div>
+					<div class="user-menu-item"><a class="user-menu-link" data-action="pvtmsg">Private Message</a></div>
+					<div class="user-menu-item"><a class="user-menu-link" data-action="hide">Hide</a></div>
+					<div class="user-menu-item"><a class="user-menu-link modaction" data-action="kick">Kick</a></div>
+					<div class="user-menu-item"><a class="user-menu-link modaction" data-action="ban">Ban</a></div>
+					<div class="user-menu-item"><a class="user-menu-link" data-action="ignore">Ignore</a></div>
+					<div class="user-menu-item"><a class="user-menu-link" data-action="abuse">Abuse</a></div>
+				</div>
+			</nav>
+			<nav id="video-menu" class="video-menu">
+				<div class="video-menu-items">
+					<a class="video-menu-name"></a>
+					<div class="video-menu-item"><a class="video-menu-link" data-action="profile">Profile</a></div>
+					<div class="video-menu-item"><a class="video-menu-link" data-action="fullscreen">Fullscreen</a></div>
+				</div>
+			</nav>
+		</div>
+	</div>
+<script>
+// --- Mock data using the exact templates from the site's room.js ---
+const avatar = (c, t) => "data:image/svg+xml;utf8," + encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="${c}"/><text x="32" y="40" fill="#fff" font-family="sans-serif" font-size="26" text-anchor="middle">${t}</text></svg>`);
+
+const users = [
+  { handle: 1, nick: "CoolCat", username: "coolcat", role: " gold", type: "Owner", av: avatar("#6f42c1", "C"), video: true, audio: true },
+  { handle: 2, nick: "SuperSam", username: "supersam", role: " blue", type: "Super", av: avatar("#d63384", "S"), video: true, audio: false },
+  { handle: 3, nick: "ModMaya", username: "modmaya", role: " green", type: "Moderator", av: avatar("#fd7e14", "M"), video: false, audio: true },
+  { handle: 4, nick: "OpOllie", username: "opollie", role: " red", type: "Operator", av: null, video: false, audio: false },
+  { handle: 5, nick: "a_very_long_nickname_that_overflows", username: "guest", role: "", type: "", av: avatar("#20c997", "G"), video: false, audio: false, guest: true },
+  { handle: 6, nick: "Quiet", username: "quiet", role: " black", type: "Muted", av: avatar("#0dcaf0", "Q"), video: false, audio: false },
+];
+const list = document.querySelector("#userlist .list");
+for (const u of users) {
+  list.insertAdjacentHTML("beforeend", `<li class="bar" user-id="${u.handle}">${u.av ? `<img src="${u.av}" class="bar-item">` : `<div class="bar-item no-image"></div>`}<div class="bar-item"><span class="nickname">${u.nick}</span><span class="username">${u.guest ? `guest` : u.username}</span></div><div class="user-status"><div class="role${u.role}">${u.type}</div><div class="status"><div class="${u.video ? "video_badge" : "hidden"}"></div><div class="${u.audio ? "audio_badge" : "hidden"}"></div></div></div></li>`);
+}
+
+// createChatItem() from room.js
+function createChatItem(value) {
+  let element = document.createElement("div");
+  element.style.background = `${value.backgroundcolor}a3`;
+  element.setAttribute("class", "message " + ((value.nick !== undefined) ? (value.avatar == undefined) ? "noavatar" : "common" : "system"));
+  element.innerHTML = (value.nick !== undefined) ? ((value.avatar == undefined) ? `` : `<span class="avatar"><img src="${value.avatar}" alt="Avatar"></span>`) + `<span class="nickname" style = "background:${value.namebackgroundcolor}">${value.nick}</span><div class="content"><span class="hidden-selectable">[${value.time}]</span><span class="timestamp">${value.time}</span><span class="message common" style="color:${value.messagetextcolor}">${value.msg}</span>` : `<span class="hidden-selectable" > System Message\n[ ${value.time}]</span><span class="timestamp">${value.time}</span>${value.msg} `;
+  document.getElementById("chat-content").appendChild(element);
+}
+const msgs = [
+  { time: "12:00", msg: "Welcome to MEATSPACE. Be excellent to each other." },
+  { time: "12:01", nick: "CoolCat", avatar: users[0].av, namebackgroundcolor: "#004466", messagetextcolor: "#ffff00", backgroundcolor: "#ff8800", msg: "hey everyone — this used to be yellow text on black" },
+  { time: "12:02", nick: "SuperSam", avatar: users[1].av, namebackgroundcolor: "#ffb6c1", messagetextcolor: "#00ff00", backgroundcolor: "#00ff00", msg: "neon green text, pink nickname bubble" },
+  { time: "12:02", nick: "ModMaya", avatar: users[2].av, namebackgroundcolor: "#ffffff", messagetextcolor: "#ffffff", backgroundcolor: "#ffffff", msg: "white text and white nickname bubble — invisible on a white theme without the contrast fixer" },
+  { time: "12:03", nick: "OpOllie", namebackgroundcolor: "undefined", messagetextcolor: "undefined", backgroundcolor: "undefined", msg: "no custom colours at all (noavatar variant)" },
+  { time: "12:04", nick: "Quiet", avatar: users[5].av, namebackgroundcolor: "#123456", messagetextcolor: "#3355aa", backgroundcolor: "#123456", msg: "a mid-blue that is already readable and should be kept as-is. Long message to check wrapping: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
+  { time: "12:05", msg: "SuperSam has become a super." },
+];
+msgs.forEach(createChatItem);
+
+// A couple of broadcast tiles
+const vids = document.getElementById("regularvideos");
+for (const u of users.filter((u) => u.video)) {
+  vids.insertAdjacentHTML("beforeend", `<div class="video" user-id="${u.handle}"><div class="video-wrapper"><video></video><span class="nickname">${u.nick}</span></div></div>`);
+}
+
+// Query flags: ?modal shows the dialog, ?menu shows the user context menu
+const q = new URLSearchParams(location.search);
+if (q.has("modal")) document.getElementById("modal-back").classList.add("visible");
+if (q.has("menu")) { const m = document.getElementById("user-menu"); m.classList.add("user-menu-active"); m.style.left = "220px"; m.style.top = "80px"; }
+</script>
+</body></html>

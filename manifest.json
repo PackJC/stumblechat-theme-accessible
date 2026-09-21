@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "StumbleChat Accessible",
+  "version": "1.0.0",
+  "description": "Restyles stumblechat.com as a clean, Bootstrap-style light theme with WCAG 2.1 AA accessibility fixes.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "StumbleChat Accessible",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["*://stumblechat.com/*", "*://*.stumblechat.com/*"],
+      "css": ["styles/theme.css"],
+      "js": ["scripts/content.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ]
+}

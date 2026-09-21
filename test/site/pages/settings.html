@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en-us"><head>
+<title>SETTINGS | StumbleChat.com (fixture)</title>
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=0">
+<meta charset="UTF-8">
+<link type="text/css" rel="stylesheet" href="../styles/home.css">
+<script src="../../harness.js"></script>
+</head>
+<body>
+<nav class="navbar">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/" title="StumbleChat Home">StumbleChat</a>
+		<ul class="navbar-nav">
+			<a class="nav-link" title="StumbleChat Home" href="/">Home</a>
+		</ul>
+		<div class="navbar-container">
+			<div class="dropdown-toggle navbar-container" id="accbtn" title="Account Navigation">
+				<span style="color:#ffffff;">echo</span>
+				<span role="button" data-mdb-toggle="dropdown"></span>
+			</div>
+			<ul class="dropdown-menu dropdown-menu-end" data-popup="none" id="accdrop">
+				<li><a class="dropdown-item" title="My Room" href="/room/echo">My Room</a></li>
+				<li><a class="dropdown-item" title="My Rewards" href="/rewards">My Rewards</a></li>
+				<li><a class="dropdown-item" title="StumbleChat Shop" href="/shop">Shop</a></li>
+				<li><a class="dropdown-item" title="My Settings" href="/settings">Settings</a></li>
+				<li><a class="dropdown-item" title="Logout of StumbleChat" href="/logout">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="content"> <div id="error"> <h1></h1> </div> <div class="wrapper"> <div class="tab active"> <button class="tablinks active" data-tab="user">USER</button> <button class="tablinks" data-tab="chat">CHAT</button> <button class="tablinks" data-tab="avatar">AVATAR</button> <button class="tablinks" data-tab="room">ROOM</button> <button class="tablinks" data-tab="privacy">PRIVACY</button> </div> <div class="tabcontent settings" id="user" style="display: block;"> <h1>ACCOUNT DETAILS</h1> <form id="password" onsubmit="return false"> <label for="username">Username:</label> <input type="text" name="username" placeholder="echo" disabled=""> <label for="email">Email:</label> <input type="email" name="email" placeholder="someone@example.com" disabled=""> <br><br> <h1>CHANGE PASSWORD</h1> <label for="currentpassword">Current Password:</label> <input type="password" id="currentpassword" name="currentpassword" placeholder="Current Password" required="" minlength="8" maxlength="128" title="Eight or more characters" autocomplete="off"> <label for="newpassword">New Password:</label> <input type="password" id="newpassword" name="newpassword" placeholder="New Password" required="" minlength="8" title="Eight or more characters" autocomplete="off"> <label for="confirmpassword">Confirm Password:</label> <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" required="" minlength="8" maxlength="128" title="Eight or more characters" autocomplete="off"> <input type="submit" value="Update"> </form> <br><br> <form id="description" onsubmit="return false"> <h1>BIOGRAPHY</h1> <input type="text" name="description" value="I am ECHO, from Tennessee." placeholder="Add Description" autocomplete="off" minlength="0" maxlength="200" required=""> <input type="submit" value="Update"> </form> <br> <br> <br> <br> <br> <br> <br> <br> <br> <div class="wrapper"> <div class="deleteAccountWarning">To delete account, contact support currently.</div> </div> </div> <div class="tabcontent settings" id="chat" style="display: none;"> <h1>CHAT COLORS</h1> <div id="chat-wrapper"> <div id="chat-position"> <div id="chat"> <div id="chat-content"> <div class="message noavatar" style="background: rgb(89, 246, 86);"> <div class="nickname" style="background: rgb(241, 114, 55);">echo</div> <div class="contentchat"> <span id="html" class="message common" style="color: rgb(255, 255, 255);">This an example of how you'll appear in chat!</span> </div> </div> </div> </div> </div> </div> <form id="color" onsubmit="return false"> <label for="bgcolor">Background:</label><br> <input type="color" id="backgroundcolor" name="usercolors" style="float: right; width: 100%" value="#59F656"><br><br> <label for="namecolor">Name Background:</label><br> <input type="color" id="namebackgroundcolor" name="usercolors" style="float: right; width: 100%" value="#F17237"><br><br> <label for="chatcolor">Message Text:</label><br> <input type="color" id="messagetextcolor" name="usercolors" style="float: right; width: 100%" value="#FFFFFF"><br><br> <input type="submit" value="Update"> <input type="button" class="reset" value="Reset"> </form> </div> <div class="tabcontent settings" id="avatar" style="display: none;"> <form id="picture" onsubmit="return false"> <h1>CURRENT AVATAR</h1> <div class="lds-roller" style="display:none"> <div></div> <div></div> <div></div> <div></div> <div></div> <div></div> <div></div> <div></div> </div> <img class="user_avatar_display" alt="Current avatar"> <h1>MANAGE AVATAR</h1> <div class="file"> <label for="input-file">Browse</label> <input id="input-file" type="file" name="avatar"> </div> <input type="submit" value="Upload" class="hidden"> <br> <br> <input type="button" class="reset" value="Delete"> </form> </div> <div class="tabcontent settings" id="room" style="display: none;"> <h1>ROOM DETAILS</h1> <label for="subscription">Subscription:</label> <input type="text" id="subscription" name="subscription" placeholder="1" disabled=""> <label for="broadcastlimit">Broadcaster Limit:</label> <input type="text" id="broadcastlimit" name="broadcastlimit" placeholder="6" disabled=""> <label for="viewerlimit">Viewer Limit:</label> <input type="text" id="viewerlimit" name="viewerlimit" placeholder="12" disabled=""> <a href="/shop?opt=roomupgrades" class="upgradebtn">Upgrade Room</a> <form id="chat_password" onsubmit="return false"> <br> <h1>ROOM PASSWORD</h1><br> <input type="password" name="chatpass" required="" placeholder="" minlength="8" maxlength="60" title="Eight or more characters" autocomplete="off"> <input type="submit" value="Clear" hidden=""> </form> <br> <br> <div class="wrapper"> <span>For more options, check out PRIVACY tab and your room directly.</span> </div> <br> <br> <h1>USER ROLE</h1> <form id="add" onsubmit="return false"> <input type="text" id="modusername" name="modusername" placeholder="Username" minlength="3" maxlength="24" pattern="[a-zA-Z0-9]{3,24}" autocomplete="off" title="Three or more characters" required=""> <select name="role" id="role" required=""> <option value="3">Super</option> <option value="2">Moderator</option> <option selected="" value="1">Operator</option> </select> <input type="submit" value="Add User"> </form> <br> <form id="removemod" onsubmit="return false"> <br> <ul id="moderator_remove" name="moderatorlist"> <li>SuperSam — Super <span class="close">x</span></li><li>ModMaya — Moderator <span class="close">x</span></li> </ul> </form> </div> <div class="tabcontent settings" id="privacy" style="display: none;"> <form id="directory_settings" onsubmit="return false"> <h1>PRIVACY</h1> <div class="checkbox"> <input type="checkbox" id="displayself" name="displayself" checked=""> <label for="displayself">LIST MY BROADCAST IN DIRECTORY</label><br> <span>Be found on our directory page by your broadcast.</span> </div> <input type="submit" value="Update"> </form> </div> </div> </div>
+<div class="footer">
+	<p><a class="footer-link" href="/">Home</a> | <a class="footer-link" href="contact">Support</a> | <a class="footer-link" href="privacy">Privacy Policy</a> | <a class="footer-link" href="terms">Terms Of Service</a></p>
+	<p>Copyright © 2026 StumbleChat. All Rights Reserved.</p>
+</div>
+<script>
+// Tab switching + ?tab=name + ?menu opens the account dropdown
+document.querySelectorAll(".tablinks").forEach((b) => b.addEventListener("click", () => show(b.dataset.tab)));
+function show(name) {
+  document.querySelectorAll(".tablinks").forEach((b) => b.classList.toggle("active", b.dataset.tab === name));
+  document.querySelectorAll(".tabcontent").forEach((t) => (t.style.display = t.id === name ? "block" : "none"));
+}
+const q = new URLSearchParams(location.search);
+if (q.get("tab")) show(q.get("tab"));
+if (q.has("menu")) document.getElementById("accdrop").classList.add("show");
+document.getElementById("accbtn").addEventListener("click", () => document.getElementById("accdrop").classList.toggle("show"));
+</script>
+</body></html>

@@ -1692,11 +1692,19 @@ html.sca11y #modal form {
   gap: 0.5rem;
   margin: 0.25rem 0 0.5rem 0;
 }
+html.sca11y #modal form > input:not([type]),
 html.sca11y #modal form > input[type="text"],
 html.sca11y #modal form > input[type="password"],
-html.sca11y #modal form > #modal-text-input {
+html.sca11y #modal form > #modal-text-input,
+html.sca11y #modal form > #room-topic,
+html.sca11y #modal form > #room-password,
+html.sca11y #modal form > #broadcast-password {
   flex: 1 1 200px;
+  width: auto !important;
   margin: 0 !important;
+}
+html.sca11y #modal > span > p {
+  margin-bottom: 0.25rem !important;
 }
 html.sca11y #modal form > h1,
 html.sca11y #modal form > ul,
@@ -2035,6 +2043,171 @@ html.sca11y #dailymotion-close-embed:hover,
 html.sca11y #soundcloud-close-embed:hover,
 html.sca11y #worldstarhiphop-close-embed:hover {
   background: var(--sc-danger) !important;
+}
+
+/* Settings page: tabs, section headings, chat-colour preview */
+html.sca11y .tab {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0 0.5rem;
+}
+html.sca11y .tab button,
+html.sca11y .tablinks {
+  float: none !important;
+  padding: 0.6rem 1rem !important;
+  font-weight: 500 !important;
+}
+html.sca11y .tabcontent.settings {
+  padding: 1rem 1.5rem 1.5rem 1.5rem !important;
+  max-width: 720px;
+  margin: 0 auto;
+}
+html.sca11y .tabcontent.settings h1 {
+  font-size: var(--sc-fs-lg) !important;
+  text-align: left !important;
+  margin: 1.5rem 0 0.75rem 0 !important;
+  padding: 0 0 0.35rem 0 !important;
+  border-bottom: 1px solid var(--sc-border);
+}
+html.sca11y .tabcontent.settings h1:first-child,
+html.sca11y .tabcontent.settings form:first-child > h1:first-child {
+  margin-top: 0.25rem !important;
+}
+html.sca11y .tabcontent.settings > br,
+html.sca11y .tabcontent.settings form > br {
+  display: none;
+}
+html.sca11y .tabcontent.settings label {
+  display: block;
+  margin-top: 0.5rem;
+}
+html.sca11y .tabcontent.settings .wrapper {
+  margin: 1.25rem 0 0 0 !important;
+  padding: 1rem !important;
+  color: var(--sc-text) !important;
+}
+html.sca11y .tabcontent.settings .wrapper > span {
+  color: var(--sc-text) !important;
+}
+html.sca11y .wrapper input:disabled::placeholder {
+  color: var(--sc-text-muted) !important;
+}
+html.sca11y .wrapper input[type="text"]:disabled,
+html.sca11y .wrapper input[type="email"]:disabled {
+  background: var(--sc-bg-subtle) !important;
+}
+html.sca11y .wrapper input[type="color"] {
+  float: none !important;
+  display: block;
+  width: 100% !important;
+  height: 2.75rem !important;
+  padding: 0.2rem !important;
+  margin: 0.25rem 0 1rem 0 !important;
+  border: 1px solid var(--sc-border-strong) !important;
+  border-radius: var(--sc-radius) !important;
+  background: var(--sc-bg) !important;
+  cursor: pointer;
+}
+html.sca11y .wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+html.sca11y .wrapper input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 0.2rem;
+}
+html.sca11y .wrapper input[type="button"] {
+  margin-top: 0.5rem !important;
+}
+html.sca11y .settings #chat-wrapper {
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 0.75rem !important;
+  margin-bottom: 1rem;
+  background: var(--sc-bg) !important;
+}
+html.sca11y .settings #chat-content > .message.noavatar {
+  padding: 2px 4px !important;
+}
+html.sca11y .settings #chat-content > .message > .nickname {
+  display: inline-block;
+  margin-bottom: 2px;
+}
+html.sca11y #chat-content > .message > .contentchat {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-left: 4px solid var(--sca11y-accent, var(--sc-border)) !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 6px 10px !important;
+  font-size: var(--sc-fs) !important;
+  line-height: 1.45 !important;
+}
+html.sca11y .checkbox {
+  position: relative;
+  padding-left: 2rem;
+  margin: 0.75rem 0 1rem 0 !important;
+}
+html.sca11y .checkbox input[type="checkbox"] {
+  position: absolute !important;
+  left: 0;
+  top: 0.15rem;
+  width: 20px !important;
+  height: 20px !important;
+}
+html.sca11y .checkbox label {
+  margin: 0 !important;
+  display: inline !important;
+}
+html.sca11y .checkbox > span {
+  display: block !important;
+  margin: 0.25rem 0 0 0 !important;
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-sm);
+}
+html.sca11y .upgradebtn,
+html.sca11y .promotebtn {
+  background: var(--sc-primary) !important;
+  margin: 0.5rem 0 1rem 0 !important;
+}
+html.sca11y .upgradebtn:hover,
+html.sca11y .promotebtn:hover {
+  background: var(--sc-primary-hover) !important;
+}
+html.sca11y .file > label {
+  height: auto !important;
+  margin: 0.5rem 0 1rem 0 !important;
+}
+html.sca11y .user_avatar_display {
+  display: block;
+  max-width: 100%;
+  background: var(--sc-bg-muted);
+  margin: 0.5rem auto 1rem auto !important;
+}
+html.sca11y #moderator_remove li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.4rem;
+  background: var(--sc-bg) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  color: var(--sc-text) !important;
+  height: auto !important;
+  font-size: var(--sc-fs) !important;
+}
+html.sca11y #moderator_remove li .close {
+  position: static;
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 !important;
+  text-align: center;
+  color: #ffffff !important;
+  background: var(--sc-danger) !important;
+  border-radius: var(--sc-radius);
 }
 
 /* Settings page extras */

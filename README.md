@@ -70,10 +70,10 @@ icons/make-icons.py    Regenerates the PNG icons (needs Pillow).
 
 ## Local preview without installing
 
-`test/site/pages/` holds copies of the site's real markup and stylesheets (directory, login, register, and a chat room seeded with sample users and messages). Serve the repo root and open a page; `test/harness.js` loads `theme.css` and `content.js` exactly as Chrome would:
+`test/site/pages/` holds copies of the site's real markup and stylesheets (directory, login, register, the logged-in settings page with all five tabs, and a chat room seeded with sample users and messages). Serve the repo root and open a page; `test/harness.js` loads `theme.css` and `content.js` exactly as Chrome would:
 
 ```bash
 python3 -m http.server 8765
 ```
 
-Then open `http://localhost:8765/test/site/pages/room.html`. Query flags: `?off` (site as shipped), `?hc` (high contrast), `?scale=130` (text size), `?modal`, `?menu`.
+Then open `http://localhost:8765/test/site/pages/room.html`. Query flags: `?off` (site as shipped), `?hc` (high contrast), `?scale=130` (text size). Room page: `?modal=media|theme|client|youtube|profile|twitch|password|nick|roomsettings`, `?menu` (user context menu), `?live` (broadcasting taskbar and PM list). Settings page: `?tab=user|chat|avatar|room|privacy`, `?menu` (account dropdown).

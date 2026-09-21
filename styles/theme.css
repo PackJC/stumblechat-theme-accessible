@@ -1345,12 +1345,47 @@ html.sca11y #regularvideos.sca11y-drag-active > .js-video {
   user-select: none;
 }
 html.sca11y #regularvideos > .js-video.sca11y-dragging {
-  opacity: 0.55;
-  transform: scale(0.96);
+  opacity: 0.35;
 }
-html.sca11y #regularvideos > .js-video.sca11y-dragging .video > div {
-  outline: 3px dashed var(--sc-primary);
-  outline-offset: -3px;
+/* Ghost that follows the pointer while dragging */
+html.sca11y .sca11y-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 8px;
+  border: 3px solid var(--sc-primary);
+  border-radius: 12px;
+  background: rgba(13, 110, 253, 0.18);
+  color: #ffffff;
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  box-shadow: var(--sc-shadow-lg);
+  will-change: transform;
+}
+/* Drop marker on the tile the camera will land next to */
+html.sca11y #regularvideos > .js-video.sca11y-drop-before .video > div,
+html.sca11y #regularvideos > .js-video.sca11y-drop-after .video > div,
+html.sca11y #regularvideos > .js-video.sca11y-drop-above .video > div,
+html.sca11y #regularvideos > .js-video.sca11y-drop-below .video > div {
+  box-shadow: 0 0 0 3px var(--sc-primary) !important;
+}
+html.sca11y #regularvideos > .js-video.sca11y-drop-before .video > div {
+  border-left: 8px solid var(--sc-primary) !important;
+}
+html.sca11y #regularvideos > .js-video.sca11y-drop-after .video > div {
+  border-right: 8px solid var(--sc-primary) !important;
+}
+html.sca11y #regularvideos > .js-video.sca11y-drop-above .video > div {
+  border-top: 8px solid var(--sc-primary) !important;
+}
+html.sca11y #regularvideos > .js-video.sca11y-drop-below .video > div {
+  border-bottom: 8px solid var(--sc-primary) !important;
 }
 html.sca11y #regularvideos .video > div > video,
 html.sca11y #regularvideos .js-video > video {
@@ -1413,7 +1448,7 @@ html.sca11y .visualizer[volume="10"] {
   --sc-b2: 16px;
   --sc-b3: 10px;
 }
-html.sca11y .visualizer[volume]:not([volume="0"])::after {
+html.sca11y .video > .visualizer[volume]:not([volume="0"])::after {
   content: "";
   position: absolute;
   top: 8px;
@@ -1441,7 +1476,7 @@ html.sca11y .visualizer[volume]:not([volume="0"])::after {
 }
 /* Pause the bars when motion is reduced (ring and badge stay) */
 @media (prefers-reduced-motion: reduce) {
-  html.sca11y .visualizer[volume]:not([volume="0"])::after {
+  html.sca11y .video > .visualizer[volume]:not([volume="0"])::after {
     animation: none !important;
   }
 }

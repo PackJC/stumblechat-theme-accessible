@@ -610,9 +610,10 @@
     if (sorted.every((t, i) => t === current[i])) return;
     sorted.forEach((t) => grid.appendChild(t));
   }
+  let dragState = null; // set while a pointer drag is in progress
   function applyCameraOrder() {
     const grid = document.getElementById("regularvideos");
-    if (!grid) return;
+    if (!grid || dragState) return;
     const tiles = gridTiles(grid);
     tiles.forEach((t) => {
       const id = tileId(t);
@@ -665,58 +666,124 @@
     setTimeout(() => (liveRegion.textContent = text), 30);
   }
 
+  /** Which slot the pointer is over: {target, before} or null. Geometry only,
+   *  so it works whatever the site's flex layout does. */
+  function dropSlot(grid, dragged, x, y) {
+    const tiles = gridTiles(grid).filter((t) => t !== dragged);
+    if (!tiles.length) return null;
+    let best = null;
+    let bestDist = Infinity;
+    for (const t of tiles) {
+      const r = t.getBoundingClientRect();
+      const cx = Math.max(r.left, Math.min(x, r.right));
+      const cy = Math.max(r.top, Math.min(y, r.bottom));
+      const d = Math.hypot(x - cx, y - cy);
+      if (d < bestDist) {
+        bestDist = d;
+        best = { t, r };
+      }
+    }
+    const { t, r } = best;
+    // If no other tile shares the target's row, the grid is a single column:
+    // decide above/below by y. Otherwise decide left/right by x.
+    const sharesRow = tiles.some((o) => {
+      if (o === t) return false;
+      const q = o.getBoundingClientRect();
+      return Math.abs(q.top - r.top) < r.height / 2;
+    });
+    const stacked = !sharesRow && tiles.length > 1;
+    const before = stacked ? y < r.top + r.height / 2 : x < r.left + r.width / 2;
+    return { target: t, before, stacked };
+  }
+
+  function clearDropMarks(grid) {
+    grid.querySelectorAll(".sca11y-drop-before, .sca11y-drop-after, .sca11y-drop-above, .sca11y-drop-below").forEach((t) =>
+      t.classList.remove("sca11y-drop-before", "sca11y-drop-after", "sca11y-drop-above", "sca11y-drop-below")
+    );
+  }
+
   function initCameraDrag() {
     const grid = document.getElementById("regularvideos");
     if (!grid || grid.dataset.sca11yDrag) return;
     grid.dataset.sca11yDrag = "1";
-    let drag = null;
 
     grid.addEventListener("pointerdown", (e) => {
-      if (!settings.enabled || !settings.dragCameras || e.button !== 0) return;
+      if (!settings.enabled || !settings.dragCameras || e.button !== 0 || dragState) return;
       const tile = e.target.closest(TILE_SEL);
       if (!tile) return;
-      drag = { tile, id: e.pointerId, x: e.clientX, y: e.clientY, moved: false };
+      dragState = { tile, id: e.pointerId, x: e.clientX, y: e.clientY, moved: false, ghost: null, slot: null };
+      try {
+        tile.setPointerCapture(e.pointerId);
+      } catch (_) {}
     });
 
-    document.addEventListener("pointermove", (e) => {
-      if (!drag || e.pointerId !== drag.id) return;
-      if (!drag.moved) {
-        if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 8) return;
-        drag.moved = true;
-        drag.tile.classList.add("sca11y-dragging");
-        grid.classList.add("sca11y-drag-active");
-      }
-      e.preventDefault();
-      const under = document.elementsFromPoint(e.clientX, e.clientY);
-      let target = null;
-      for (const el of under) {
-        const t = el.closest && el.closest(TILE_SEL);
-        if (t && t !== drag.tile) { target = t; break; }
-      }
-      if (!target) return;
-      const r = target.getBoundingClientRect();
-      const before = e.clientX < r.left + r.width / 2;
-      if (before) {
-        if (target.previousElementSibling !== drag.tile) grid.insertBefore(drag.tile, target);
-      } else if (target.nextElementSibling !== drag.tile) {
-        grid.insertBefore(drag.tile, target.nextElementSibling);
-      }
-    });
+    document.addEventListener(
+      "pointermove",
+      (e) => {
+        const d = dragState;
+        if (!d || e.pointerId !== d.id) return;
+        if (!d.moved) {
+          if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 8) return;
+          d.moved = true;
+          d.tile.classList.add("sca11y-dragging");
+          grid.classList.add("sca11y-drag-active");
+          // Ghost that follows the pointer
+          const r = d.tile.getBoundingClientRect();
+          const ghost = document.createElement("div");
+          ghost.className = "sca11y-ghost";
+          ghost.style.width = r.width + "px";
+          ghost.style.height = r.height + "px";
+          const nick = d.tile.querySelector(".nickname");
+          ghost.textContent = nick ? nick.textContent.trim() : "";
+          d.offX = e.clientX - r.left;
+          d.offY = e.clientY - r.top;
+          document.body.appendChild(ghost);
+          d.ghost = ghost;
+        }
+        e.preventDefault();
+        d.ghost.style.transform = `translate(${e.clientX - d.offX}px, ${e.clientY - d.offY}px)`;
+        const slot = dropSlot(grid, d.tile, e.clientX, e.clientY);
+        clearDropMarks(grid);
+        d.slot = slot;
+        if (slot) {
+          slot.target.classList.add(
+            slot.stacked ? (slot.before ? "sca11y-drop-above" : "sca11y-drop-below") : slot.before ? "sca11y-drop-before" : "sca11y-drop-after"
+          );
+        }
+      },
+      true
+    );
 
     const finish = (e) => {
-      if (!drag || (e.pointerId !== undefined && e.pointerId !== drag.id)) return;
-      if (drag.moved) {
-        drag.tile.classList.remove("sca11y-dragging");
+      const d = dragState;
+      if (!d || (e.pointerId !== undefined && e.pointerId !== d.id)) return;
+      try {
+        d.tile.releasePointerCapture(d.id);
+      } catch (_) {}
+      if (d.moved) {
+        e.stopPropagation(); // the site opens its video menu on document pointerup
+        e.preventDefault();
+        d.tile.classList.remove("sca11y-dragging");
         grid.classList.remove("sca11y-drag-active");
-        saveOrder(grid);
+        clearDropMarks(grid);
+        if (d.ghost) d.ghost.remove();
+        if (e.type === "pointerup" && d.slot && d.slot.target.parentElement === grid) {
+          const ref = d.slot.before ? d.slot.target : d.slot.target.nextElementSibling;
+          if (ref !== d.tile) grid.insertBefore(d.tile, ref);
+          saveOrder(grid);
+          const tiles = gridTiles(grid);
+          announce("Camera moved to position " + (tiles.indexOf(d.tile) + 1) + " of " + tiles.length);
+        }
         suppressNextClick = true;
-        setTimeout(() => (suppressNextClick = false), 50);
-        e.stopPropagation(); // keep the site's pointerup handler from opening a menu
+        setTimeout(() => (suppressNextClick = false), 80);
       }
-      drag = null;
+      dragState = null;
     };
     document.addEventListener("pointerup", finish, true);
     document.addEventListener("pointercancel", finish, true);
+    window.addEventListener("blur", () => {
+      if (dragState) finish({ type: "pointercancel", pointerId: dragState.id, stopPropagation() {}, preventDefault() {} });
+    });
     document.addEventListener(
       "click",
       (e) => {

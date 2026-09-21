@@ -531,6 +531,63 @@ html.sca11y .navbar {
   box-shadow: var(--sc-shadow) !important;
   user-select: auto !important;
 }
+/* Logged-in navbar: account name/avatar button (#accbtn), notification and
+   cart icons, and the #accdrop menu are built with white text for the dark
+   site. Force every navbar descendant dark except the red badge. */
+html.sca11y .navbar *:not(.notification-bubble),
+html.sca11y .navbar-container,
+html.sca11y #accbtn,
+html.sca11y #accbtn *,
+html.sca11y .text-reset,
+html.sca11y .dropdown-toggle {
+  color: var(--sc-text) !important;
+}
+html.sca11y #accbtn,
+html.sca11y .text-reset {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.6rem !important;
+  border-radius: var(--sc-radius) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  background: transparent !important;
+}
+html.sca11y .profile_avatar {
+  border: 1px solid var(--sc-border) !important;
+  background: var(--sc-bg-muted);
+}
+html.sca11y #accdrop,
+html.sca11y #accdrop.show,
+html.sca11y .dropdown-menu.show {
+  display: block;
+  background: var(--sc-bg) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  box-shadow: var(--sc-shadow-lg) !important;
+  padding: 0.5rem 0 !important;
+  min-width: 12rem !important;
+}
+html.sca11y #accdrop:not(.show) {
+  display: none;
+}
+html.sca11y .dropdown-menu .dropdown-item,
+html.sca11y .dropdown-menu a,
+html.sca11y .dropdown-menu li,
+html.sca11y .dropdown-menu span {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+  text-decoration: none !important;
+}
+html.sca11y .dropdown-menu .dropdown-item:hover,
+html.sca11y .dropdown-menu a:hover,
+html.sca11y .dropdown-menu .dropdown-item:focus-visible {
+  background: var(--sc-bg-muted) !important;
+  color: var(--sc-text) !important;
+}
+
 html.sca11y .navbar-brand {
   color: var(--sc-text) !important;
   font-size: var(--sc-fs-lg) !important;

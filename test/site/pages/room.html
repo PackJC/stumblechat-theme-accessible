@@ -170,9 +170,35 @@ for (const u of users.filter((u) => u.video)) {
   vids.insertAdjacentHTML("beforeend", `<div class="video" user-id="${u.handle}"><div class="video-wrapper"><video></video><span class="nickname">${u.nick}</span></div></div>`);
 }
 
-// Query flags: ?modal shows the dialog, ?menu shows the user context menu
+// Query flags: ?modal[=name] shows a dialog, ?menu shows the user context menu,
+// ?live shows the taskbar in its "broadcasting" state (Stop / Talk / open mic).
 const q = new URLSearchParams(location.search);
-if (q.has("modal")) document.getElementById("modal-back").classList.add("visible");
+const MODALS = {
+  media: null, // static markup above (MEDIA OPTIONS)
+  theme: ["Theme Settings", `<p>Chat Color:</p><br><form autocomplete="off"><input id="modal-color-input" value="#000000" type="color"></input><input style="width:46px;" type="submit" id='resetchatcolor' value="Reset"></input><input style="width:54px;" type="submit" id='setchatcolor' value="Set"></input></form><hr><p>Background URL/Color:</p><br><br><form autocomplete="off"><input id="modal-text-input" placeholder="Image Url" type="text"></input><input type="color" id='modal-bgcolor-input'></input><input style="width:46px;" type="submit" id='resetbackground' value="Reset"></input><input style="width:54px;" type="submit" id='setbackground' value="Set"></input></form><hr><div class="optionside"><label class="switch"><input type="checkbox" checked><span id="largeembeddedvideos" class="slider round"></span></label><h2>Large Embedded Videos:</h2></div><h3>Change size of broadcasts and embedded videos.</h3><hr><div class="optionside"><label class="switch"><input type="checkbox"><span id="largefont" class="slider round"></span></label><h2>Large Font:</h2></div><h3>Adjust font size.</h3>`],
+  client: ["Client Settings", `<div class="optionside"><label class="switch"><input type="checkbox" checked><span id="soundmeter" class="slider round"></span></label><h2>Soundmeter:</h2></div><h3>Track broadcast audio levels.</h3><hr><div class="optionside"><label class="switch"><input type="checkbox"><span id="youtube" class="slider round"></span></label><h2>YouTube:</h2></div><h3>Watch YouTube embeds.</h3><hr><div class="optionside"><label class="switch"><input type="checkbox" checked><span id="imgur" class="slider round"></span></label><h2>Imgur:</h2><h3>Show Imgur images/videos posted by other users in the chat.</h3></div>`],
+  youtube: ["YouTube Search", `<form autocomplete="off"><input id="modal-text-input" placeholder="Link/Keyword Search" type="text"></input><input type="submit" value="Submit"  id='search'></input> <br><br><h1>PLAYING</h1><ul><li class="youtubelist" id="a"><img class="youtube_thumbnail" src="${avatar('#dc3545','▶')}" alt="YouTube Thumbnail"><span class="close">x</span><p class="youtube_title">A fairly long video title that might wrap onto a second line in the queue</p><p class="youtube_title">Username: CoolCat | Duration: 00:04:12</p></li></ul><h1>UP NEXT</h1><ul id="youtuberemove" name="moderatorlist"><li class="youtubelist" id="b"><img class="youtube_thumbnail" src="${avatar('#0dcaf0','▶')}" alt="YouTube Thumbnail"><span class="close">x</span><p class="youtube_title">Second video</p><p class="youtube_title">Username: SuperSam | Duration: 00:02:30</p></li></ul> </form>`],
+  profile: ["coolcat", `<div class="card"><p class="age">CREATED: 3/4/2021</p><img src="${avatar('#6f42c1','C')}" style="width:180px; height:100px;margin:0 auto;" alt="Avatar"><p class="age">AGE: 32</p><p class="title">Just here for the vibes.\nAsk me about fishing.</p><br><p>Subscription: none | Coins: 120</p></div>`],
+  twitch: ["Twitch Search", `<form autocomplete="off"><input id="modal-text-input" placeholder="Channel" type="text"></input><input type="submit" id='twitch-close' value="Stop"></input><input type="submit" value="Submit" id='searchtwitch'></input></form>`],
+  password: ["Room Password", `<form autocomplete="off"><div class="warning-label">Wrong password, try again</div><input id="modal-text-input" placeholder="Password" type="text"></input><input type="submit" id='room-password-clear' value="Clear"></input><input type="submit" value="Join" id='join'></input></form>`],
+  nick: ["HELLO MY NAME IS", `<form autocomplete="off"><input id="modal-text-input" placeholder="CoolCat" type="text"></input><input type="submit" value="Join" id='join'></input></form>`],
+};
+if (q.has("modal")) {
+  const name = q.get("modal");
+  if (MODALS[name]) {
+    document.querySelector("#modal > #title > p").textContent = MODALS[name][0];
+    document.querySelector("#modal > span").innerHTML = MODALS[name][1];
+  }
+  document.getElementById("modal-back").classList.add("visible");
+}
+if (q.has("live")) {
+  document.getElementById("media-broadcast").classList.add("hidden");
+  for (const id of ["media-stop", "media-ptt", "media-openmic"]) document.getElementById(id).classList.remove("hidden");
+  document.querySelector(".privateMessages").classList.remove("hidden");
+  document.querySelector("#userlist h2.hidden").classList.remove("hidden");
+  document.querySelector(".privateMessages").innerHTML = `<div><span class="private" user-id="2"><div class="nickname">SuperSam</div><div class="unreadpm show">2</div><span class="closepm">x</span></span></div>`;
+  const back = document.getElementById("back"); back.classList.add("show"); back.textContent = "< SuperSam (supersam)";
+}
 if (q.has("menu")) { const m = document.getElementById("user-menu"); m.classList.add("user-menu-active"); m.style.left = "220px"; m.style.top = "80px"; }
 </script>
 </body></html>

@@ -28,7 +28,10 @@ To update after editing files, click the reload icon on the extension card.
 - White page background, `#212529` text, system font stack, 0.375rem radii, subtle borders and shadows.
 - Navbar, cards (room tiles), pagination, forms, alerts, modals, dropdowns, context menus, toggle switches, and buttons all follow Bootstrap 5 conventions (`.btn-primary`, `.btn-danger`, `.form-control`, `.card`, `.alert`, etc.).
 - The site's black text-shadow outlines, translucent black panels, neon valid/invalid form glows, and hidden scrollbars are removed.
-- Video tiles stay dark (they hold video); everything around them is light.
+- Video tiles stay dark (they hold video); everything around them is light. Tiles take the video's own aspect ratio instead of being letterboxed into a 4:3 box, so the name pill sits on the picture.
+- Speaking indicator is a red ring at every volume level (thicker as volume rises) instead of teal/green/red.
+- Start Broadcast, Talk, and open-mic are green; Stop is red.
+- Every modal (media options, theme settings, client settings, YouTube queue, ban list, profile card, password prompts) is restyled as a Bootstrap dialog.
 
 ### Accessibility (WCAG 2.1 AA)
 | Criterion | Fix |

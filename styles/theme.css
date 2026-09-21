@@ -1250,6 +1250,63 @@ html.sca11y .volumebarwrap {
   color: var(--sc-text) !important;
 }
 
+/* Broadcast tiles follow the video's own aspect ratio: no letterbox bars, the
+   name pill sits on the picture. Embeds (#embeddedvideos) keep the fixed box
+   because iframes need an explicit height. */
+html.sca11y #regularvideos .video > .video-wrapper:before,
+html.sca11y #regularvideos .video > div:before {
+  display: none !important;
+  padding-bottom: 0 !important;
+}
+html.sca11y #regularvideos .video > div > video,
+html.sca11y #regularvideos .js-video > video {
+  position: static !important;
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-height: 80vh;
+  object-fit: contain;
+}
+html.sca11y #regularvideos .video > div {
+  min-height: 90px;
+  line-height: 0;
+}
+html.sca11y #regularvideos .video > div > .nickname {
+  bottom: 8px !important;
+  line-height: 1.4 !important;
+}
+html.sca11y .video:hover > div > .nickname {
+  font-size: var(--sc-fs-sm) !important;
+  height: auto !important;
+  bottom: 8px !important;
+}
+
+/* Speaking indicator: red ring at every level, thicker as volume rises */
+html.sca11y .visualizer {
+  transition: box-shadow 0.12s ease-out !important;
+}
+html.sca11y .visualizer[volume="0"] {
+  box-shadow: none !important;
+}
+html.sca11y .visualizer[volume="1"],
+html.sca11y .visualizer[volume="2"],
+html.sca11y .visualizer[volume="3"] {
+  box-shadow: 0 0 0 2px var(--sc-danger) !important;
+}
+html.sca11y .visualizer[volume="4"],
+html.sca11y .visualizer[volume="5"],
+html.sca11y .visualizer[volume="6"] {
+  box-shadow: 0 0 0 3px var(--sc-danger) !important;
+}
+html.sca11y .visualizer[volume="7"],
+html.sca11y .visualizer[volume="8"],
+html.sca11y .visualizer[volume="9"] {
+  box-shadow: 0 0 0 4px var(--sc-danger) !important;
+}
+html.sca11y .visualizer[volume="10"] {
+  box-shadow: 0 0 0 5px var(--sc-danger), 0 0 12px 2px rgba(176, 42, 55, 0.5) !important;
+}
+
 /* Video area: tiles stay dark (video content), surround is light */
 html.sca11y #videos-content,
 html.sca11y #videos {
@@ -1411,6 +1468,20 @@ html.sca11y #media-broadcast,
 html.sca11y #media-ptt,
 html.sca11y #media-loading {
   flex: 1 1 auto;
+  width: auto !important;
+  float: none !important;
+}
+/* Stop broadcast: fixed-width red button beside Talk */
+html.sca11y #media-stop {
+  flex: 0 0 auto;
+  width: 110px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.04em;
+}
+html.sca11y #media-stop.hidden {
+  display: none !important;
 }
 html.sca11y #media-screen,
 html.sca11y #media-settings {
@@ -1611,6 +1682,391 @@ html.sca11y #previewvideo {
   border-radius: var(--sc-radius);
   background: var(--sc-bg-dark);
   margin-bottom: 0.5rem;
+}
+
+/* Modal forms: inputs and buttons flow on one row, lists span full width */
+html.sca11y #modal form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.25rem 0 0.5rem 0;
+}
+html.sca11y #modal form > input[type="text"],
+html.sca11y #modal form > input[type="password"],
+html.sca11y #modal form > #modal-text-input {
+  flex: 1 1 200px;
+  margin: 0 !important;
+}
+html.sca11y #modal form > h1,
+html.sca11y #modal form > ul,
+html.sca11y #modal form > .warning-label,
+html.sca11y #modal form > br {
+  flex-basis: 100%;
+  width: 100%;
+}
+html.sca11y #modal form > br,
+html.sca11y #modal > span > br {
+  display: none;
+}
+html.sca11y #modal form > h1 {
+  margin: 0.75rem 0 0 0 !important;
+  border: none !important;
+  border-radius: var(--sc-radius) !important;
+}
+html.sca11y #modal form ul,
+html.sca11y #modal ul {
+  padding: 0 !important;
+  margin: 0.25rem 0 !important;
+  border: none !important;
+  min-height: 0 !important;
+  list-style: none;
+}
+/* Inline-sized "Set"/"Reset"/"Stop"/"Submit" buttons inside modal forms */
+html.sca11y #modal input[type="submit"],
+html.sca11y #modal form button,
+html.sca11y #resetchatcolor,
+html.sca11y #setchatcolor,
+html.sca11y #resetbackground,
+html.sca11y #setbackground {
+  width: auto !important;
+  min-width: 5rem;
+  height: 2.5rem !important;
+  display: inline-block;
+  margin: 0 !important;
+}
+html.sca11y #modal button#interact,
+html.sca11y #modal button#join,
+html.sca11y #modal button#broadcastsettings,
+html.sca11y #modal button#change-nick {
+  width: 100% !important;
+  margin-top: 0.5rem !important;
+}
+html.sca11y #room-password-clear,
+html.sca11y #broadcast-password-clear,
+html.sca11y #youtube-close,
+html.sca11y #twitch-close,
+html.sca11y #dailymotion-close,
+html.sca11y #soundcloud-close,
+html.sca11y #worldstarhiphop-close {
+  background: var(--sc-danger) !important;
+  color: #ffffff !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--sc-radius) !important;
+  box-shadow: none !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 600 !important;
+  padding: 0.375rem 0.75rem !important;
+  cursor: pointer;
+}
+html.sca11y #room-password-clear:hover,
+html.sca11y #broadcast-password-clear:hover,
+html.sca11y #youtube-close:hover,
+html.sca11y #twitch-close:hover,
+html.sca11y #dailymotion-close:hover,
+html.sca11y #soundcloud-close:hover,
+html.sca11y #worldstarhiphop-close:hover {
+  background: var(--sc-danger-hover) !important;
+}
+html.sca11y #modal-accept {
+  background: var(--sc-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 0.375rem 0.75rem !important;
+  font-weight: 600 !important;
+}
+/* Colour pickers (Theme Settings) */
+html.sca11y #modal input[type="color"],
+html.sca11y #modal-color-input,
+html.sca11y #modal-bgcolor-input {
+  width: 3rem !important;
+  min-width: 3rem;
+  height: 2.5rem !important;
+  min-height: 0 !important;
+  padding: 0.15rem !important;
+  margin: 0 !important;
+  display: inline-block;
+  border: 1px solid var(--sc-border-strong) !important;
+  border-radius: var(--sc-radius) !important;
+  background: var(--sc-bg) !important;
+  cursor: pointer;
+}
+html.sca11y #modal input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+html.sca11y #modal input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 0.2rem;
+}
+
+/* Client / Theme Settings: label + description + toggle rows */
+html.sca11y .optionside {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  width: 100% !important;
+  margin: 0.5rem 0 0 0 !important;
+}
+html.sca11y .optionside h2,
+html.sca11y #modal h2 {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  flex: 1 1 auto;
+  order: 1;
+}
+html.sca11y .optionside > .switch {
+  float: none !important;
+  margin: 0 !important;
+  flex: 0 0 auto;
+  order: 2;
+}
+html.sca11y .optionside > h3,
+html.sca11y #modal > span h3 {
+  order: 3;
+  flex-basis: 100%;
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-sm) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  margin: 0.15rem 0 0.5rem 0 !important;
+  padding: 0 !important;
+}
+html.sca11y .switch {
+  width: 40px !important;
+  height: 22px !important;
+}
+html.sca11y .slider:before {
+  height: 16px !important;
+  width: 16px !important;
+  left: 3px !important;
+  bottom: 3px !important;
+}
+html.sca11y input:checked + .slider:before {
+  transform: translateX(18px) !important;
+}
+
+/* User profile card (click a name -> Profile) */
+html.sca11y #modal .card {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 1rem !important;
+  text-align: center;
+}
+html.sca11y #modal .card img {
+  border-radius: var(--sc-radius);
+  border: 1px solid var(--sc-border);
+  background: var(--sc-bg-muted);
+  object-fit: cover;
+  margin: 0.5rem auto !important;
+}
+html.sca11y #modal .card .age {
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-xs) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em;
+  text-align: center !important;
+  margin: 0 !important;
+}
+html.sca11y #modal .card p.title {
+  background: transparent !important;
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 400 !important;
+  height: auto !important;
+  padding: 0.5rem 0 !important;
+  text-align: center !important;
+  white-space: pre-line;
+}
+
+/* YouTube queue and ban list rows */
+html.sca11y .youtubelist,
+html.sca11y #banremove li,
+html.sca11y li.banlist {
+  display: flex !important;
+  align-items: center;
+  gap: 0.75rem;
+  height: auto !important;
+  min-height: 2.5rem;
+  margin: 0 0 0.5rem 0 !important;
+  padding: 0.5rem !important;
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  font-size: var(--sc-fs) !important;
+  position: relative;
+}
+html.sca11y .youtubelist {
+  flex-wrap: wrap;
+  padding-right: 3rem !important;
+}
+html.sca11y .youtubelist:hover,
+html.sca11y #banremove li:hover {
+  background: var(--sc-primary-subtle-hover) !important;
+}
+html.sca11y .youtube_thumbnail {
+  width: 96px !important;
+  height: 64px !important;
+  float: none !important;
+  margin: 0 !important;
+  border-radius: 0.25rem;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+html.sca11y .youtube_title {
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs-sm) !important;
+  line-height: 1.4 !important;
+  height: auto !important;
+  max-height: 2.8em;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+html.sca11y .youtube_title + .youtube_title {
+  flex-basis: 100%;
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-xs) !important;
+}
+html.sca11y .youtubelist .close,
+html.sca11y #banremove .close,
+html.sca11y #moderator-userlist-wrapper button.show {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  padding: 0 !important;
+  text-align: center;
+  color: #ffffff !important;
+  background: var(--sc-danger) !important;
+  border: none !important;
+  border-radius: var(--sc-radius) !important;
+  font-weight: 700;
+  cursor: pointer;
+}
+html.sca11y .youtubelist .close:hover,
+html.sca11y #banremove .close:hover {
+  background: var(--sc-danger-hover) !important;
+}
+
+/* Private-message list in the user panel */
+html.sca11y .privateMessages > div {
+  height: auto !important;
+  margin-bottom: 4px;
+}
+html.sca11y .privateMessages > div > span.private,
+html.sca11y .privateMessages > div > span {
+  display: flex !important;
+  align-items: center;
+  gap: 0.4rem;
+  height: auto !important;
+  min-height: 30px;
+  padding: 2px 6px !important;
+  background: var(--sc-bg-subtle) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius) !important;
+  color: var(--sc-text) !important;
+  cursor: pointer;
+}
+html.sca11y .privateMessages > div > span:hover {
+  background: var(--sc-primary-subtle-hover) !important;
+  border-color: var(--sc-primary) !important;
+}
+html.sca11y .privateMessages .nickname {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html.sca11y .privateMessages .unreadpm {
+  position: static !important;
+  border-radius: 999px !important;
+  padding: 0 0.5rem !important;
+  animation: none !important;
+  min-width: 1.2rem;
+  text-align: center;
+}
+html.sca11y .closepm {
+  visibility: visible !important;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: var(--sc-radius);
+  color: var(--sc-text-muted) !important;
+}
+html.sca11y #back {
+  width: calc(100% - 4px) !important;
+  margin: 0 2px 4px 2px !important;
+  padding: 0.3rem 0.75rem !important;
+  font-size: var(--sc-fs-sm) !important;
+  text-align: left;
+}
+html.sca11y #back.show {
+  display: block !important;
+}
+
+/* Embedded player bars keep their dark strip; give the X a name-sized target */
+html.sca11y #youtube-close-embed,
+html.sca11y #twitch-close-embed,
+html.sca11y #dailymotion-close-embed,
+html.sca11y #soundcloud-close-embed,
+html.sca11y #worldstarhiphop-close-embed {
+  color: #ffffff !important;
+  padding: 0 8px;
+  cursor: pointer;
+  border-radius: var(--sc-radius);
+}
+html.sca11y #youtube-close-embed:hover,
+html.sca11y #twitch-close-embed:hover,
+html.sca11y #dailymotion-close-embed:hover,
+html.sca11y #soundcloud-close-embed:hover,
+html.sca11y #worldstarhiphop-close-embed:hover {
+  background: var(--sc-danger) !important;
+}
+
+/* Settings page extras */
+html.sca11y .deleteAccountWarning {
+  display: block !important;
+  background: var(--sc-alert-danger-bg) !important;
+  color: var(--sc-alert-danger-text) !important;
+  border: 1px solid var(--sc-alert-danger-border) !important;
+  border-radius: var(--sc-radius);
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+}
+html.sca11y .user_avatar_display,
+html.sca11y .wrapper img.profile_avatar {
+  border-radius: var(--sc-radius);
+  border: 1px solid var(--sc-border);
+}
+html.sca11y #moderator_remove {
+  border: 1px solid var(--sc-border);
+  border-radius: var(--sc-radius);
+  padding: 0.5rem;
+  background: var(--sc-bg-subtle);
+}
+html.sca11y .wrapper h2,
+html.sca11y .wrapper h3,
+html.sca11y .wrapper h4 {
+  color: var(--sc-text) !important;
+}
+html.sca11y .wrapper hr {
+  border: none !important;
+  border-top: 1px solid var(--sc-border) !important;
+  margin: 1rem 0;
 }
 
 /* Toggle switch (.switch/.slider): off = grey (4.7:1), on = green */

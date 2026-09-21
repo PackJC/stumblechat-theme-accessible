@@ -22,6 +22,7 @@
   document.head.appendChild(link);
   document.addEventListener("DOMContentLoaded", function () {
     if (params.has("hc")) document.documentElement.classList.add("sca11y-hc");
+    if (params.has("dark")) document.documentElement.classList.add("sca11y-dark");
     if (params.has("scale")) document.documentElement.style.setProperty("--sc-scale", String(Number(params.get("scale")) / 100));
   });
 })();

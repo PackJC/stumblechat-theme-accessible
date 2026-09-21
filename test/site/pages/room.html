@@ -164,10 +164,10 @@ const msgs = [
 ];
 msgs.forEach(createChatItem);
 
-// A couple of broadcast tiles
+// Broadcast tiles, using the site's exact markup (room.js inserts newest first)
 const vids = document.getElementById("regularvideos");
-for (const u of users.filter((u) => u.video)) {
-  vids.insertAdjacentHTML("beforeend", `<div class="video" user-id="${u.handle}"><div class="video-wrapper"><video></video><span class="nickname">${u.nick}</span></div></div>`);
+for (const u of users.filter((u) => u.video || u.audio)) {
+  vids.insertAdjacentHTML("afterbegin", ` <div class="js-video"><div class="video"><div class="video-wrapper"><video id="video" video-id="${u.handle}" autoplay playsinline>Your browser does not support the video tag...</video><span class="nickname" title="${u.nick}" style="">${u.nick}</span></div></div></div> `);
 }
 
 // Query flags: ?modal[=name] shows a dialog, ?menu shows the user context menu,
@@ -191,6 +191,11 @@ if (q.has("modal")) {
     document.querySelector("#modal > span").innerHTML = MODALS[name][1];
   }
   document.getElementById("modal-back").classList.add("visible");
+}
+if (q.has("speaking")) {
+  const tiles = document.querySelectorAll("#regularvideos .video > .video-wrapper");
+  if (tiles[0]) { tiles[0].classList.add("visualizer"); tiles[0].setAttribute("volume", "3"); }
+  if (tiles[1]) { tiles[1].classList.add("visualizer"); tiles[1].setAttribute("volume", "9"); }
 }
 if (q.has("live")) {
   document.getElementById("media-broadcast").classList.add("hidden");

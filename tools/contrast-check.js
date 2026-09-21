@@ -18,6 +18,8 @@ function tokens(selector) {
 }
 const base = tokens("html.sca11y {");
 const hc = { ...base, ...tokens("html.sca11y.sca11y-hc {") };
+const dark = { ...base, ...tokens("html.sca11y.sca11y-dark {") };
+const darkHc = { ...dark, ...tokens("html.sca11y.sca11y-dark.sca11y-hc {") };
 
 function hex(c) {
   const m = /^#([0-9a-f]{6})$/i.exec(c);
@@ -56,15 +58,20 @@ const PAIRS = [
   ["Text on primary-subtle-hover", "sc-text", "sc-primary-subtle-hover", 4.5],
   ["Warning alert text", "sc-alert-warn-text", "sc-alert-warn-bg", 4.5],
   ["Danger alert text", "sc-alert-danger-text", "sc-alert-danger-bg", 4.5],
-  ["Success text (#buygames) on white", "sc-success", "sc-bg", 4.5],
-  ["Placeholder #6c757d on white", "#6c757d", "sc-bg", 4.5],
-  ["Yellow replacement #664d03 on white", "#664d03", "sc-bg", 4.5],
-  ["Input border on white (UI 3:1)", "sc-border-strong", "sc-bg", 3.0],
-  ["Focus ring on white (UI 3:1)", "sc-focus", "sc-bg", 3.0],
+  ["Success text (#buygames) on bg", "sc-success-text", "sc-bg", 4.5],
+  ["Placeholder on bg", "sc-placeholder", "sc-bg", 4.5],
+  ["Yellow replacement on bg", "sc-yellow-text", "sc-bg", 4.5],
+  ["Input border on bg (UI 3:1)", "sc-border-strong", "sc-bg", 3.0],
+  ["Focus ring on bg (UI 3:1)", "sc-focus", "sc-bg", 3.0],
   ["Focus ring on subtle (UI 3:1)", "sc-focus", "sc-bg-subtle", 3.0],
-  ["Toggle off #6c757d on white (UI 3:1)", "#6c757d", "sc-bg", 3.0],
-  ["Scrollbar thumb #6c757d on subtle (UI 3:1)", "#6c757d", "sc-bg-subtle", 3.0],
-  ["Primary button on white (UI 3:1)", "sc-primary", "sc-bg", 3.0],
+  ["Toggle off on bg (UI 3:1)", "sc-toggle-off", "sc-bg", 3.0],
+  ["Scrollbar thumb on subtle (UI 3:1)", "sc-scroll-thumb", "sc-bg-subtle", 3.0],
+  ["Primary button on bg (UI 3:1)", "sc-primary", "sc-bg", 3.0],
+  ["Success button on bg (UI 3:1)", "sc-success", "sc-bg", 3.0],
+  ["Danger button on bg (UI 3:1)", "sc-danger", "sc-bg", 3.0],
+  ["Speaking ring on bg (UI 3:1)", "sc-speaking", "sc-bg", 3.0],
+  ["Speaking ring on video tile (UI 3:1)", "sc-speaking", "sc-bg-dark", 3.0],
+  ["White bars on speaking badge (UI 3:1)", "#ffffff", "sc-speaking", 3.0],
 ];
 
 function run(name, t) {
@@ -81,6 +88,10 @@ function run(name, t) {
   return failed;
 }
 
-const failures = run("Default palette", base) + run("High-contrast palette", hc);
+const failures =
+  run("Light palette", base) +
+  run("Light + high contrast", hc) +
+  run("Dark palette", dark) +
+  run("Dark + high contrast", darkHc);
 console.log(failures ? `\n${failures} pair(s) failed` : "\nAll pairs pass WCAG AA");
 process.exit(failures ? 1 : 0);

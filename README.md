@@ -8,19 +8,43 @@ No tracking, no network requests, no build step. The only permission is `storage
 
 ## Screenshots
 
-Faces, room previews, and usernames are blurred.
+All screenshots are rendered from the repo's fixture pages, which use the site's real markup and stylesheets with made-up users, so nobody's face or handle appears.
 
-**Directory**
+### Chat room, before and after
 
-![Room directory with white cards, dark text, and blue pagination](docs/screenshots/directory.png)
+Same room, same users, same custom chat colours. Note the yellow-on-orange and white-on-white messages on the left become readable on the right while keeping their hue, the user list gains role badges you can read, and the speaking indicator becomes a green ring plus a sound-bars badge.
 
-**Chat room** (user list with role badges, broadcast grid with red speaking rings, chat log with colour-corrected messages)
+| Site as shipped | With the extension |
+| --- | --- |
+| ![Chat room as the site ships it: black panels, neon message backgrounds, unreadable text](docs/screenshots/room-before.png) | ![Chat room with the extension: white panels, readable chat bubbles, green speaking rings](docs/screenshots/room-light.png) |
 
-![Chat room with light panels, user list, video grid, and chat log](docs/screenshots/room.png)
+### Dark mode
 
-**Login**
+Same room with **Appearance: Dark**. Every colour pair is re-verified for the dark palette.
 
-![Login form as a centred Bootstrap card](docs/screenshots/login.png)
+![Chat room in dark mode](docs/screenshots/room-dark.png)
+
+### Directory, before and after
+
+The carousel arrows on each card (they did nothing) are gone, counts have readable icons, and descriptions are left-aligned dark text.
+
+| Site as shipped | With the extension |
+| --- | --- |
+| ![Directory as the site ships it](docs/screenshots/directory-before.png) | ![Directory with the extension: white cards, dark text](docs/screenshots/directory-after.png) |
+
+### Dialogs
+
+Theme Settings in light mode and Client Settings in dark mode.
+
+| Light | Dark |
+| --- | --- |
+| ![Theme settings dialog with colour pickers and toggle rows](docs/screenshots/modal-theme.png) | ![Client settings dialog in dark mode](docs/screenshots/modal-client-dark.png) |
+
+### Settings page and login
+
+| Settings (chat colour preview) | Login |
+| --- | --- |
+| ![Settings page chat tab with live preview and colour pickers](docs/screenshots/settings.png) | ![Login form as a centred card](docs/screenshots/login.png) |
 
 ## Install
 
@@ -47,9 +71,12 @@ Click the toolbar icon to open the popup. Changes apply instantly to any open St
 | Setting | What it does |
 | --- | --- |
 | Enable light theme | Turns the whole restyle on or off. |
+| Appearance | Light, Dark, or Follow system (switches with your OS dark-mode setting). |
 | Text size | Scales chat, cards, forms, and nav text from 100% to 150%. |
-| High contrast | Switches to a 7:1 palette and re-fits user-chosen chat colours to 7:1. |
-| Reduce motion | Stops floating hearts, fades, and pulsing badges. Also follows your OS setting automatically. |
+| High contrast | Switches to a 7:1 palette and re-fits user-chosen chat colours to 7:1. Works in light and dark. |
+| Reduce motion | Stops floating hearts, fades, pulsing badges, and the speaking-badge animation. Also follows your OS setting automatically. |
+| Rearrange cameras | Drag any broadcast tile to move it, or focus one and press Alt + arrow keys (Home/End jump to the ends). The order is remembered per room and re-applied when people join or leave. |
+| Reset camera layout | Puts the tiles back in the site's own order (newest broadcaster first). |
 
 ## What it changes
 
@@ -57,8 +84,11 @@ Click the toolbar icon to open the popup. Changes apply instantly to any open St
 - White page background, `#212529` text, system font stack, 0.375rem radii, subtle borders and shadows.
 - Navbar, room cards, pagination, forms, alerts, modals, dropdowns, context menus, toggle switches, and buttons all follow Bootstrap 5 conventions.
 - Start Broadcast, Talk, and open-mic are green; Stop and destructive actions are red; everything else is blue or grey.
+- A full dark mode using Bootstrap's dark palette, with every colour pair re-verified.
 - Broadcast tiles take the video's own aspect ratio instead of being letterboxed into a 4:3 box, so the name pill sits on the picture. Embedded players keep their box.
-- The speaking indicator is a red ring at every volume level, thicker as the volume rises.
+- Broadcast tiles can be dragged into any order (or moved with Alt + arrow keys). A grip appears on hover.
+- The speaking indicator follows the convention Zoom, Meet, and Discord share: a steady green ring around the tile plus a small sound-bars badge in the corner whose bars rise with volume. Colour and icon together, and it never flashes.
+- The carousel arrows on directory cards, which did nothing, are removed.
 - Every dialog is restyled: media options, theme settings, client settings, room settings, YouTube queue, ban list, profile card, password prompts, media searches.
 - The logged-in settings page (all five tabs), the account dropdown, the chat-colour preview, and colour pickers are covered.
 - The site's black text-shadow outlines, translucent black panels, neon valid/invalid glows, hidden scrollbars, and 1-second background fades are removed.
@@ -83,7 +113,7 @@ Click the toolbar icon to open the popup. Changes apply instantly to any open St
 ## How it works
 
 - `styles/theme.css` is injected at `document_start`, before the page paints, so there is no flash of the dark site. Every rule is scoped to `html.sca11y` (so the popup can switch it off) and uses `!important`, because the site's own stylesheets and the inline styles it writes for user themes would otherwise win.
-- `scripts/content.js` applies your settings, rewrites the viewport meta, adds the ARIA and keyboard fixes, and runs the contrast fixer. A `MutationObserver` re-applies everything as the chat and user list change.
+- `scripts/content.js` applies your settings, rewrites the viewport meta, adds the ARIA and keyboard fixes, runs the contrast fixer, and handles camera dragging. A `MutationObserver` re-applies everything (including your camera order) as the chat, user list, and video grid change.
 - `popup/` is the settings UI, stored with `chrome.storage.sync`.
 
 ## Local preview without installing
@@ -96,7 +126,13 @@ python3 -m http.server 8765
 
 Then open `http://localhost:8765/test/site/pages/room.html`.
 
-Query flags: `?off` (site as shipped), `?hc` (high contrast), `?scale=130` (text size). Room page: `?modal=media|theme|client|youtube|profile|twitch|password|nick|roomsettings`, `?menu` (user context menu), `?live` (broadcasting taskbar and PM list). Settings page: `?tab=user|chat|avatar|room|privacy`, `?menu` (account dropdown).
+Query flags: `?off` (site as shipped), `?dark`, `?hc` (high contrast), `?scale=130` (text size). Room page: `?modal=media|theme|client|youtube|profile|twitch|password|nick|roomsettings`, `?menu` (user context menu), `?live` (broadcasting taskbar and PM list), `?speaking` (two tiles with the speaking indicator). Settings page: `?tab=user|chat|avatar|room|privacy`, `?menu` (account dropdown).
+
+The screenshots above were rendered from these pages with headless Chrome:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --window-size=1440,900 --timeout=4000 --screenshot=room.png "http://127.0.0.1:8765/test/site/pages/room.html?live&speaking"
+```
 
 To check the palette after editing colours:
 
@@ -116,7 +152,7 @@ popup/                   Settings popup
 tools/contrast-check.js  Palette verifier
 icons/make-icons.py      Regenerates the PNG icons (needs Pillow)
 test/                    Fixture pages and harness for previewing without installing
-docs/screenshots/        Blurred screenshots used above
+docs/screenshots/        Screenshots used above (rendered from the fixtures)
 ```
 
 ## Known limits

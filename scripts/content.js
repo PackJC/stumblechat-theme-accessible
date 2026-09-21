@@ -12,11 +12,15 @@
   const ROOT = document.documentElement;
   const DEFAULTS = {
     enabled: true,
+    theme: "light", // "light" | "dark" | "auto" (follow the OS)
     fontScale: 100, // percent
     highContrast: false,
     reduceMotion: false,
+    dragCameras: true, // drag broadcast tiles to rearrange them
+    resetCameras: 0, // timestamp; the popup bumps it to reset the layout
   };
   let settings = { ...DEFAULTS };
+  const darkQuery = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
 
   // Apply immediately so there is no flash of the dark site.
   ROOT.classList.add("sca11y");
@@ -24,8 +28,14 @@
   /* ------------------------------------------------------------------ */
   /* Settings                                                            */
   /* ------------------------------------------------------------------ */
+  function wantsDark() {
+    if (settings.theme === "dark") return true;
+    if (settings.theme === "auto") return !!(darkQuery && darkQuery.matches);
+    return false;
+  }
   function applySettings() {
     ROOT.classList.toggle("sca11y", !!settings.enabled);
+    ROOT.classList.toggle("sca11y-dark", !!settings.enabled && wantsDark());
     ROOT.classList.toggle("sca11y-hc", !!settings.enabled && !!settings.highContrast);
     ROOT.classList.toggle("sca11y-reduce-motion", !!settings.enabled && !!settings.reduceMotion);
     const scale = Math.max(80, Math.min(200, Number(settings.fontScale) || 100)) / 100;
@@ -44,9 +54,16 @@
       if (area !== "sync") return;
       for (const key of Object.keys(changes)) settings[key] = changes[key].newValue;
       applySettings();
+      if (changes.resetCameras) resetCameraOrder();
+      if (changes.dragCameras) applyCameraOrder();
     });
   } catch (_) {
     /* storage unavailable (e.g. extension reloaded) — keep defaults */
+  }
+  if (darkQuery && darkQuery.addEventListener) {
+    darkQuery.addEventListener("change", () => {
+      if (settings.theme === "auto") applySettings();
+    });
   }
 
   /* ------------------------------------------------------------------ */
@@ -435,10 +452,9 @@
       setAttr(s, "role", "group");
       setAttr(s, "aria-roledescription", "carousel");
       setAttr(s, "aria-label", room + " broadcast previews");
-      const prev = s.querySelector(".prev");
-      const next = s.querySelector(".next");
-      if (prev) { makeKeyboardButton(prev); setAttr(prev, "aria-label", "Previous preview"); }
-      if (next) { makeKeyboardButton(next); setAttr(next, "aria-label", "Next preview"); }
+      // The prev/next arrows are hidden by the theme (they do nothing); keep
+      // them out of the accessibility tree too.
+      s.querySelectorAll(".prev, .next").forEach((a) => setAttr(a, "aria-hidden", "true"));
     });
     document.querySelectorAll(".room-wrap").forEach((card) => {
       setAttr(card, "role", "article");
@@ -537,15 +553,195 @@
     const back = document.querySelector("a.directory");
     if (back) setAttr(back, "aria-label", "Back to directory");
 
-    // Broadcast tiles: give them a name and keyboard reach (they open a menu).
-    document.querySelectorAll("#regularvideos .video").forEach((v) => {
+    // Broadcast tiles: give them a name and keyboard reach (they open a menu,
+    // and Alt+Arrow moves them when rearranging is on).
+    document.querySelectorAll("#regularvideos > .js-video").forEach((v) => {
       makeKeyboardButton(v);
       setAttr(v, "aria-haspopup", "menu");
       const nick = v.querySelector(".nickname");
-      if (nick) setAttr(v, "aria-label", "Broadcast from " + nick.textContent.trim() + ". Open video menu");
+      const hint = settings.dragCameras ? " Alt plus arrow keys moves this camera." : "";
+      if (nick) setAttr(v, "aria-label", "Broadcast from " + nick.textContent.trim() + ". Open video menu." + hint);
     });
+    initCameraDrag();
+    applyCameraOrder();
     const openmic = document.querySelector("#media-openmic > input");
     if (openmic) setAttr(openmic, "aria-label", "Open microphone");
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Rearrangeable broadcast tiles                                       */
+  /*                                                                     */
+  /* Tiles are #regularvideos > .js-video, keyed by their <video video-id>. */
+  /* The site inserts new tiles at the front and re-lays-out on every     */
+  /* change, so the chosen order is saved per room in localStorage and    */
+  /* re-applied whenever the grid mutates. Drag with the pointer, or      */
+  /* focus a tile and press Alt+Arrow.                                    */
+  /* ------------------------------------------------------------------ */
+  const TILE_SEL = "#regularvideos > .js-video";
+  const seenAt = new Map(); // video-id -> first time we saw it (for reset)
+  let suppressNextClick = false;
+
+  function orderKey() {
+    return "sca11y-camera-order:" + location.pathname.toLowerCase();
+  }
+  function tileId(tile) {
+    const v = tile.querySelector("video[video-id]");
+    return v ? v.getAttribute("video-id") : null;
+  }
+  function gridTiles(grid) {
+    return Array.from(grid.querySelectorAll(":scope > .js-video"));
+  }
+  function loadOrder() {
+    try {
+      return JSON.parse(localStorage.getItem(orderKey()) || "[]");
+    } catch (_) {
+      return [];
+    }
+  }
+  function saveOrder(grid) {
+    try {
+      localStorage.setItem(orderKey(), JSON.stringify(gridTiles(grid).map(tileId).filter(Boolean)));
+    } catch (_) {
+      /* storage full or blocked */
+    }
+  }
+  function reorder(grid, sorted) {
+    const current = gridTiles(grid);
+    if (sorted.every((t, i) => t === current[i])) return;
+    sorted.forEach((t) => grid.appendChild(t));
+  }
+  function applyCameraOrder() {
+    const grid = document.getElementById("regularvideos");
+    if (!grid) return;
+    const tiles = gridTiles(grid);
+    tiles.forEach((t) => {
+      const id = tileId(t);
+      if (id && !seenAt.has(id)) seenAt.set(id, performance.now());
+    });
+    if (!settings.dragCameras) return;
+    const saved = loadOrder();
+    if (!saved.length) return;
+    const rank = (t) => {
+      const i = saved.indexOf(tileId(t));
+      return i < 0 ? saved.length : i;
+    };
+    reorder(grid, tiles.slice().sort((a, b) => rank(a) - rank(b)));
+  }
+  function resetCameraOrder() {
+    const grid = document.getElementById("regularvideos");
+    try {
+      localStorage.removeItem(orderKey());
+    } catch (_) {}
+    if (!grid) return;
+    // The site shows the newest broadcaster first; restore that.
+    const tiles = gridTiles(grid).sort((a, b) => (seenAt.get(tileId(b)) || 0) - (seenAt.get(tileId(a)) || 0));
+    reorder(grid, tiles);
+    announce("Camera layout reset");
+  }
+  function moveTile(tile, delta) {
+    const grid = tile.parentElement;
+    const tiles = gridTiles(grid);
+    const from = tiles.indexOf(tile);
+    const to = Math.max(0, Math.min(tiles.length - 1, from + delta));
+    if (from === to) return;
+    tiles.splice(from, 1);
+    tiles.splice(to, 0, tile);
+    reorder(grid, tiles);
+    saveOrder(grid);
+    tile.focus({ preventScroll: true });
+    announce("Camera moved to position " + (to + 1) + " of " + tiles.length);
+  }
+
+  let liveRegion = null;
+  function announce(text) {
+    if (!liveRegion) {
+      liveRegion = document.createElement("div");
+      liveRegion.className = "sca11y-sr-only";
+      liveRegion.setAttribute("role", "status");
+      liveRegion.setAttribute("aria-live", "polite");
+      document.body.appendChild(liveRegion);
+    }
+    liveRegion.textContent = "";
+    setTimeout(() => (liveRegion.textContent = text), 30);
+  }
+
+  function initCameraDrag() {
+    const grid = document.getElementById("regularvideos");
+    if (!grid || grid.dataset.sca11yDrag) return;
+    grid.dataset.sca11yDrag = "1";
+    let drag = null;
+
+    grid.addEventListener("pointerdown", (e) => {
+      if (!settings.enabled || !settings.dragCameras || e.button !== 0) return;
+      const tile = e.target.closest(TILE_SEL);
+      if (!tile) return;
+      drag = { tile, id: e.pointerId, x: e.clientX, y: e.clientY, moved: false };
+    });
+
+    document.addEventListener("pointermove", (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      if (!drag.moved) {
+        if (Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 8) return;
+        drag.moved = true;
+        drag.tile.classList.add("sca11y-dragging");
+        grid.classList.add("sca11y-drag-active");
+      }
+      e.preventDefault();
+      const under = document.elementsFromPoint(e.clientX, e.clientY);
+      let target = null;
+      for (const el of under) {
+        const t = el.closest && el.closest(TILE_SEL);
+        if (t && t !== drag.tile) { target = t; break; }
+      }
+      if (!target) return;
+      const r = target.getBoundingClientRect();
+      const before = e.clientX < r.left + r.width / 2;
+      if (before) {
+        if (target.previousElementSibling !== drag.tile) grid.insertBefore(drag.tile, target);
+      } else if (target.nextElementSibling !== drag.tile) {
+        grid.insertBefore(drag.tile, target.nextElementSibling);
+      }
+    });
+
+    const finish = (e) => {
+      if (!drag || (e.pointerId !== undefined && e.pointerId !== drag.id)) return;
+      if (drag.moved) {
+        drag.tile.classList.remove("sca11y-dragging");
+        grid.classList.remove("sca11y-drag-active");
+        saveOrder(grid);
+        suppressNextClick = true;
+        setTimeout(() => (suppressNextClick = false), 50);
+        e.stopPropagation(); // keep the site's pointerup handler from opening a menu
+      }
+      drag = null;
+    };
+    document.addEventListener("pointerup", finish, true);
+    document.addEventListener("pointercancel", finish, true);
+    document.addEventListener(
+      "click",
+      (e) => {
+        if (suppressNextClick && e.target.closest("#regularvideos")) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+      },
+      true
+    );
+
+    // Keyboard: Alt+Arrow moves the focused tile
+    grid.addEventListener("keydown", (e) => {
+      if (!settings.dragCameras || !e.altKey) return;
+      const tile = e.target.closest(TILE_SEL);
+      if (!tile) return;
+      let delta = 0;
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") delta = -1;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") delta = 1;
+      if (e.key === "Home") delta = -1000;
+      if (e.key === "End") delta = 1000;
+      if (!delta) return;
+      e.preventDefault();
+      moveTile(tile, delta);
+    });
   }
 
   let lastModalVisible = false;

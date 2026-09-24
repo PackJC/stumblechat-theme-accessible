@@ -9,47 +9,148 @@
   <main>
     <h1>StumbleChat Accessible</h1>
 
-    <div class="form-check form-switch">
-      <input class="form-check-input" type="checkbox" role="switch" id="enabled">
-      <label class="form-check-label" for="enabled">Enable light theme</label>
+    <p class="notice" id="compat" role="alert" hidden></p>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" role="switch" id="enabled" data-key="enabled">
+      <label class="form-check-label" for="enabled">Turn on StumbleChat Accessible</label>
     </div>
 
-    <div class="field">
-      <label for="theme">Appearance</label>
-      <select class="form-select" id="theme">
-        <option value="light">Light</option>
-        <option value="dark">Dark</option>
-        <option value="auto">Follow system</option>
-      </select>
-    </div>
+    <fieldset>
+      <legend>Look</legend>
+      <div class="field">
+        <label for="theme">Appearance</label>
+        <select class="form-select" id="theme" data-key="theme">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="auto">Follow system</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fontScale">Text size</label>
+        <select class="form-select" id="fontScale" data-key="fontScale" data-number>
+          <option value="100">Default (100%)</option>
+          <option value="115">Large (115%)</option>
+          <option value="130">Larger (130%)</option>
+          <option value="150">Largest (150%)</option>
+        </select>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="highContrast" data-key="highContrast">
+        <label class="form-check-label" for="highContrast">High contrast (7:1 text)</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="reduceMotion" data-key="reduceMotion">
+        <label class="form-check-label" for="reduceMotion">Reduce motion</label>
+        <p class="hint">Animations are already reduced when your system asks for it.</p>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="glass" data-key="glass">
+        <label class="form-check-label" for="glass">Frosted glass look</label>
+        <p class="hint">Translucent panels over a soft gradient. Off, or with High contrast, panels are solid.</p>
+      </div>
+    </fieldset>
 
-    <div class="field">
-      <label for="fontScale">Text size</label>
-      <select class="form-select" id="fontScale">
-        <option value="100">Default (100%)</option>
-        <option value="115">Large (115%)</option>
-        <option value="130">Larger (130%)</option>
-        <option value="150">Largest (150%)</option>
-      </select>
-    </div>
+    <fieldset>
+      <legend>Directory</legend>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="infiniteDirectory" data-key="infiniteDirectory">
+        <label class="form-check-label" for="infiniteDirectory">Load more rooms as you scroll</label>
+      </div>
+      <div class="field">
+        <label for="roomSort">Order rooms by</label>
+        <select class="form-select" id="roomSort" data-key="roomSort">
+          <option value="cams">People on cam</option>
+          <option value="people">People in the room</option>
+          <option value="name">Name</option>
+          <option value="site">The site's own order</option>
+        </select>
+        <p class="hint">Favourite rooms (the star on each card) always come first.</p>
+      </div>
+      <div class="field">
+        <label for="muteKeywords">Hide rooms that mention</label>
+        <input class="form-control" type="text" id="muteKeywords" data-key="muteKeywords" placeholder="word, another word" autocomplete="off" aria-describedby="muteKeywords-hint">
+        <p class="hint" id="muteKeywords-hint">Checks room names and topics. Separate words with commas.</p>
+      </div>
+    </fieldset>
 
-    <div class="form-check form-switch">
-      <input class="form-check-input" type="checkbox" role="switch" id="highContrast">
-      <label class="form-check-label" for="highContrast">High contrast (7:1 text)</label>
-    </div>
+    <fieldset>
+      <legend>Room</legend>
+      <div class="field">
+        <label for="stageMode">Speaker stage</label>
+        <select class="form-select" id="stageMode" data-key="stageMode" aria-describedby="stageMode-hint">
+          <option value="auto">On phones</option>
+          <option value="always">Always</option>
+          <option value="off">Off</option>
+        </select>
+        <p class="hint" id="stageMode-hint">In crowded rooms, the people talking most recently are shown large and everyone else as name chips. Tap a chip to pin someone.</p>
+      </div>
+      <div class="field">
+        <label for="stageSize">Cameras on the stage</label>
+        <select class="form-select" id="stageSize" data-key="stageSize" data-number>
+          <option value="1">1</option>
+          <option value="4">4</option>
+          <option value="6">6</option>
+          <option value="9">9</option>
+        </select>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="fillGrid" data-key="fillGrid">
+        <label class="form-check-label" for="fillGrid">Cameras fill the space</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="dragCameras" data-key="dragCameras">
+        <label class="form-check-label" for="dragCameras">Rearrange cameras</label>
+        <p class="hint">Drag a camera (on a touchscreen, press and hold), or focus one and press Alt with the arrow keys. The order is remembered per room.</p>
+      </div>
+      <button type="button" class="btn-outline" id="resetCameras">Reset camera layout</button>
+    </fieldset>
 
-    <div class="form-check form-switch">
-      <input class="form-check-input" type="checkbox" role="switch" id="reduceMotion">
-      <label class="form-check-label" for="reduceMotion">Reduce motion</label>
-      <p class="hint">Animations are already reduced when your OS asks for it.</p>
-    </div>
-
-    <div class="form-check form-switch">
-      <input class="form-check-input" type="checkbox" role="switch" id="dragCameras">
-      <label class="form-check-label" for="dragCameras">Rearrange cameras</label>
-      <p class="hint">Drag a camera to move it, or focus one and press Alt + arrow keys. The order is remembered per room.</p>
-    </div>
-    <button type="button" class="btn-outline" id="resetCameras">Reset camera layout</button>
+    <fieldset>
+      <legend>Chat</legend>
+      <div class="field">
+        <label for="chatAnnounce">Screen reader announcements</label>
+        <select class="form-select" id="chatAnnounce" data-key="chatAnnounce">
+          <option value="all">Every new message</option>
+          <option value="mentions">Mentions and private messages</option>
+          <option value="off">Off</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="mentionWords">Also count as a mention</label>
+        <input class="form-control" type="text" id="mentionWords" data-key="mentionWords" placeholder="nickname, another name" autocomplete="off" aria-describedby="mentionWords-hint">
+        <p class="hint" id="mentionWords-hint">Your nickname always counts. Separate words with commas.</p>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="desktopAlerts" data-key="desktopAlerts">
+        <label class="form-check-label" for="desktopAlerts">Desktop alerts for mentions and private messages</label>
+        <p class="hint">Only while the room is in the background. Chrome asks for permission the first time.</p>
+      </div>
+      <div class="field">
+        <label for="chatScale">Chat text size</label>
+        <select class="form-select" id="chatScale" data-key="chatScale" data-number>
+          <option value="90">Smaller (90%)</option>
+          <option value="100">Same as the page</option>
+          <option value="115">Larger (115%)</option>
+          <option value="130">Largest (130%)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="chatDensity">Chat spacing</label>
+        <select class="form-select" id="chatDensity" data-key="chatDensity">
+          <option value="comfortable">Comfortable</option>
+          <option value="compact">Compact</option>
+        </select>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="chatTimestamps" data-key="chatTimestamps">
+        <label class="form-check-label" for="chatTimestamps">Always show message times</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" role="switch" id="collapseJoins" data-key="collapseJoins">
+        <label class="form-check-label" for="collapseJoins">Fold runs of join and leave messages</label>
+      </div>
+    </fieldset>
 
     <p class="status" id="status" role="status" aria-live="polite"></p>
     <p class="footer">Changes apply instantly to open stumblechat.com tabs.</p>

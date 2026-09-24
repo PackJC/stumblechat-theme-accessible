@@ -1,0 +1,18 @@
+{
+  "name": "stumblechat-accessible",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Accessible light/dark theme and usability fixes for stumblechat.com (browser extension).",
+  "scripts": {
+    "test": "node tools/contrast-check.js && node test/run.js",
+    "test:contrast": "node tools/contrast-check.js",
+    "test:browser": "node test/run.js",
+    "package": "node tools/package.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.11.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

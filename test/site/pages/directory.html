@@ -22,12 +22,14 @@
 	<div class="content">
 		<div class="wrapper">
 			<h1 class="centered">PROMOTED ROOMS</h1>
+			<a class="promotebtn" href="/shop?opt=promote">&#128227; Promote</a>
 		</div>
 		<div class="wrapper">
 			<h1>PUBLIC ROOMS</h1>
 		</div>
 		<div class="wrapper publicrooms"><div class="centered bubble"></div></div>
 	</div>
+	<button id="scrollup" style="display: none;">&#9650;</button>
 	<div class="footer">
 	<p>
 		<a class="footer-link" href="/">Home</a> |
@@ -46,7 +48,7 @@ const rooms = [
   { name: "subbacultcha", broadcasting_count: 17, watching_count: 19, topic: "pillar of learnts", img: false },
   { name: "shaybaby420", broadcasting_count: 12, watching_count: 16, topic: "♥♥♥ ALL OUTCASTS WELCOME, SPREAD LOVE NO HATE♥♥♥", img: true },
   { name: "clubmosthated", broadcasting_count: 12, watching_count: 15, topic: "A much longer description that should scroll inside the card when it runs past the fixed height of the description block. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", img: false },
-  { name: "lalaland", broadcasting_count: 10, watching_count: 12, topic: "space case street racing: pick a car and number :)", img: true },
+  { name: "lalaland", broadcasting_count: 25, watching_count: 12, topic: "space case street racing: pick a car and number :) (25 cams: the sort should put this first)", img: true },
 ];
 const placeholder = (name) => "data:image/svg+xml;utf8," + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" width="246" height="184"><rect width="100%" height="100%" fill="#6c757d"/><text x="50%" y="50%" fill="#fff" font-family="sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle">${name}</text></svg>`);
@@ -56,5 +58,47 @@ for (const room of rooms) {
 }
 document.querySelector(".publicrooms").innerHTML += `<div class="pagination-wrapper"><div class="pagination"><div page-id="1" class="active">1</div><div page-id="2">2</div><div page-id="3">3</div><div page-id="2">&raquo;</div></div></div>`;
 new Masonry(".publicrooms>.centered", { itemSelector: ".grid-item", columnWidth: 250, gutter: 15, fitWidth: true });
+
+// Back to top, as directory.js does it: shown once .content scrolls, and
+// acted on by a document "pointerup" whose target is the button itself.
+{
+  const content = document.querySelector(".content");
+  document.addEventListener("pointerup", (e) => {
+    if (e.target.id == "scrollup") {
+      window.__scrollups = (window.__scrollups || 0) + 1;
+      content.scrollTop = 0;
+    }
+  }, { passive: true });
+  content.addEventListener("scroll", () => document.getElementById("scrollup").style.display = (content.scrollTop > 20) ? "block" : "none", { passive: true });
+}
+
+// Stand-in for the site's /lbstats endpoint (directory.js POSTs page=N and
+// gets {rooms, currentPage, totalPages}) so "load more" can be exercised
+// here. The extension's own fetch is untouched on the real site.
+const realFetch = window.fetch.bind(window);
+const dq = new URLSearchParams(location.search);
+// ?ratelimit: the site's own rate-limit message in place of the rooms.
+// ?limitmore: "Load more" gets the rate-limited answer ({error: 0}).
+if (dq.has("ratelimit")) document.querySelector(".publicrooms").innerHTML = "<h1>YOU'VE EXCEEDED RATELIMITS</h1>";
+window.fetch = (url, opts) => {
+  if (String(url).endsWith("/lbstats") && dq.has("limitmore")) {
+    window.__lbstatsCalls = (window.__lbstatsCalls || 0) + 1;
+    return Promise.resolve(new Response(JSON.stringify({ error: 0 }), { status: 200, headers: { "Content-Type": "application/json" } }));
+  }
+  if (String(url).endsWith("/lbstats")) {
+    const page = Number(new URLSearchParams(opts && opts.body).get("page")) || 1;
+    const totalPages = 3;
+    const rooms = Array.from({ length: 6 }, (_, i) => ({
+      name: `page${page}room${i + 1}`,
+      broadcasting_count: Math.max(0, [3, 30, 1, 17, 0, 12][i] - (page - 2)),
+      watching_count: [30, 9, 40, 19, 5, 14][i],
+      topic: i % 2 ? `Lazily loaded room ${i + 1} from page ${page}` : `Page ${page}, room ${i + 1}. A longer topic to check that the description scrolls inside the card rather than growing it.`,
+    }));
+    window.__lbstatsCalls = (window.__lbstatsCalls || 0) + 1;
+    return new Promise((resolve) => setTimeout(() => resolve(new Response(JSON.stringify({ rooms, currentPage: page, totalPages }), { status: 200, headers: { "Content-Type": "application/json" } })), 150));
+  }
+  if (/large_avatar\.webp$/.test(String(url))) return Promise.resolve(new Response("", { status: 404 }));
+  return realFetch(url, opts);
+};
 </script>
 </body></html>

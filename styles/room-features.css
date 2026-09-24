@@ -1,0 +1,334 @@
+/* StumbleChat Accessible — room features (see scripts/room-features.js)
+   Every rule is scoped to html.sca11y; layout rules also stand down when
+   the site's structure changed (html.sca11y-compat). */
+
+/* ------------------------------------------------------------------------
+   Camera grid that fills the video area. room-features.js works out the
+   best tile width for the space and the number of cameras and writes it to
+   --sca11y-tile-w on each tile; tiles share one aspect ratio (the median of
+   the cameras' own) and letterbox inside it.
+   ------------------------------------------------------------------------ */
+html.sca11y.sca11y-fill:not(.sca11y-compat) #regularvideos {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-content: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 8px !important;
+  box-sizing: border-box !important;
+  overflow: hidden;
+}
+html.sca11y.sca11y-fill:not(.sca11y-compat) #regularvideos > .js-video {
+  width: var(--sca11y-tile-w, 320px) !important;
+  flex: 0 0 auto !important;
+  max-width: 100%;
+}
+html.sca11y.sca11y-fill:not(.sca11y-compat) #regularvideos .video {
+  padding: 0 !important;
+}
+html.sca11y.sca11y-fill:not(.sca11y-compat) #regularvideos .video > .video-wrapper {
+  aspect-ratio: var(--sca11y-aspect, 1.3333);
+  min-height: 0 !important;
+}
+html.sca11y.sca11y-fill:not(.sca11y-compat) #regularvideos .video > .video-wrapper > video {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+  object-fit: contain;
+}
+
+html.sca11y .sca11y-row-break {
+  display: none;
+}
+html.sca11y.sca11y-fill:not(.sca11y-compat) #regularvideos > .sca11y-row-break {
+  display: block;
+  flex: 0 0 100%;
+  height: 0;
+  order: 999;
+}
+
+/* Pinned cameras (spotlight on wide screens) get a primary-coloured frame. */
+html.sca11y #regularvideos > .js-video.sca11y-pinned .video > .video-wrapper {
+  box-shadow: 0 0 0 3px var(--sc-primary) !important;
+}
+html.sca11y #regularvideos > .js-video.sca11y-pinned .video > .visualizer[volume]:not([volume="0"]) {
+  box-shadow: 0 0 0 3px var(--sc-speaking), 0 0 0 6px var(--sc-primary) !important;
+}
+
+/* ------------------------------------------------------------------------
+   Mic-only broadcasters: a compact chip instead of a black 4:3 box.
+   ------------------------------------------------------------------------ */
+html.sca11y:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only {
+  width: auto !important;
+  min-width: 0;
+}
+html.sca11y:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only .video > .video-wrapper {
+  aspect-ratio: auto !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px 0 38px !important;
+  border-radius: 999px !important;
+  background: var(--sc-bg-subtle) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23495057' d='M12 15a4 4 0 0 0 4-4V5a4 4 0 1 0-8 0v6a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z'/%3E%3C/svg%3E") 14px 50% / 16px 16px no-repeat !important;
+  border: 1px solid var(--sc-border) !important;
+}
+html.sca11y.sca11y-dark:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only .video > .video-wrapper {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23adb5bd' d='M12 15a4 4 0 0 0 4-4V5a4 4 0 1 0-8 0v6a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z'/%3E%3C/svg%3E") !important;
+}
+html.sca11y:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only video {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0;
+}
+html.sca11y:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only .video > .video-wrapper > .nickname {
+  position: static !important;
+  transform: none !important;
+  background: transparent !important;
+  color: var(--sc-text) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: 14em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 40px !important;
+}
+html.sca11y:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only .video > .video-wrapper::before,
+html.sca11y:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only .video > .visualizer[volume]:not([volume="0"])::after {
+  display: none !important;
+}
+html.sca11y:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only .video > .visualizer[volume]:not([volume="0"]) {
+  box-shadow: 0 0 0 3px var(--sc-speaking) !important;
+}
+html.sca11y:not(.sca11y-compat) #regularvideos > .js-video.sca11y-audio-only .sca11y-qa {
+  display: none;
+}
+
+/* ------------------------------------------------------------------------
+   Quick actions on each camera: pin, mute for me, full screen.
+   Shown on hover and keyboard focus; always shown on touch screens.
+   ------------------------------------------------------------------------ */
+html.sca11y .video {
+  position: relative;
+}
+html.sca11y .sca11y-qa {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 3;
+  display: flex;
+  gap: 4px;
+}
+/* Buttons appear while the pointer moves over the camera and fade 5 s after
+   it stops (room-features.js sets .sca11y-controls), or while a keyboard user
+   is on the camera. A pressed button (muted for me, pinned) stays as a mark. */
+html.sca11y .sca11y-qa-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+html.sca11y #regularvideos > .js-video.sca11y-controls .sca11y-qa-btn,
+html.sca11y #regularvideos > .js-video:has(:focus-visible) .sca11y-qa-btn,
+html.sca11y .sca11y-qa-btn[aria-pressed="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+html.sca11y .sca11y-qa-btn:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+html.sca11y .sca11y-qa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(33, 37, 41, 0.82);
+  color: #ffffff;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+html.sca11y .sca11y-qa-btn[hidden] {
+  display: none;
+}
+html.sca11y .sca11y-qa-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+html.sca11y .sca11y-qa-btn:hover {
+  background: rgba(11, 94, 215, 0.95);
+}
+html.sca11y .sca11y-qa-btn[aria-pressed="true"] {
+  background: #ffffff;
+  color: #212529;
+  border-color: #ffffff;
+}
+html.sca11y .sca11y-qa-btn:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 1px !important;
+  box-shadow: 0 0 0 5px #0b5ed7 !important;
+}
+/* Small tiles (the phone stage, crowded grids): smaller buttons, and full
+   screen moves out (it is still in the camera menu). */
+html.sca11y #regularvideos > .js-video:not(.sca11y-audio-only) {
+  container-type: inline-size;
+}
+@container (max-width: 200px) {
+  html.sca11y .sca11y-qa {
+    top: 6px;
+    left: 6px;
+    gap: 3px;
+  }
+  html.sca11y .sca11y-qa-btn {
+    width: 26px;
+    height: 26px;
+  }
+  html.sca11y .sca11y-qa-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+  html.sca11y .sca11y-qa-btn[data-action="full"] {
+    display: none;
+  }
+}
+/* Muted for me or pinned: the pressed button stays visible on the picture
+   (see the :hover/:focus-within rule above), so the state is always shown. */
+
+/* ------------------------------------------------------------------------
+   Speaker stage: the most recent speakers large, everyone else as chips.
+   ------------------------------------------------------------------------ */
+html.sca11y.sca11y-stage:not(.sca11y-compat) #regularvideos > .js-video.sca11y-offstage {
+  display: none !important;
+}
+html.sca11y.sca11y-stage.sca11y-has-chips:not(.sca11y-compat) #videos {
+  height: calc(100% - 60px) !important;
+}
+html.sca11y .sca11y-chips {
+  display: none;
+}
+html.sca11y.sca11y-stage.sca11y-has-chips:not(.sca11y-compat) .sca11y-chips {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  background: var(--sc-glass);
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  border-top: 1px solid var(--sc-glass-border);
+  box-sizing: border-box;
+  z-index: 2;
+}
+html.sca11y .sca11y-chip-item {
+  flex: 0 0 auto;
+  list-style: none;
+}
+html.sca11y .sca11y-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  max-width: 11em;
+  padding: 0 12px 0 4px;
+  border: 1px solid var(--sc-border);
+  border-radius: 999px;
+  background: var(--sc-bg);
+  color: var(--sc-text);
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  cursor: pointer;
+}
+html.sca11y .sca11y-chip:hover {
+  background: var(--sc-primary-subtle-hover);
+  border-color: var(--sc-primary);
+}
+html.sca11y .sca11y-chip-av {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sc-bg-muted) center / cover no-repeat;
+  color: var(--sc-text);
+  font-weight: 700;
+}
+html.sca11y .sca11y-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+html.sca11y .sca11y-chip.sca11y-audio-only .sca11y-chip-av {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23495057' d='M12 15a4 4 0 0 0 4-4V5a4 4 0 1 0-8 0v6a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z'/%3E%3C/svg%3E") !important;
+  background-size: 18px 18px !important;
+  font-size: 0;
+}
+/* Talking: the same green ring as the camera tiles. */
+html.sca11y .sca11y-chip.sca11y-talking {
+  border-color: var(--sc-speaking);
+  box-shadow: 0 0 0 2px var(--sc-speaking);
+}
+html.sca11y .sca11y-chip.sca11y-talking .sca11y-chip-av {
+  box-shadow: 0 0 0 2px var(--sc-bg), 0 0 0 4px var(--sc-speaking);
+}
+
+/* ------------------------------------------------------------------------
+   Talking marks in the user list.
+   ------------------------------------------------------------------------ */
+html.sca11y #userlist .bar.sca11y-talking {
+  border-color: var(--sc-speaking) !important;
+  box-shadow: inset 3px 0 0 var(--sc-speaking);
+}
+html.sca11y #userlist .bar.sca11y-talking > img,
+html.sca11y #userlist .bar.sca11y-talking > .no-image {
+  box-shadow: 0 0 0 2px var(--sc-speaking);
+}
+
+/* ------------------------------------------------------------------------
+   Theatre mode: chat and the user list step aside for the cameras.
+   ------------------------------------------------------------------------ */
+html.sca11y .sca11y-theatre-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  color: var(--sc-text);
+}
+html.sca11y .sca11y-theatre-btn[aria-pressed="true"] {
+  background: var(--sc-primary) !important;
+}
+html.sca11y .sca11y-theatre-btn[aria-pressed="true"] svg {
+  color: #ffffff;
+}
+html.sca11y.sca11y-theatre:not(.sca11y-compat) sc-userlist,
+html.sca11y.sca11y-theatre:not(.sca11y-compat) sc-chat {
+  display: none !important;
+}
+html.sca11y.sca11y-theatre:not(.sca11y-compat) sc-videolist {
+  width: 100% !important;
+  flex: 1 1 auto !important;
+}
+@media (max-width: 652px) {
+  html.sca11y.sca11y-theatre:not(.sca11y-compat) #videos-content {
+    height: calc(100% - 165px) !important;
+  }
+  html.sca11y.sca11y-theatre:not(.sca11y-compat) sc-taskbar {
+    bottom: 0 !important;
+  }
+}

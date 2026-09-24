@@ -59,6 +59,24 @@ const PAIRS = [
   ["Warning alert text", "sc-alert-warn-text", "sc-alert-warn-bg", 4.5],
   ["Danger alert text", "sc-alert-danger-text", "sc-alert-danger-bg", 4.5],
   ["Success text (#buygames) on bg", "sc-success-text", "sc-bg", 4.5],
+  ["Danger text (Kick/Ban menu items) on bg", "sc-danger-text", "sc-bg", 4.5],
+  ["Danger text on subtle (mod rows)", "sc-danger-text", "sc-bg-subtle", 4.5],
+  ["Muted text on subtle (open mic Talk bar)", "sc-text-muted", "sc-bg-subtle", 4.5],
+  ["Dark text on amber (Mic open)", "sc-warning-text", "sc-warning", 4.5],
+  ["Owner role text on owner row", "sc-role-owner-fg", "sc-role-owner-bg", 4.5],
+  ["Super role text on super row", "sc-role-super-fg", "sc-role-super-bg", 4.5],
+  ["Mod role text on mod row", "sc-role-mod-fg", "sc-role-mod-bg", 4.5],
+  ["Operator role text on operator row", "sc-role-op-fg", "sc-role-op-bg", 4.5],
+  ["Muted role text on muted row", "sc-role-muted-fg", "sc-role-muted-bg", 4.5],
+  ["Nickname on owner row", "sc-text", "sc-role-owner-bg", 4.5],
+  ["Nickname on super row", "sc-text", "sc-role-super-bg", 4.5],
+  ["Nickname on mod row", "sc-text", "sc-role-mod-bg", 4.5],
+  ["Nickname on operator row", "sc-text", "sc-role-op-bg", 4.5],
+  ["Username on owner row", "sc-text-muted", "sc-role-owner-bg", 4.5],
+  ["Username on super row", "sc-text-muted", "sc-role-super-bg", 4.5],
+  ["Username on mod row", "sc-text-muted", "sc-role-mod-bg", 4.5],
+  ["Username on operator row", "sc-text-muted", "sc-role-op-bg", 4.5],
+  ["Username on muted row", "sc-text-muted", "sc-role-muted-bg", 4.5],
   ["Placeholder on bg", "sc-placeholder", "sc-bg", 4.5],
   ["Yellow replacement on bg", "sc-yellow-text", "sc-bg", 4.5],
   ["Input border on bg (UI 3:1)", "sc-border-strong", "sc-bg", 3.0],
@@ -74,6 +92,34 @@ const PAIRS = [
   ["White bars on speaking badge (UI 3:1)", "#ffffff", "sc-speaking", 3.0],
 ];
 
+// Frosted-glass panels are rgba(--sc-glass-rgb, --sc-glass-alpha) over
+// whatever the page shows underneath: the gradient, or the moai logo (its
+// white, sky blue and bark brown are the extremes), or in theory pure black.
+// Blend the panel over each and check the text tokens against the result.
+const BACKDROPS = [
+  ["white", "#ffffff"],
+  ["black", "#000000"],
+  ["logo sky", "#5fc0f0"],
+  ["logo bark", "#4a2c14"],
+  ["logo grass", "#3fae3a"],
+];
+const toHex = (rgb) => "#" + rgb.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("");
+function glassOver(t, alphaTok, backdrop) {
+  const rgb = t["sc-glass-rgb"].split(",").map(Number);
+  const a = Number(t[alphaTok]);
+  const b = hex(backdrop);
+  return toHex(rgb.map((c, i) => c * a + b[i] * (1 - a)));
+}
+const GLASS_PAIRS = [
+  ["Body text on glass", "sc-text", "sc-glass-alpha", 4.5],
+  ["Muted text on glass", "sc-text-muted", "sc-glass-alpha", 4.5],
+  ["Link on glass", "sc-link", "sc-glass-alpha", 4.5],
+  ["Body text on count pill", "sc-text", "sc-glass-strong-alpha", 4.5],
+  ["Muted label on count pill", "sc-text-muted", "sc-glass-strong-alpha", 4.5],
+  ["Live count on pill", "sc-success-text", "sc-glass-strong-alpha", 4.5],
+  ["Focus ring on glass (UI 3:1)", "sc-focus", "sc-glass-alpha", 3.0],
+];
+
 function run(name, t) {
   let failed = 0;
   console.log(`\n== ${name} ==`);
@@ -84,6 +130,16 @@ function run(name, t) {
     const ok = r >= min;
     if (!ok) failed++;
     console.log(`${ok ? "PASS" : "FAIL"}  ${r.toFixed(2).padStart(5)}:1  (min ${min})  ${label}  ${fg} on ${bg}`);
+  }
+  for (const [label, fgTok, alphaTok, min] of GLASS_PAIRS) {
+    for (const [bname, backdrop] of BACKDROPS) {
+      const fg = t[fgTok];
+      const bg = glassOver(t, alphaTok, backdrop);
+      const r = ratio(fg, bg);
+      const ok = r >= min;
+      if (!ok) failed++;
+      console.log(`${ok ? "PASS" : "FAIL"}  ${r.toFixed(2).padStart(5)}:1  (min ${min})  ${label} over ${bname}  ${fg} on ${bg}`);
+    }
   }
   return failed;
 }

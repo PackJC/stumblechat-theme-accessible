@@ -1,0 +1,276 @@
+/* StumbleChat Accessible — chat features (see scripts/chat-features.js) */
+
+/* ------------------------------------------------------------------------
+   Chat text size, density, times, and the site's Large Font toggle.
+   The chat's own size tokens are redefined inside #chat-content, so every
+   chat rule in theme.css scales with them.
+   ------------------------------------------------------------------------ */
+html.sca11y #chat-content {
+  --sc-chat-large: 1;
+  --sc-fs-xs: calc(12px * var(--sc-scale) * var(--sc-chat-scale, 1) * var(--sc-chat-large));
+  --sc-fs-sm: calc(13px * var(--sc-scale) * var(--sc-chat-scale, 1) * var(--sc-chat-large));
+  --sc-fs: calc(14px * var(--sc-scale) * var(--sc-chat-scale, 1) * var(--sc-chat-large));
+}
+/* The site's Theme Settings > Large Font adds .large to #chat-content; the
+   theme's fixed sizes used to cancel it. */
+html.sca11y #chat-content.large {
+  --sc-chat-large: 1.2;
+}
+html.sca11y #input > textarea {
+  font-size: calc(14px * var(--sc-scale) * var(--sc-chat-scale, 1)) !important;
+}
+html.sca11y.sca11y-chat-compact #chat-content > .message {
+  margin-bottom: 2px !important;
+}
+html.sca11y.sca11y-chat-compact #chat-content > .message > .content {
+  padding: 3px 8px !important;
+  margin-bottom: 1px !important;
+  line-height: 1.35 !important;
+}
+html.sca11y.sca11y-chat-compact #chat-content > .message.common {
+  padding-left: 40px !important;
+}
+html.sca11y.sca11y-chat-compact #chat-content > div.message.common > .avatar > img {
+  width: 30px !important;
+  height: 30px !important;
+}
+html.sca11y.sca11y-chat-times #chat-content > .message > .content > .timestamp,
+html.sca11y.sca11y-chat-times #chat-content > .system > .timestamp {
+  display: inline-block !important;
+  float: right;
+  margin-left: 8px;
+}
+
+/* ------------------------------------------------------------------------
+   Mentions: an amber bar and an @ mark. The bubble colour stays the same so
+   the colour fixer's contrast still holds for the text inside it.
+   ------------------------------------------------------------------------ */
+html.sca11y #chat-content > .message > .content.sca11y-mention {
+  border-left: 6px solid var(--sc-warning) !important;
+  box-shadow: 0 0 0 1px var(--sc-warning) !important;
+  position: relative;
+}
+html.sca11y #chat-content > .message > .content.sca11y-mention::before {
+  content: "@ mentions you";
+  display: block;
+  margin-bottom: 2px;
+  color: var(--sc-yellow-text);
+  font: 700 var(--sc-fs-xs) / 1.4 var(--sc-font);
+  letter-spacing: 0.02em;
+}
+html.sca11y .sca11y-mention-pill {
+  position: absolute;
+  right: 12px;
+  bottom: calc(100% - var(--sca11y-chat-bottom, 0px));
+  z-index: 4;
+}
+html.sca11y .sca11y-mention-pill,
+html.sca11y .unreadmessage {
+  box-sizing: border-box;
+  min-height: 32px;
+  padding: 4px 14px !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font: 700 var(--sc-fs-sm) / 1.5 var(--sc-font) !important;
+  box-shadow: var(--sc-shadow-lg) !important;
+  cursor: pointer;
+}
+html.sca11y .sca11y-mention-pill {
+  background: var(--sc-warning) !important;
+  color: var(--sc-warning-text) !important;
+}
+html.sca11y .sca11y-mention-pill[hidden] {
+  display: none;
+}
+
+/* The site's "There are N unread message(s)!" bar becomes a floating
+   "jump to latest" pill over the bottom of the chat. */
+html.sca11y #chat-position {
+  position: absolute;
+}
+html.sca11y .unreadmessage:not(.hidden) {
+  position: absolute !important;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(64px + 16px);
+  z-index: 4;
+  height: auto !important;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  margin: 0 !important;
+}
+html.sca11y .unreadmessage:not(.hidden)::before {
+  content: "↓ ";
+}
+html.sca11y .sca11y-mention-pill {
+  bottom: calc(64px + 16px);
+}
+html.sca11y .sca11y-mention-pill:focus-visible,
+html.sca11y .unreadmessage:focus-visible {
+  outline: 3px solid var(--sc-focus) !important;
+  outline-offset: 2px !important;
+}
+
+/* "New messages" divider */
+html.sca11y .sca11y-new-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 4px;
+  color: var(--sc-danger-text);
+  font: 700 var(--sc-fs-xs) var(--sc-font);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+html.sca11y .sca11y-new-divider::before,
+html.sca11y .sca11y-new-divider::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--sc-danger-text);
+  opacity: 0.6;
+}
+
+/* ------------------------------------------------------------------------
+   Join/leave lines: compact, and runs of three or more fold into one.
+   ------------------------------------------------------------------------ */
+html.sca11y #chat-content > .message.system.sca11y-joinleave {
+  padding: 2px 10px !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-xs) !important;
+}
+html.sca11y #chat-content > .message.system.sca11y-jl-hidden {
+  display: none !important;
+}
+html.sca11y .sca11y-jl-toggle {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 4px;
+  min-height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--sc-link);
+  font: 600 var(--sc-fs-xs) var(--sc-font);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------------
+   Private-message tabs above the chat. They replace the site's "< nick"
+   back bar, which stays in the page as the target the tabs press.
+   ------------------------------------------------------------------------ */
+html.sca11y .sca11y-pm-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px 4px 6px 4px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 0 0 auto;
+}
+html.sca11y.sca11y-has-pms #back {
+  display: none !important;
+}
+html.sca11y .sca11y-pm-tab {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  max-width: 12em;
+  padding: 0 12px;
+  border: 1px solid var(--sc-border);
+  border-radius: 999px;
+  background: var(--sc-bg);
+  color: var(--sc-text);
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+html.sca11y .sca11y-pm-tab:hover {
+  background: var(--sc-bg-muted);
+}
+html.sca11y .sca11y-pm-tab[aria-selected="true"] {
+  background: var(--sc-primary);
+  border-color: var(--sc-primary);
+  color: #ffffff;
+}
+html.sca11y .sca11y-pm-unread {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--sc-danger);
+  color: #ffffff;
+  font-size: var(--sc-fs-xs);
+  line-height: 1.5;
+  text-align: center;
+}
+/* Unread private messages on the phone Users button */
+html.sca11y .sca11y-users-btn {
+  position: relative;
+}
+html.sca11y .sca11y-users-btn[data-pm]::after {
+  content: attr(data-pm);
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: var(--sc-danger);
+  color: #ffffff;
+  font: 700 11px / 18px var(--sc-font);
+  box-shadow: 0 0 0 2px var(--sc-bg);
+}
+
+/* ------------------------------------------------------------------------
+   Phone composer: a Send button beside the message box.
+   ------------------------------------------------------------------------ */
+html.sca11y .sca11y-send {
+  display: none;
+}
+@media (pointer: coarse), (max-width: 652px) {
+  html.sca11y #input {
+    display: flex !important;
+    align-items: stretch;
+    gap: 6px;
+    padding: 0 2px;
+  }
+  html.sca11y #input > textarea {
+    flex: 1 1 auto;
+    width: auto !important;
+    margin: 0 !important;
+  }
+  html.sca11y .sca11y-send {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    border: none;
+    border-radius: var(--sc-radius);
+    background: var(--sc-primary);
+    color: #ffffff;
+    cursor: pointer;
+  }
+  html.sca11y .sca11y-send svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+  }
+  html.sca11y .sca11y-send:disabled {
+    background: var(--sc-bg-muted);
+    color: var(--sc-text-muted);
+  }
+}
+/* iOS: keep the room inside the visible area while the keyboard is up. */
+html.sca11y.sca11y-kb #room {
+  height: var(--sca11y-vvh, 100%) !important;
+  min-height: 0 !important;
+}

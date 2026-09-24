@@ -107,30 +107,68 @@
 			</sc-modal>
 			<nav id="user-menu" class="user-menu">
 				<div class="user-menu-items">
-					<a class="user-menu-name">CoolCat</a>
+					<a class="user-menu-name"> </a>
 					<div class="user-menu-item"><a class="user-menu-link" data-action="nickname">Change Nickname</a></div>
 					<div class="user-menu-item"><a class="user-menu-link" data-action="profile">Profile</a></div>
 					<div class="user-menu-item"><a class="user-menu-link" data-action="pvtmsg">Private Message</a></div>
 					<div class="user-menu-item"><a class="user-menu-link" data-action="hide">Hide</a></div>
+					<div class="user-menu-item hidden"><a class="user-menu-link" data-action="unhide">Unhide</a></div>
+					<div class="user-menu-item"><a class="user-menu-link modaction" data-action="grantsuper">Grant Super</a></div>
+					<div class="user-menu-item"><a class="user-menu-link modaction" data-action="grantmoderator">Grant Moderator</a></div>
+					<div class="user-menu-item"><a class="user-menu-link modaction" data-action="grantoperator">Grant Operator</a></div>
+					<div class="user-menu-item modaction"><a class="user-menu-link" data-action="revoke">Revoke Role</a></div>
+					<div class="user-menu-item"><a class="user-menu-link modaction" data-action="close">Close Broadcast</a></div>
 					<div class="user-menu-item"><a class="user-menu-link modaction" data-action="kick">Kick</a></div>
 					<div class="user-menu-item"><a class="user-menu-link modaction" data-action="ban">Ban</a></div>
 					<div class="user-menu-item"><a class="user-menu-link" data-action="ignore">Ignore</a></div>
+					<div class="user-menu-item hidden"><a class="user-menu-link" data-action="unignore">Unignore</a></div>
 					<div class="user-menu-item"><a class="user-menu-link" data-action="abuse">Abuse</a></div>
 				</div>
 			</nav>
 			<nav id="video-menu" class="video-menu">
 				<div class="video-menu-items">
 					<a class="video-menu-name"></a>
+					<div class="video-menu-item"><div class="video-menu-link" data-action="volume"><div class="volumebar-video"><div class="volumebarwrap-video"><input id="video-volume" type="range" min="0" max="100" value="100" class=""></div></div></div></div>
 					<div class="video-menu-item"><a class="video-menu-link" data-action="profile">Profile</a></div>
+					<div class="video-menu-item"><a class="video-menu-link" data-action="pvtmsg">Private Message</a></div>
+					<div class="video-menu-item"><a class="video-menu-link" data-action="hide">Hide</a></div>
+					<div class="video-menu-item hidden"><a class="video-menu-link" data-action="unhide">Unhide</a></div>
+					<div class="video-menu-item"><a class="video-menu-link modaction" data-action="kick">Kick</a></div>
+					<div class="video-menu-item"><a class="video-menu-link modaction" data-action="ban">Ban</a></div>
+					<div class="video-menu-item"><a class="video-menu-link modaction" data-action="close">Close Broadcast</a></div>
 					<div class="video-menu-item"><a class="video-menu-link" data-action="fullscreen">Fullscreen</a></div>
+					<div class="video-menu-item"><a class="video-menu-link" data-action="pip">PiP</a></div>
 				</div>
 			</nav>
 		</div>
 	</div>
 <script>
-// --- Mock data using the exact templates from the site's room.js ---
+/* Fixture room. Markup and event handling mirror the site's room.js:
+ * nearly everything reacts to a window "pointerup" whose target is the
+ * control itself, and Start Broadcast / Talk react to "pointerdown". The
+ * counters on window.__fx let tests see what the "site" did.
+ *
+ * Query flags:
+ *   ?live                broadcasting taskbar (Stop, Talk, Open mic) and a PM
+ *   ?speaking            two tiles with the speaking indicator
+ *   ?cams=24             that many broadcasters, with real test video streams
+ *   ?miconly=3           of those, this many broadcast sound only
+ *   ?sim                 simulate people talking over time
+ *   ?joins               a run of join/leave lines in the chat
+ *   ?modal=name          open a dialog: media theme client youtube profile twitch
+ *                        password roomsettings nick verify permissions connecting
+ *   ?menu                the user context menu open
+ *   ?breaksite           remove #regularvideos, as if the site had changed
+ */
+window.__fx = { videoMenu: 0, userMenu: 0, topic: 0, verify: 0, broadcast: 0, sliders: [], volume: [], sent: [] };
+const q = new URLSearchParams(location.search);
 const avatar = (c, t) => "data:image/svg+xml;utf8," + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" fill="${c}"/><text x="32" y="40" fill="#fff" font-family="sans-serif" font-size="26" text-anchor="middle">${t}</text></svg>`);
+const COLORS = ["#6f42c1", "#d63384", "#fd7e14", "#20c997", "#0dcaf0", "#198754", "#dc3545", "#6610f2", "#0d6efd", "#ffc107"];
+const NAMES = ["Sunshine", "sharon", "Bella", "PhillyTheKid", "Th3Unkn0wn", "jayslost", "jstme", "Papas", "Baxter", "Bort", "HighPriestess", "Liquid_Silk", "jam", "Antifacab_Ape", "Scrotal", "TREBLE", "sak", "Jah", "JAYLEN", "ECHO", "CIA_Agent_Pete", "thanku", "NawnSense", "Munch", "pali", "cabbage"];
+
+// You are CoolCat (the site keeps your nick in localStorage "nick").
+try { localStorage.setItem("nick", "CoolCat"); } catch (_) {}
 
 const users = [
   { handle: 1, nick: "CoolCat", username: "coolcat", role: " gold", type: "Owner", av: avatar("#6f42c1", "C"), video: true, audio: true },
@@ -140,10 +178,19 @@ const users = [
   { handle: 5, nick: "a_very_long_nickname_that_overflows", username: "guest", role: "", type: "", av: avatar("#20c997", "G"), video: false, audio: false, guest: true },
   { handle: 6, nick: "Quiet", username: "quiet", role: " black", type: "Muted", av: avatar("#0dcaf0", "Q"), video: false, audio: false },
 ];
+const extraCams = Math.max(0, (Number(q.get("cams")) || 0) - 3);
+const micOnly = Number(q.get("miconly")) || 0;
+for (let i = 0; i < extraCams; i++) {
+  const nick = NAMES[i % NAMES.length] + (i >= NAMES.length ? "_" + i : "");
+  const audioOnly = i < micOnly;
+  users.push({ handle: 100 + i, nick, username: nick.toLowerCase(), role: "", type: "", av: avatar(COLORS[i % COLORS.length], nick[0]), video: !audioOnly, audio: true });
+}
+
 const list = document.querySelector("#userlist .list");
 for (const u of users) {
   list.insertAdjacentHTML("beforeend", `<li class="bar" user-id="${u.handle}">${u.av ? `<img src="${u.av}" class="bar-item">` : `<div class="bar-item no-image"></div>`}<div class="bar-item"><span class="nickname">${u.nick}</span><span class="username">${u.guest ? `guest` : u.username}</span></div><div class="user-status"><div class="role${u.role}">${u.type}</div><div class="status"><div class="${u.video ? "video_badge" : "hidden"}"></div><div class="${u.audio ? "audio_badge" : "hidden"}"></div></div></div></li>`);
 }
+document.getElementById("onlinecount").textContent = String(users.length);
 
 // createChatItem() from room.js
 function createChatItem(value) {
@@ -153,7 +200,7 @@ function createChatItem(value) {
   element.innerHTML = (value.nick !== undefined) ? ((value.avatar == undefined) ? `` : `<span class="avatar"><img src="${value.avatar}" alt="Avatar"></span>`) + `<span class="nickname" style = "background:${value.namebackgroundcolor}">${value.nick}</span><div class="content"><span class="hidden-selectable">[${value.time}]</span><span class="timestamp">${value.time}</span><span class="message common" style="color:${value.messagetextcolor}">${value.msg}</span>` : `<span class="hidden-selectable" > System Message\n[ ${value.time}]</span><span class="timestamp">${value.time}</span>${value.msg} `;
   document.getElementById("chat-content").appendChild(element);
 }
-const msgs = [
+const roomMsgs = [
   { time: "12:00", msg: "Welcome to MEATSPACE. Be excellent to each other." },
   { time: "12:01", nick: "CoolCat", avatar: users[0].av, namebackgroundcolor: "#004466", messagetextcolor: "#ffff00", backgroundcolor: "#ff8800", msg: "hey everyone — this used to be yellow text on black" },
   { time: "12:02", nick: "SuperSam", avatar: users[1].av, namebackgroundcolor: "#ffb6c1", messagetextcolor: "#00ff00", backgroundcolor: "#00ff00", msg: "neon green text, pink nickname bubble" },
@@ -162,17 +209,56 @@ const msgs = [
   { time: "12:04", nick: "Quiet", avatar: users[5].av, namebackgroundcolor: "#123456", messagetextcolor: "#3355aa", backgroundcolor: "#123456", msg: "a mid-blue that is already readable and should be kept as-is. Long message to check wrapping: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
   { time: "12:05", msg: "SuperSam has become a super." },
 ];
-msgs.forEach(createChatItem);
+if (q.has("joins")) {
+  for (const [n, u, h, w] of [["jam", "jam", 7, "joined"], ["pali", "wildcrow", 8, "joined"], ["guest-4412", "guest", 9, "joined"], ["Munch", "munch", 10, "left"], ["sak", "sak", 11, "joined"]]) {
+    roomMsgs.push({ time: "12:06", msg: `${n} (${u}:${h}) has ${w}.` });
+  }
+  roomMsgs.push({ time: "12:07", nick: "SuperSam", avatar: users[1].av, namebackgroundcolor: "#ffb6c1", messagetextcolor: "#00ff00", backgroundcolor: "#00ff00", msg: "hey @CoolCat did you see the new layout?" });
+}
+const pmMsgs = [
+  { time: "12:03", nick: "SuperSam", avatar: users[1].av, namebackgroundcolor: "#ffb6c1", messagetextcolor: "#00ff00", backgroundcolor: "#00ff00", msg: "psst, this is a private message" },
+  { time: "12:04", nick: "SuperSam", avatar: users[1].av, namebackgroundcolor: "#ffb6c1", messagetextcolor: "#00ff00", backgroundcolor: "#00ff00", msg: "and another one" },
+];
+function renderView(which) {
+  document.getElementById("chat-content").innerHTML = "";
+  (which === "room" ? roomMsgs : pmMsgs).forEach(createChatItem);
+  const back = document.getElementById("back");
+  if (which === "room") { back.classList.remove("show"); back.textContent = ""; }
+  else { back.classList.add("show"); back.textContent = "< SuperSam (supersam)"; }
+  window.__fx.view = which;
+}
+renderView("room");
 
 // Broadcast tiles, using the site's exact markup (room.js inserts newest first)
 const vids = document.getElementById("regularvideos");
+const streams = [];
 for (const u of users.filter((u) => u.video || u.audio)) {
-  vids.insertAdjacentHTML("afterbegin", ` <div class="js-video"><div class="video"><div class="video-wrapper"><video id="video" video-id="${u.handle}" autoplay playsinline>Your browser does not support the video tag...</video><span class="nickname" title="${u.nick}" style="">${u.nick}</span></div></div></div> `);
+  vids.insertAdjacentHTML("afterbegin", ` <div class="js-video"><div class="video"><div class="video-wrapper"><video id="video" video-id="${u.handle}" autoplay playsinline muted>Your browser does not support the video tag...</video><span class="nickname" title="${u.nick}" style="">${u.nick}</span></div></div></div> `);
+  if (q.has("cams") && u.video) streams.push({ u, video: vids.querySelector(`video[video-id="${u.handle}"]`) });
 }
+// Real test video for ?cams: an animated canvas per broadcaster, alternating
+// 4:3 and 16:9 like real webcams.
+streams.forEach(({ u, video }, i) => {
+  const canvas = document.createElement("canvas");
+  canvas.width = i % 3 === 1 ? 640 : 480;
+  canvas.height = 360;
+  const ctx = canvas.getContext("2d");
+  const color = COLORS[i % COLORS.length];
+  let t = i * 10;
+  const draw = () => {
+    t++;
+    ctx.fillStyle = color; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(255,255,255,0.18)";
+    ctx.beginPath(); ctx.arc(canvas.width / 2 + Math.sin(t / 20) * 60, 170, 70, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#fff"; ctx.font = "bold 44px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(u.nick.slice(0, 12), canvas.width / 2, 185);
+  };
+  draw();
+  setInterval(draw, 120);
+  video.srcObject = canvas.captureStream(8);
+  video.play().catch(() => {});
+});
 
-// Query flags: ?modal[=name] shows a dialog, ?menu shows the user context menu,
-// ?live shows the taskbar in its "broadcasting" state (Stop / Talk / open mic).
-const q = new URLSearchParams(location.search);
 const MODALS = {
   media: null, // static markup above (MEDIA OPTIONS)
   theme: ["Theme Settings", `<p>Chat Color:</p><br><form autocomplete="off"><input id="modal-color-input" value="#000000" type="color"></input><input style="width:46px;" type="submit" id='resetchatcolor' value="Reset"></input><input style="width:54px;" type="submit" id='setchatcolor' value="Set"></input></form><hr><p>Background URL/Color:</p><br><br><form autocomplete="off"><input id="modal-text-input" placeholder="Image Url" type="text"></input><input type="color" id='modal-bgcolor-input'></input><input style="width:46px;" type="submit" id='resetbackground' value="Reset"></input><input style="width:54px;" type="submit" id='setbackground' value="Set"></input></form><hr><div class="optionside"><label class="switch"><input type="checkbox" checked><span id="largeembeddedvideos" class="slider round"></span></label><h2>Large Embedded Videos:</h2></div><h3>Change size of broadcasts and embedded videos.</h3><hr><div class="optionside"><label class="switch"><input type="checkbox"><span id="largefont" class="slider round"></span></label><h2>Large Font:</h2></div><h3>Adjust font size.</h3>`],
@@ -183,19 +269,41 @@ const MODALS = {
   password: ["Room Password", `<form autocomplete="off"><div class="warning-label">Wrong password, try again</div><input id="modal-text-input" placeholder="Password" type="text"></input><input type="submit" id='room-password-clear' value="Clear"></input><input type="submit" value="Join" id='join'></input></form>`],
   roomsettings: ["Room Settings", `<p>Topic:</p><br><br><form autocomplete="off"><input id="room-topic" placeholder="Topic" autocomplete="off"></input><input type="submit" id='changeroomtopic' value="Set" style="width:54px;"></input></form><hr><p>Room Password:</p><br><br><form autocomplete="off"><input id="room-password" placeholder="Password" autocomplete="off"></input><input type="submit" id='room-password-clear' value="Clear" style="width:44px;"><input type="submit" id='changeroompassword' value="Set" style="width:54px;"></input></form><hr><p>Broadcast Password:</p><br><br><form autocomplete="off"><input id="broadcast-password" placeholder="Password" autocomplete="off"></input><input type="submit" id='broadcast-password-clear' value="Clear" style="width:44px;"><input type="submit" id='changebroadcastpassword' value="Set" style="width:54px;"></input></form><hr><div class="optionside"><label class="switch"><input type="checkbox" checked><span id="guestsallowed" class="slider round"></span></label><h2>Guests:</h2></div><h3>Allow unregistered users to enter the room.</h3><hr><div class="optionside"><label class="switch"><input type="checkbox" checked><span id="publicroom" class="slider round"></span></label><h2>List room in directory:</h2></div><h3>Be found on our directory page by users browsing the rooms.</h3><hr><div class="optionside"><label class="switch"><input type="checkbox"><span id="greenroom" class="slider round"></span></label><h2>Greenroom:</h2></div><h3>Enable a waiting area where you can moderate and choose who can broadcast.</h3>`],
   nick: ["HELLO MY NAME IS", `<form autocomplete="off"><input id="modal-text-input" placeholder="CoolCat" type="text"></input><input type="submit" value="Join" id='join'></input></form>`],
+  // The join flow, word for word from room.js (Modal.Items 20, 4, 2)
+  permissions: ["GATHERING PERMISSIONS", `Some devices for video to automatically play, the user must accept the prompt requesting camera access.`],
+  verify: ["VERIFY...", `<button id='interact'>VERIFY</button>`],
+  connecting: ["CONNECTING...", `<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>`],
 };
-if (q.has("modal")) {
-  const name = q.get("modal");
+function openModal(name) {
   if (MODALS[name]) {
-    document.querySelector("#modal > #title > p").textContent = MODALS[name][0];
+    document.querySelector("#modal > #title > p").innerHTML = MODALS[name][0];
     document.querySelector("#modal > span").innerHTML = MODALS[name][1];
   }
+  document.getElementById("modal-exit").classList.toggle("visible", !["verify", "permissions", "connecting"].includes(name));
   document.getElementById("modal-back").classList.add("visible");
 }
+function closeModal() {
+  document.getElementById("modal-back").classList.remove("visible");
+}
+if (q.has("modal")) openModal(q.get("modal"));
+else closeModal();
 if (q.has("speaking")) {
   const tiles = document.querySelectorAll("#regularvideos .video > .video-wrapper");
   if (tiles[0]) { tiles[0].classList.add("visualizer"); tiles[0].setAttribute("volume", "3"); }
   if (tiles[1]) { tiles[1].classList.add("visualizer"); tiles[1].setAttribute("volume", "9"); }
+}
+if (q.has("sim")) {
+  // A few people take turns talking, like a real room.
+  const wrappers = () => Array.from(document.querySelectorAll("#regularvideos .video > .video-wrapper"));
+  let speakerIdx = 0;
+  setInterval(() => {
+    const all = wrappers();
+    if (!all.length) return;
+    all.forEach((w) => { w.classList.add("visualizer"); if (w.getAttribute("volume") !== "0") w.setAttribute("volume", "0"); });
+    const talkers = [all[(speakerIdx * 7) % all.length], all[(speakerIdx * 3 + 5) % all.length]];
+    talkers.forEach((w) => w.setAttribute("volume", String(3 + (speakerIdx % 7))));
+  }, 300);
+  setInterval(() => speakerIdx++, 2600);
 }
 if (q.has("live")) {
   document.getElementById("media-broadcast").classList.add("hidden");
@@ -203,8 +311,93 @@ if (q.has("live")) {
   document.querySelector(".privateMessages").classList.remove("hidden");
   document.querySelector("#userlist h2.hidden").classList.remove("hidden");
   document.querySelector(".privateMessages").innerHTML = `<div><span class="private" user-id="2"><div class="nickname">SuperSam</div><div class="unreadpm show">2</div><span class="closepm">x</span></span></div>`;
-  const back = document.getElementById("back"); back.classList.add("show"); back.textContent = "< SuperSam (supersam)";
 }
 if (q.has("menu")) { const m = document.getElementById("user-menu"); m.classList.add("user-menu-active"); m.style.left = "220px"; m.style.top = "80px"; }
+if (q.has("breaksite")) vids.remove();
+
+/* ---- Stand-ins for the site's handlers (same events and targets) ---- */
+function showMenu(menu, cls, name, e) {
+  menu.querySelector(".user-menu-name, .video-menu-name").textContent = name;
+  menu.classList.add(cls);
+  menu.style.left = Math.min(e.pageX, window.innerWidth - 200) + "px";
+  menu.style.top = Math.min(e.pageY, window.innerHeight - 300) + "px";
+}
+// Video menu: document pointerup whose target IS the .video-wrapper.
+document.addEventListener("pointerup", (e) => {
+  const menu = document.getElementById("video-menu");
+  const t = e.target;
+  if (t.classList && t.classList.contains("video-wrapper")) {
+    showMenu(menu, "video-menu-active", t.querySelector(".nickname").textContent, e);
+    window.__fx.videoMenu++;
+    window.__videoMenuOpens = window.__fx.videoMenu; // older tests
+  } else if (!t.closest || !t.closest(".video-menu")) {
+    menu.classList.remove("video-menu-active");
+  }
+});
+// Everything else: one window pointerup keyed on event.target, like room.js.
+window.addEventListener("pointerup", (e) => {
+  const t = e.target;
+  if (!t || !t.classList) return;
+  // Any pointerup ends push-to-talk unless open mic is on.
+  const ptt = document.getElementById("media-ptt");
+  if (/TALKING/.test(ptt.textContent) && !document.querySelector("#media-openmic > input").checked) ptt.textContent = "TALK";
+  const userMenu = document.getElementById("user-menu");
+  if (t.classList.contains("bar")) {
+    showMenu(userMenu, "user-menu-active", t.querySelector(".nickname").textContent, e);
+    window.__fx.userMenu++;
+  } else if (!t.closest(".user-menu")) {
+    userMenu.classList.remove("user-menu-active");
+  }
+  if (t.classList.contains("resizetopic")) {
+    openModal("topic");
+    document.querySelector("#modal > #title > p").textContent = "Room Topic";
+    document.querySelector("#modal > span").textContent = document.querySelector(".topic").textContent;
+    window.__fx.topic++;
+    window.__topicModalOpens = window.__fx.topic;
+  } else if (t.id === "interact") {
+    window.__fx.verify++;
+    closeModal();
+  } else if (t.id === "modal-exit") {
+    closeModal();
+  } else if (t.classList.contains("slider")) {
+    window.__fx.sliders.push(t.id);
+  } else if (t.classList.contains("private")) {
+    renderView("pm");
+  } else if (t.id === "back") {
+    renderView("room");
+  } else if (t.id === "video-volume") {
+    window.__fx.volume.push(t.value);
+  } else if (t.classList.contains("unreadmessage")) {
+    document.getElementById("chat").scrollTop = 1e9;
+  }
+});
+window.addEventListener("pointerdown", (e) => {
+  if (e.target.id === "media-ptt") e.target.textContent = "TALKING...";
+});
+document.getElementById("media-broadcast").addEventListener("pointerdown", () => window.__fx.broadcast++);
+window.addEventListener("change", (e) => {
+  if (e.target.parentElement && e.target.parentElement.id === "media-openmic") {
+    document.getElementById("media-ptt").textContent = e.target.checked ? "TALKING..." : "TALK";
+  }
+});
+// Sending: keypress Enter in the box; the "server" echoes it back.
+document.getElementById("textarea").addEventListener("keypress", (e) => {
+  if ((e.key === "Enter" || e.code === "Enter") && !e.shiftKey) {
+    e.preventDefault();
+    const ta = e.target;
+    if (!ta.value.trim()) return;
+    window.__fx.sent.push(ta.value);
+    const msg = { time: "12:10", nick: "CoolCat", avatar: users[0].av, namebackgroundcolor: "#004466", messagetextcolor: "#ffff00", backgroundcolor: "#ff8800", msg: ta.value };
+    ta.value = "";
+    setTimeout(() => { roomMsgs.push(msg); if (window.__fx.view === "room") createChatItem(msg); }, 60);
+  }
+});
+// Tests call this to have someone else say something.
+window.__say = (nick, text) => {
+  const u = users.find((x) => x.nick === nick) || users[1];
+  const msg = { time: "12:11", nick: u.nick, avatar: u.av, namebackgroundcolor: "#ffb6c1", messagetextcolor: "#00ff00", backgroundcolor: "#00ff00", msg: text };
+  roomMsgs.push(msg);
+  if (window.__fx.view === "room") createChatItem(msg);
+};
 </script>
 </body></html>

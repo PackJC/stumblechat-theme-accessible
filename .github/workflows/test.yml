@@ -1,0 +1,26 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # Contrast check, then the headless browser tests over the fixtures.
+      # GitHub's Ubuntu runners ship Google Chrome at this path.
+      - run: npm test
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+      - run: npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extension-packages
+          path: dist/*.zip

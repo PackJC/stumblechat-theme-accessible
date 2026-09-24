@@ -52,6 +52,7 @@ html.sca11y {
   --sc-toggle-off: #6c757d;
   --sc-yellow-text: #664d03;
   --sc-success-text: #146c43;
+  --sc-danger-text: #b02a37;
   --sc-speaking: #198754;
   --sc-speaking-glow: rgba(25, 135, 84, 0.45);
   --sc-icon-invert: 1; /* site icons are white; invert them on light backgrounds */
@@ -66,6 +67,41 @@ html.sca11y {
   --sc-fs-md: calc(16px * var(--sc-scale));
   --sc-fs-lg: calc(20px * var(--sc-scale));
   --sc-fs-xl: calc(24px * var(--sc-scale));
+
+  /* Frosted-glass surfaces (directory, login, register, settings). The
+     panel colour is rgb + alpha so tools/contrast-check.js can blend it over
+     the worst-case backdrop (pure white, pure black, the logo's sky blue and
+     bark brown) and prove text on the glass still clears 4.5:1. */
+  --sc-glass-rgb: 255, 255, 255;
+  --sc-glass-alpha: 0.9;
+  --sc-glass-strong-alpha: 0.94;
+  --sc-glass: rgba(var(--sc-glass-rgb), var(--sc-glass-alpha));
+  --sc-glass-strong: rgba(var(--sc-glass-rgb), var(--sc-glass-strong-alpha));
+  --sc-glass-blur: 22px;
+  --sc-glass-border: rgba(255, 255, 255, 0.9);
+  --sc-glass-edge: rgba(15, 23, 42, 0.12);
+  --sc-glass-highlight: rgba(255, 255, 255, 0.95);
+  --sc-glass-shadow: 0 12px 32px rgba(15, 23, 42, 0.12), 0 1px 2px rgba(15, 23, 42, 0.06);
+  --sc-glass-shadow-hover: 0 18px 44px rgba(15, 23, 42, 0.18), 0 1px 2px rgba(15, 23, 42, 0.08);
+  --sc-page-bg: radial-gradient(70% 55% at 8% 0%, #cfe6ff 0%, rgba(207, 230, 255, 0) 62%), radial-gradient(55% 45% at 96% 8%, #f3d9ff 0%, rgba(243, 217, 255, 0) 60%), radial-gradient(60% 50% at 70% 100%, #d6f5e3 0%, rgba(214, 245, 227, 0) 60%), linear-gradient(180deg, #f7f9fc 0%, #eef2f8 100%);
+  --sc-logo-opacity: 1;
+  /* User-list role rows: tinted background, deep-coloured role text, and a
+     role-coloured edge (Bootstrap "subtle"/"emphasis" pairs, all >= 6:1). */
+  --sc-role-owner-bg: #fff3cd;
+  --sc-role-owner-fg: #664d03;
+  --sc-role-owner-edge: #ffc107;
+  --sc-role-super-bg: #cfe2ff;
+  --sc-role-super-fg: #084298;
+  --sc-role-super-edge: #0b5ed7;
+  --sc-role-mod-bg: #d1e7dd;
+  --sc-role-mod-fg: #0f5132;
+  --sc-role-mod-edge: #198754;
+  --sc-role-op-bg: #f8d7da;
+  --sc-role-op-fg: #842029;
+  --sc-role-op-edge: #dc3545;
+  --sc-role-muted-bg: #e2e3e5;
+  --sc-role-muted-fg: #41464b;
+  --sc-role-muted-edge: #6c757d;
   color-scheme: light;
 }
 
@@ -85,6 +121,18 @@ html.sca11y.sca11y-hc {
   --sc-focus: #000000;
   --sc-focus-ring: rgba(0, 0, 0, 0.35);
   --sc-placeholder: #495057;
+  /* High contrast: solid panels, no blur, plain page */
+  --sc-glass-alpha: 1;
+  --sc-glass-strong-alpha: 1;
+  --sc-glass-blur: 0px;
+  --sc-glass-border: var(--sc-border);
+  --sc-page-bg: linear-gradient(var(--sc-bg), var(--sc-bg));
+  --sc-logo-opacity: 0;
+  --sc-role-owner-fg: #3d2e02;
+  --sc-role-super-fg: #052c65;
+  --sc-role-mod-fg: #0a3622;
+  --sc-role-op-fg: #58151c;
+  --sc-role-muted-fg: #212529;
 }
 
 /* Dark mode (Bootstrap 5.3 dark palette, every pair re-verified) */
@@ -126,11 +174,38 @@ html.sca11y.sca11y-dark {
   --sc-toggle-off: #6c757d;
   --sc-yellow-text: #ffda6a;
   --sc-success-text: #75b798;
+  --sc-danger-text: #ea868f;
   --sc-speaking: #198754;
   --sc-speaking-glow: rgba(25, 135, 84, 0.55);
   --sc-icon-invert: 0;
   --sc-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.4);
   --sc-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.6);
+
+  --sc-glass-rgb: 30, 34, 40;
+  --sc-glass-alpha: 0.9;
+  --sc-glass-strong-alpha: 0.96;
+  --sc-glass-border: rgba(255, 255, 255, 0.14);
+  --sc-glass-edge: rgba(0, 0, 0, 0.55);
+  --sc-glass-highlight: rgba(255, 255, 255, 0.12);
+  --sc-glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sc-glass-shadow-hover: 0 18px 44px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.5);
+  --sc-page-bg: radial-gradient(70% 55% at 8% 0%, rgba(59, 130, 246, 0.35) 0%, rgba(59, 130, 246, 0) 62%), radial-gradient(55% 45% at 96% 8%, rgba(168, 85, 247, 0.28) 0%, rgba(168, 85, 247, 0) 60%), radial-gradient(60% 50% at 70% 100%, rgba(16, 185, 129, 0.22) 0%, rgba(16, 185, 129, 0) 60%), linear-gradient(180deg, #171b22 0%, #0f1319 100%);
+  --sc-logo-opacity: 0.7;
+  --sc-role-owner-bg: #332701;
+  --sc-role-owner-fg: #ffda6a;
+  --sc-role-owner-edge: #ffc107;
+  --sc-role-super-bg: #031633;
+  --sc-role-super-fg: #6ea8fe;
+  --sc-role-super-edge: #0d6efd;
+  --sc-role-mod-bg: #051b11;
+  --sc-role-mod-fg: #75b798;
+  --sc-role-mod-edge: #198754;
+  --sc-role-op-bg: #2c0b0e;
+  --sc-role-op-fg: #ea868f;
+  --sc-role-op-edge: #dc3545;
+  --sc-role-muted-bg: #161719;
+  --sc-role-muted-fg: #a7acb1;
+  --sc-role-muted-edge: #6c757d;
   color-scheme: dark;
 }
 
@@ -149,6 +224,43 @@ html.sca11y.sca11y-dark.sca11y-hc {
   --sc-danger: #dc3545;
   --sc-primary: #0d6efd;
   --sc-secondary: #6c757d;
+  --sc-glass-alpha: 1;
+  --sc-glass-strong-alpha: 1;
+  --sc-glass-blur: 0px;
+  --sc-glass-border: var(--sc-border);
+  --sc-page-bg: linear-gradient(var(--sc-bg), var(--sc-bg));
+  --sc-logo-opacity: 0;
+  --sc-role-owner-fg: #ffe69c;
+  --sc-role-super-fg: #9ec5fe;
+  --sc-role-mod-fg: #a3cfbb;
+  --sc-role-op-fg: #f1aeb5;
+  --sc-role-muted-fg: #dee2e6;
+}
+
+/* Glass off (popup toggle) or the OS asks for less transparency: same solid
+   surfaces as high contrast, plain page, no logo backdrop. */
+html.sca11y:not(.sca11y-glass) {
+  --sc-glass-alpha: 1;
+  --sc-glass-strong-alpha: 1;
+  --sc-glass-blur: 0px;
+  --sc-glass-border: var(--sc-border);
+  --sc-page-bg: linear-gradient(var(--sc-bg), var(--sc-bg));
+  --sc-logo-opacity: 0;
+}
+@media (prefers-reduced-transparency: reduce) {
+  html.sca11y {
+    --sc-glass-alpha: 1;
+    --sc-glass-strong-alpha: 1;
+    --sc-glass-blur: 0px;
+  }
+}
+
+/* Display face for room names, headings and the brand: Outfit (SIL OFL,
+   bundled in fonts/). content.js registers the @font-face with the right
+   extension URL for Chrome and Firefox; test/harness.js does the same for
+   the fixtures. Falls back to the system stack if the font is unavailable. */
+html.sca11y {
+  --sc-font-display: "SCA11y Outfit", "Segoe UI Variable Display", "SF Pro Display", "Helvetica Neue", var(--sc-font);
 }
 
 /* --------------------------------------------------------------------------
@@ -319,15 +431,11 @@ html.sca11y.sca11y-reduce-motion .heart {
 /* Icons: the site's SVG glyphs are white. Invert them on light backgrounds
    (--sc-icon-invert is 1 in light mode, 0 in dark mode). */
 html.sca11y img[src*="/svg/"],
-html.sca11y .detailbadge,
 html.sca11y .status > .audio_badge,
 html.sca11y .status > .video_badge,
 html.sca11y .status > .audio_badge_hide,
 html.sca11y .status > .video_badge_hide {
   filter: invert(var(--sc-icon-invert)) !important;
-}
-html.sca11y .detailbadge {
-  color: #ffffff !important; /* inverted -> black in light mode, white in dark */
 }
 
 /* --------------------------------------------------------------------------
@@ -341,7 +449,6 @@ html.sca11y .restart,
 html.sca11y .reset,
 html.sca11y .upgradebtn,
 html.sca11y .promotebtn,
-html.sca11y #scrollup,
 html.sca11y #back,
 html.sca11y #videoSelect,
 html.sca11y #audioSelect,
@@ -391,7 +498,6 @@ html.sca11y .button:hover,
 html.sca11y .login-form input[type="submit"]:hover,
 html.sca11y .wrapper input[type="submit"]:hover,
 html.sca11y .file > label:hover,
-html.sca11y #scrollup:hover,
 html.sca11y #back:hover,
 html.sca11y #broadcastsettings:hover,
 html.sca11y #interact:hover,
@@ -446,15 +552,13 @@ html.sca11y #media-stop:hover {
   background: var(--sc-danger-hover) !important;
 }
 
-/* Start broadcast / talk / open-mic -> btn-success */
+/* Start broadcast / talk -> btn-success (open mic is a labelled toggle, below) */
 html.sca11y #media-broadcast,
-html.sca11y #media-ptt,
-html.sca11y #media-openmic {
+html.sca11y #media-ptt {
   background: var(--sc-success) !important;
 }
 html.sca11y #media-broadcast:hover,
-html.sca11y #media-ptt:hover,
-html.sca11y #media-openmic:hover {
+html.sca11y #media-ptt:hover {
   background: var(--sc-success-hover) !important;
 }
 
@@ -462,14 +566,12 @@ html.sca11y #media-openmic:hover {
 html.sca11y #back,
 html.sca11y #media-screen,
 html.sca11y #media-settings,
-html.sca11y #media-loading,
-html.sca11y #scrollup {
+html.sca11y #media-loading {
   background: var(--sc-secondary) !important;
 }
 html.sca11y #back:hover,
 html.sca11y #media-screen:hover,
-html.sca11y #media-settings:hover,
-html.sca11y #scrollup:hover {
+html.sca11y #media-settings:hover {
   background: var(--sc-secondary-hover) !important;
 }
 
@@ -602,11 +704,29 @@ html.sca11y input[type="range"] {
 /* Navbar -> .navbar.navbar-light.bg-white */
 html.sca11y .navbar {
   height: 56px !important;
-  background: var(--sc-bg) !important;
+  background: var(--sc-glass) !important;
   background-image: none !important;
-  border-bottom: 1px solid var(--sc-border) !important;
-  box-shadow: var(--sc-shadow) !important;
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  border-bottom: 1px solid var(--sc-glass-border) !important;
+  box-shadow: 0 1px 0 var(--sc-glass-edge), var(--sc-shadow) !important;
   user-select: auto !important;
+  position: relative;
+  z-index: 2;
+}
+/* Small logo beside the brand (content.js inserts it from the site's own image) */
+html.sca11y .sca11y-brand-logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+  vertical-align: middle;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px var(--sc-glass-edge);
+}
+html.sca11y:not(.sca11y-glass) .sca11y-brand-logo,
+html.sca11y.sca11y-hc .sca11y-brand-logo {
+  box-shadow: none;
 }
 /* Logged-in navbar: account name/avatar button (#accbtn), notification and
    cart icons, and the #accdrop menu are built with white text for the dark
@@ -650,6 +770,19 @@ html.sca11y .dropdown-menu.show {
 html.sca11y #accdrop:not(.show) {
   display: none;
 }
+/* Open the account menu under the account button, right edges lined up,
+   instead of at the far edge of the bar. */
+html.sca11y .navbar .container-fluid > .navbar-container {
+  position: relative;
+}
+html.sca11y #accdrop {
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  right: 0 !important;
+  left: auto !important;
+  margin-top: 0 !important;
+  z-index: 1000;
+}
 html.sca11y .dropdown-menu .dropdown-item,
 html.sca11y .dropdown-menu a,
 html.sca11y .dropdown-menu li,
@@ -667,8 +800,9 @@ html.sca11y .dropdown-menu .dropdown-item:focus-visible {
 
 html.sca11y .navbar-brand {
   color: var(--sc-text) !important;
-  font-size: var(--sc-fs-lg) !important;
-  font-weight: 600 !important;
+  font-family: var(--sc-font-display) !important;
+  font-size: calc(22px * var(--sc-scale)) !important;
+  font-weight: 700 !important;
   text-decoration: none !important;
   padding: 0.25rem 0;
 }
@@ -720,19 +854,48 @@ html.sca11y .fa-bell:before {
   color: var(--sc-text) !important;
 }
 
-/* Page frame */
-html.sca11y .content {
+/* Page frame. The pages that use home.css (directory, login, register,
+   settings) get the gradient page background on <html>, the site's own moai
+   logo (content.js finds its URL in the site's stylesheet and sets
+   --sc-logo-url) as a fixed backdrop behind everything, and frosted panels
+   on top. Nothing readable ever sits directly on the picture. */
+html.sca11y:has(body > .content) {
+  background: var(--sc-page-bg) !important;
+  background-attachment: fixed !important;
+}
+html.sca11y body:has(> .content) {
+  background: transparent !important;
+}
+html.sca11y body:has(> .content)::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  bottom: 44px;
+  z-index: -1;
+  width: min(62vw, 560px);
+  height: min(62vh, 560px);
+  background: var(--sc-logo-url, none) no-repeat left bottom / contain;
+  opacity: var(--sc-logo-opacity);
+  pointer-events: none;
+}
+/* The page wrapper only: chat bubbles are also ".content", and this bottom
+   offset pulled any bubble that became position: relative (mentions) up
+   over the message above it. */
+html.sca11y body > .content {
   height: calc(100% - 100px) !important;
   bottom: 44px !important;
-  background: var(--sc-bg) !important;
+  background: transparent !important;
   padding: 16px !important;
 }
 html.sca11y .footer {
   height: 44px !important;
   padding: 4px 8px;
-  background: var(--sc-bg-subtle) !important;
+  background: var(--sc-glass) !important;
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
   color: var(--sc-text-muted) !important;
-  border-top: 1px solid var(--sc-border) !important;
+  border-top: 1px solid var(--sc-glass-border) !important;
+  box-shadow: 0 -1px 0 var(--sc-glass-edge);
   font-size: var(--sc-fs-xs) !important;
   line-height: 1.4 !important;
   user-select: auto !important;
@@ -744,27 +907,30 @@ html.sca11y .footer-link:visited {
   text-decoration: underline !important;
 }
 
-/* Panels -> .card */
+/* Panels -> frosted glass cards */
 html.sca11y .wrapper,
 html.sca11y .login-form,
 html.sca11y .returnlink,
 html.sca11y .pagination-wrapper,
 html.sca11y .bubble {
-  background: var(--sc-bg) !important;
+  background: var(--sc-glass) !important;
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
   color: var(--sc-text) !important;
-  border: 1px solid var(--sc-border) !important;
-  border-radius: var(--sc-radius-lg) !important;
-  box-shadow: var(--sc-shadow) !important;
+  border: 1px solid var(--sc-glass-border) !important;
+  border-radius: 20px !important;
+  box-shadow: inset 0 1px 0 var(--sc-glass-highlight), 0 0 0 1px var(--sc-glass-edge), var(--sc-glass-shadow) !important;
   user-select: auto !important;
 }
 html.sca11y .wrapper > h1,
 html.sca11y .wrapper h1,
 html.sca11y .login-form h1 {
   color: var(--sc-text) !important;
-  font-size: var(--sc-fs-xl) !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.01em;
-  padding: 0.5rem 0 !important;
+  font-family: var(--sc-font-display) !important;
+  font-size: calc(22px * var(--sc-scale)) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em;
+  padding: 0.4rem 0 !important;
 }
 html.sca11y .wrapper > p,
 html.sca11y .wrapper > li,
@@ -845,59 +1011,268 @@ html.sca11y #error h1 {
   padding: 0.75rem 1rem !important;
 }
 
-/* Room cards on the directory */
+/* Directory grid. The site lays cards out with Masonry (absolute positions
+   and an inline container height). Cards are now all the same height, so a
+   CSS grid does the job, reflows with the window, and takes the cards
+   content.js appends when more pages are loaded. */
+html.sca11y .publicrooms > .centered {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, 250px);
+  justify-content: center;
+  gap: 15px;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+}
+html.sca11y .publicrooms > .centered > .grid-item {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  /* Masonry re-runs on every window resize and moves cards with an inline
+     translate3d(); with the grid in charge that offset must never apply. */
+  transform: none !important;
+  width: 250px !important;
+  min-width: 0;
+  margin: 0 !important;
+  transition: none !important;
+}
+/* Phones: one column that uses the width available instead of a fixed 250px */
+@media (max-width: 560px) {
+  html.sca11y .publicrooms > .centered {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html.sca11y .publicrooms > .centered > .grid-item {
+    width: auto !important;
+    max-width: 340px;
+    justify-self: center;
+    width: 100% !important;
+  }
+}
+html.sca11y .publicrooms {
+  overflow: visible !important;
+  /* The panel around the cards is invisible: each card is its own glass
+     surface on the backdrop. The panel keeps its padding so the "Load more"
+     control still has room. */
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding: 0 !important;
+}
+/* Infinite loading (content.js): the page buttons give way to a sentinel
+   and a "Load more" button that also fires when scrolled into view. */
+html.sca11y.sca11y-infinite .pagination-wrapper {
+  display: none !important;
+}
+html.sca11y .sca11y-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 16px auto 8px auto;
+  text-align: center;
+}
+html.sca11y .sca11y-more:empty {
+  display: none;
+}
+html.sca11y .sca11y-more-btn {
+  min-width: 12rem;
+  min-height: 44px;
+  padding: 0.6rem 1.5rem;
+  background: var(--sc-glass) !important;
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  color: var(--sc-link) !important;
+  border: 1px solid var(--sc-glass-border) !important;
+  border-radius: 999px !important;
+  box-shadow: inset 0 1px 0 var(--sc-glass-highlight), 0 0 0 1px var(--sc-glass-edge), var(--sc-glass-shadow);
+  font: 600 var(--sc-fs-md) var(--sc-font) !important;
+  cursor: pointer;
+}
+html.sca11y .sca11y-more-btn:hover {
+  background: var(--sc-glass-strong) !important;
+  color: var(--sc-link-hover) !important;
+}
+html.sca11y .sca11y-more-btn[aria-busy="true"] {
+  cursor: progress;
+  color: var(--sc-text-muted) !important;
+}
+html.sca11y .sca11y-more-status {
+  font-size: var(--sc-fs-sm);
+  color: var(--sc-text-muted);
+  background: var(--sc-glass);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+/* Room cards on the directory: one glass card per room. The site's fixed
+   380px card with 2px blue borders and black strips becomes a rounded
+   frosted card: name, two labelled count pills, the preview with rounded
+   corners, then the topic. */
 html.sca11y .publicrooms .bubble,
 html.sca11y .centered.bubble {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 html.sca11y .room-wrap {
-  background: var(--sc-bg) !important;
-  border: 1px solid var(--sc-border) !important;
-  border-radius: var(--sc-radius-lg) !important;
-  box-shadow: var(--sc-shadow) !important;
+  background: var(--sc-glass) !important;
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  border: 1px solid var(--sc-glass-border) !important;
+  border-radius: 20px !important;
+  box-shadow: inset 0 1px 0 var(--sc-glass-highlight), 0 0 0 1px var(--sc-glass-edge), var(--sc-glass-shadow) !important;
+  height: auto !important;
+  min-height: 0 !important;
   overflow: hidden;
-  transition: box-shadow 0.15s ease-in-out;
+  transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+}
+html.sca11y .room-wrap {
+  cursor: pointer; /* content.js: a click anywhere on the card joins the room */
 }
 html.sca11y .room-wrap:hover,
 html.sca11y .room-wrap:focus-within {
-  box-shadow: var(--sc-shadow-lg) !important;
-  border-color: var(--sc-border-strong) !important;
+  box-shadow: inset 0 1px 0 var(--sc-glass-highlight), 0 0 0 1px var(--sc-glass-edge), var(--sc-glass-shadow-hover) !important;
+  transform: translateY(-2px);
+}
+/* The join link is the card's single tab stop; show its focus on the card */
+html.sca11y .room-wrap:has(.thumbnail a:focus-visible) {
+  outline: 3px solid var(--sc-focus) !important;
+  outline-offset: 2px;
+}
+html.sca11y .room-wrap .thumbnail a:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 html.sca11y .roomname {
-  background: var(--sc-bg-subtle) !important;
+  background: transparent !important;
   background-image: none !important;
-  border-bottom: 1px solid var(--sc-border) !important;
+  border: none !important;
   border-radius: 0 !important;
+  padding: 10px 12px 0 12px;
   user-select: auto !important;
 }
 html.sca11y .roomname h3 {
   color: var(--sc-text) !important;
-  font-size: var(--sc-fs-md) !important;
-  font-weight: 600 !important;
-  line-height: 28px !important;
+  font-family: var(--sc-font-display) !important;
+  font-size: calc(19px * var(--sc-scale)) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+  line-height: 26px !important;
+  height: 26px !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
+/* Count pills: "22 on cam" and "48 in room" instead of two 16px icons */
 html.sca11y .details {
-  background: var(--sc-bg) !important;
-  color: var(--sc-text) !important;
-  font-size: var(--sc-fs-sm) !important;
-  font-weight: 600 !important;
+  display: flex !important;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  padding: 0 6px;
-  width: 100% !important;
+  height: auto !important;
+  width: auto !important;
+  padding: 6px 10px 8px 10px;
+  background: transparent !important;
+  color: var(--sc-text) !important;
+  text-shadow: none !important;
+}
+html.sca11y .detailbadge {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
+  width: auto !important;
+  height: 26px !important;
+  padding: 0 10px 0 8px !important;
+  margin: 0 !important;
+  background-color: var(--sc-glass-strong) !important;
+  background-image: none !important;
+  border: 1px solid var(--sc-glass-border);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 var(--sc-glass-highlight), 0 0 0 1px var(--sc-glass-edge);
+  color: var(--sc-text) !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs-sm) !important;
+  font-weight: 700 !important;
+  line-height: 24px !important;
+  white-space: nowrap;
+  filter: none !important;
+  text-shadow: none !important;
+}
+html.sca11y .detailbadge::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  background: currentColor;
+}
+html.sca11y .detailbadge::after {
+  font-weight: 500 !important;
+  color: var(--sc-text-muted);
+}
+html.sca11y .detailbadge.broadcast::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y .detailbadge.broadcast::after {
+  content: "on cam";
+}
+/* The on-cam count goes green while anyone is broadcasting (content.js sets .sca11y-live) */
+html.sca11y .room-wrap.sca11y-live .detailbadge.broadcast {
+  color: var(--sc-success-text) !important;
+}
+html.sca11y .detailbadge.users::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.7 0-8 1.3-8 4v2h9v-2c0-1.1.6-2.3 1.7-3.2A11 11 0 0 0 8 13zm8 0c-.3 0-.7 0-1 .1 1.3.9 2 2.2 2 3.9v3h6v-3c0-2.7-4.3-4-7-4z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.7 0-8 1.3-8 4v2h9v-2c0-1.1.6-2.3 1.7-3.2A11 11 0 0 0 8 13zm8 0c-.3 0-.7 0-1 .1 1.3.9 2 2.2 2 3.9v3h6v-3c0-2.7-4.3-4-7-4z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y .detailbadge.users::after {
+  content: "in room";
 }
 html.sca11y .thumbnail {
-  background: var(--sc-bg-muted) !important;
-  border-top: 1px solid var(--sc-border) !important;
-  border-bottom: 1px solid var(--sc-border) !important;
+  background: var(--sc-bg-dark) !important;
+  border: 1px solid var(--sc-glass-edge) !important;
+  border-radius: 14px !important;
+  width: calc(100% - 20px);
+  height: auto !important;
+  aspect-ratio: 4 / 3;
+  margin: 0 auto;
+  overflow: hidden;
   position: relative;
+}
+html.sca11y .slideshow,
+html.sca11y .slides,
+html.sca11y .thumbnail > .slideshow > a[room-name],
+html.sca11y .thumbnail > .slideshow > a[href] {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+/* The site's carousel arrows (one preview per room, they do nothing) must
+   never come back as blocks over the preview. */
+html.sca11y .thumbnail .prev,
+html.sca11y .thumbnail .next,
+html.sca11y .slideshow > a.prev,
+html.sca11y .slideshow > a.next {
+  display: none !important;
+}
+html.sca11y .slides > img,
+html.sca11y .thumbnail > a > img {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
 }
 html.sca11y .no-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--sc-text-muted) !important;
+  width: 100%;
+  height: 100%;
+  color: #ffffff !important;
+  background: linear-gradient(160deg, #3b4252, #1f2430) !important;
   font-size: var(--sc-fs) !important;
   font-weight: 500;
 }
@@ -909,10 +1284,10 @@ html.sca11y .slideshow a {
   text-decoration: none !important;
 }
 html.sca11y .description {
-  background: var(--sc-bg) !important;
+  background: transparent !important;
   border-radius: 0 !important;
-  text-align: left !important;
-  padding: 8px 10px !important;
+  text-align: center !important;
+  padding: 10px 12px 12px 12px !important;
   user-select: auto !important;
 }
 html.sca11y .description h4 {
@@ -920,6 +1295,7 @@ html.sca11y .description h4 {
   font-size: var(--sc-fs) !important;
   font-weight: 400 !important;
   line-height: 1.5 !important;
+  height: 84px !important;
   overflow-y: auto !important;
 }
 /* The site's carousel arrows on each room card do nothing (one preview per
@@ -934,28 +1310,31 @@ html.sca11y .slides > img:hover {
 
 /* Pagination -> .pagination */
 html.sca11y .pagination-wrapper {
-  padding: 8px !important;
-  margin: 12px auto 0 auto !important;
+  padding: 6px !important;
+  margin: 16px auto 0 auto !important;
+  border-radius: 999px !important;
+  width: max-content;
+  min-width: 0 !important;
+}
+html.sca11y .pagination {
+  display: flex;
+  gap: 4px;
 }
 html.sca11y .pagination div {
   color: var(--sc-link) !important;
-  background: var(--sc-bg) !important;
-  border: 1px solid var(--sc-border) !important;
-  margin-left: -1px;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 999px !important;
+  float: none !important;
+  margin: 0;
   padding: 0.5rem 0.9rem !important;
   min-width: 44px;
   min-height: 44px;
   text-align: center;
   font-size: var(--sc-fs-md) !important;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.5;
   box-sizing: border-box;
-}
-html.sca11y .pagination div:first-child {
-  border-radius: var(--sc-radius) 0 0 var(--sc-radius);
-}
-html.sca11y .pagination div:last-child {
-  border-radius: 0 var(--sc-radius) var(--sc-radius) 0;
 }
 html.sca11y .pagination div:hover:not(.active) {
   background: var(--sc-bg-muted) !important;
@@ -1024,7 +1403,32 @@ html.sca11y .fl-table thead th:nth-child(odd) {
 }
 html.sca11y .fl-table {
   color: var(--sc-text) !important;
+  background: var(--sc-bg) !important;
   font-size: var(--sc-fs) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: var(--sc-radius-lg) !important;
+  overflow: hidden;
+}
+/* The site hard-codes #f8f8f8 even rows and borders; in dark mode that put
+   light text on a near-white row. Use the palette. */
+html.sca11y .fl-table tr,
+html.sca11y .fl-table tbody tr {
+  background: var(--sc-bg) !important;
+}
+html.sca11y .fl-table tr:nth-child(even) {
+  background: var(--sc-bg-subtle) !important;
+}
+html.sca11y .fl-table td {
+  border-right: 1px solid var(--sc-border) !important;
+  color: var(--sc-text) !important;
+}
+html.sca11y .fl-table td,
+html.sca11y .fl-table th {
+  padding: 0.6rem 0.75rem !important;
+}
+html.sca11y .table-wrapper {
+  border-radius: var(--sc-radius-lg);
+  box-shadow: var(--sc-shadow);
 }
 html.sca11y .table-wrapper:before {
   color: var(--sc-text-muted) !important;
@@ -1165,7 +1569,64 @@ html.sca11y .bar .role:empty {
 html.sca11y .bar .status {
   padding: 0 !important;
 }
-/* Role badges: each pair >= 4.5:1 */
+/* User-list rows take their role's colour: a soft tint across the row, a
+   coloured left edge, and the role name as deep-coloured text where the
+   badge was. (The old badges lost their white text to the row text colour,
+   which left "Mod" and "Operator" under 3:1.) */
+html.sca11y #userlist .bar:has(.role.gold) {
+  --sca11y-role-bg: var(--sc-role-owner-bg);
+  --sca11y-role-fg: var(--sc-role-owner-fg);
+  --sca11y-role-edge: var(--sc-role-owner-edge);
+}
+html.sca11y #userlist .bar:has(.role.blue) {
+  --sca11y-role-bg: var(--sc-role-super-bg);
+  --sca11y-role-fg: var(--sc-role-super-fg);
+  --sca11y-role-edge: var(--sc-role-super-edge);
+}
+html.sca11y #userlist .bar:has(.role.green) {
+  --sca11y-role-bg: var(--sc-role-mod-bg);
+  --sca11y-role-fg: var(--sc-role-mod-fg);
+  --sca11y-role-edge: var(--sc-role-mod-edge);
+}
+html.sca11y #userlist .bar:has(.role.red) {
+  --sca11y-role-bg: var(--sc-role-op-bg);
+  --sca11y-role-fg: var(--sc-role-op-fg);
+  --sca11y-role-edge: var(--sc-role-op-edge);
+}
+html.sca11y #userlist .bar:has(.role.black) {
+  --sca11y-role-bg: var(--sc-role-muted-bg);
+  --sca11y-role-fg: var(--sc-role-muted-fg);
+  --sca11y-role-edge: var(--sc-role-muted-edge);
+}
+html.sca11y #userlist .bar:has(.role:not(:empty)) {
+  background: var(--sca11y-role-bg, var(--sc-bg-subtle)) !important;
+  border-color: color-mix(in srgb, var(--sca11y-role-edge, var(--sc-border)) 45%, transparent) !important;
+  box-shadow: inset 4px 0 0 var(--sca11y-role-edge, transparent) !important;
+  padding-left: 8px !important;
+}
+html.sca11y #userlist .bar:has(.role:not(:empty)):hover,
+html.sca11y #userlist .bar:has(.role:not(:empty)).selected {
+  background: var(--sca11y-role-bg, var(--sc-bg-subtle)) !important;
+  border-color: var(--sc-primary) !important;
+}
+html.sca11y #userlist .bar .role {
+  background: transparent !important;
+  color: var(--sca11y-role-fg, var(--sc-text-muted)) !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: var(--sc-fs-xs) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+  line-height: 1.3 !important;
+  height: auto !important;
+  overflow: visible !important;
+  white-space: nowrap;
+}
+html.sca11y #userlist .bar.sca11y-talking {
+  box-shadow: inset 4px 0 0 var(--sc-speaking) !important;
+}
+
+/* Role colours elsewhere (for example a profile card): each pair >= 4.5:1 */
 html.sca11y .gold {
   background: var(--sc-warning) !important;
   color: var(--sc-warning-text) !important;
@@ -1231,39 +1692,211 @@ html.sca11y sc-videolist .resizetopic:hover {
   background-color: var(--sc-primary) !important;
 }
 
-/* Room header + option dropdowns */
-html.sca11y .header {
+/* Room header: the site stacks two 19px strips (a back arrow with three
+   16px icons, then a 13px topic with a down-arrow that opens the full topic
+   in a dialog). Now: a 44px toolbar with an Exit pill and 32px option
+   buttons, and a 28px topic line that opens the same dialog when clicked.
+   The video area starts below both (top 74px; see #videos-content). */
+html.sca11y:not(.sca11y-compat) .header {
   background: var(--sc-bg-subtle) !important;
   color: var(--sc-text) !important;
   border-bottom: 1px solid var(--sc-border) !important;
   font-family: var(--sc-font) !important;
+  height: 44px !important;
+  box-sizing: border-box;
 }
-html.sca11y .topic {
+html.sca11y:not(.sca11y-compat) sc-videolist > .header:not(.roomdesc) > div {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 8px;
+}
+html.sca11y:not(.sca11y-compat) .header.roomdesc {
+  height: 28px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: var(--sc-bg) !important;
+}
+html.sca11y:not(.sca11y-compat) .topic {
   color: var(--sc-text) !important;
-  font-size: var(--sc-fs-xs) !important;
+  font-size: var(--sc-fs-sm) !important;
   font-weight: 500;
-}
-html.sca11y .directory {
-  color: var(--sc-text) !important;
+  height: auto !important;
+  width: auto !important;
+  max-width: 100%;
+  margin: 0 !important;
+  line-height: 26px !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border-radius: var(--sc-radius);
+  padding: 0 8px;
+  cursor: pointer; /* content.js: opens the site's full-topic dialog */
 }
-html.sca11y .directory:hover,
-html.sca11y .directory:focus-visible {
+html.sca11y:not(.sca11y-compat) .topic:hover {
   background: var(--sc-bg-muted) !important;
 }
-html.sca11y .dropbtn {
+/* Room name beside the topic; only shown where the user list is a drawer */
+html.sca11y:not(.sca11y-compat) .sca11y-room-title {
+  display: none;
+  flex: 0 0 auto;
+  font: 700 var(--sc-fs-sm) var(--sc-font-display);
+  color: var(--sc-text);
+  letter-spacing: 0.02em;
+}
+/* The down-arrow below the topic is gone; the topic line does its job */
+html.sca11y:not(.sca11y-compat) sc-videolist .resizetopic {
+  display: none !important;
+}
+/* Exit: the back arrow becomes a labelled pill that leaves to the directory */
+html.sca11y:not(.sca11y-compat) .directory {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  height: 32px !important;
+  padding: 0 12px 0 10px !important;
+  margin: 0 !important;
+  background: var(--sc-bg-muted) !important;
   color: var(--sc-text) !important;
-  border-radius: var(--sc-radius) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: 999px !important;
+  font: 600 var(--sc-fs-sm) / 1 var(--sc-font) !important;
+  text-decoration: none !important;
+  overflow: visible !important;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+html.sca11y:not(.sca11y-compat) .directory > img {
+  display: none !important;
+}
+html.sca11y:not(.sca11y-compat) .directory::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3zm6.6 5.6L15.2 10l1.6 1.6H9v2h7.8l-1.6 1.6 1.4 1.4 4-4-4-4z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3zm6.6 5.6L15.2 10l1.6 1.6H9v2h7.8l-1.6 1.6 1.4 1.4 4-4-4-4z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y:not(.sca11y-compat) .directory::after {
+  content: "Exit room";
+}
+html.sca11y:not(.sca11y-compat) .directory:hover,
+html.sca11y:not(.sca11y-compat) .directory:focus-visible {
+  background: var(--sc-danger) !important;
+  border-color: var(--sc-danger) !important;
+  color: #ffffff !important;
+}
+/* Option buttons: 32px targets at the right of the toolbar. The site gives
+   each menu wrapper an 18px height, which pushed Games/Media/Options 8px
+   below Theatre; every child is now a 32px flex item, centred. */
+html.sca11y:not(.sca11y-compat) #user-options > * {
+  display: inline-flex !important;
+  align-items: center;
+  height: 32px !important;
+  margin: 0 !important;
+  vertical-align: middle;
+}
+html.sca11y:not(.sca11y-compat) #user-options > .hidden {
+  display: none !important;
+}
+html.sca11y:not(.sca11y-compat) #user-options {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+/* Header buttons: labelled pills in the same style as "Exit room", with
+   crisp icons instead of the site's 16px inverted images. They drop to
+   icon-only when the toolbar is narrow (container query below). */
+html.sca11y:not(.sca11y-compat) sc-videolist > .header:not(.roomdesc) > div {
+  container-type: inline-size;
+  container-name: sca11y-roombar;
+}
+html.sca11y:not(.sca11y-compat) .dropbtn {
+  color: var(--sc-text) !important;
+  height: 32px !important;
+  width: auto !important;
+  min-width: 32px;
+  padding: 0 12px 0 10px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--sc-bg-muted) !important;
+  border: 1px solid var(--sc-border) !important;
+  border-radius: 999px !important;
+  font: 600 var(--sc-fs-sm) / 1 var(--sc-font) !important;
+  white-space: nowrap;
+  cursor: pointer;
+}
+html.sca11y:not(.sca11y-compat) .dropbtn > img,
+html.sca11y:not(.sca11y-compat) .dropbtn > svg {
+  display: none !important;
+}
+html.sca11y:not(.sca11y-compat) .dropbtn::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+}
+html.sca11y:not(.sca11y-compat) #games.dropbtn::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 6h10a5 5 0 0 1 4.9 6l-1 5a3 3 0 0 1-5.2 1.3L14 16h-4l-1.7 2.3A3 3 0 0 1 3.1 17l-1-5A5 5 0 0 1 7 6zm0 3v2H5v2h2v2h2v-2h2v-2H9V9H7zm8.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm3-2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 6h10a5 5 0 0 1 4.9 6l-1 5a3 3 0 0 1-5.2 1.3L14 16h-4l-1.7 2.3A3 3 0 0 1 3.1 17l-1-5A5 5 0 0 1 7 6zm0 3v2H5v2h2v2h2v-2h2v-2H9V9H7zm8.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm3-2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y:not(.sca11y-compat) #games.dropbtn::after {
+  content: "Games";
+}
+html.sca11y:not(.sca11y-compat) #media.dropbtn::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm6 4v6l5-3-5-3z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm6 4v6l5-3-5-3z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y:not(.sca11y-compat) #media.dropbtn::after {
+  content: "Media";
+}
+html.sca11y:not(.sca11y-compat) .dropbtn:has(> img[alt="Options"])::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6h11v2H3V6zm15 0h3v2h-3v2h-2V4h2v2zM3 16h3v-2h2v6H6v-2H3v-2zm7 0h11v2H10v-2zm-7-5h7v2H3v-2zm11-2h2v2h5v2h-5v2h-2V9z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 6h11v2H3V6zm15 0h3v2h-3v2h-2V4h2v2zM3 16h3v-2h2v6H6v-2H3v-2zm7 0h11v2H10v-2zm-7-5h7v2H3v-2zm11-2h2v2h5v2h-5v2h-2V9z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y:not(.sca11y-compat) .dropbtn:has(> img[alt="Options"])::after {
+  content: "Options";
+}
+html.sca11y:not(.sca11y-compat) .sca11y-theatre-btn.dropbtn::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2v10h16V7H4zm2 2h12v6H6V9z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2v10h16V7H4zm2 2h12v6H6V9z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y:not(.sca11y-compat) .sca11y-theatre-btn.dropbtn::after {
+  content: "Theatre";
+}
+@container sca11y-roombar (max-width: 560px) {
+  html.sca11y:not(.sca11y-compat) .dropbtn {
+    width: 36px !important;
+    padding: 0 !important;
+  }
+  html.sca11y:not(.sca11y-compat) .dropbtn::after {
+    content: none !important;
+  }
 }
 html.sca11y .user-options-dropdown:hover .dropbtn,
-html.sca11y .user-options-dropdown:focus-within .dropbtn {
-  background: var(--sc-bg-muted) !important;
+html.sca11y .user-options-dropdown.sca11y-open .dropbtn,
+html.sca11y .dropbtn:hover {
+  background: var(--sc-primary-subtle-hover) !important;
+  border-color: var(--sc-primary) !important;
+}
+/* The header sits above the camera area, so its menus are not covered by
+   the cameras (the glass blur gives the header its own layer). */
+html.sca11y sc-videolist > .header:not(.roomdesc) {
+  position: relative;
+  z-index: 6;
 }
 /* Keyboard users can open the hover-only menus (WCAG 2.1.1) */
-html.sca11y .user-options-dropdown:focus-within .dropdown-content {
+html.sca11y .user-options-dropdown.sca11y-open .dropdown-content {
   display: block !important;
 }
-html.sca11y .user-options-dropdown.hidden:focus-within .dropdown-content {
+html.sca11y .user-options-dropdown.hidden.sca11y-open .dropdown-content {
   display: none !important;
 }
 html.sca11y .dropdown-content {
@@ -1273,7 +1906,20 @@ html.sca11y .dropdown-content {
   box-shadow: var(--sc-shadow-lg) !important;
   padding: 6px 0 !important;
   min-width: 180px !important;
-  top: 24px !important;
+  top: calc(100% + 6px) !important;
+  right: 0;
+  left: auto !important;
+  z-index: 20 !important;
+}
+/* An invisible bridge over the 6px gap, so moving the mouse from the
+   button into the menu does not close it. */
+html.sca11y .dropdown-content::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -8px;
+  height: 8px;
 }
 html.sca11y .dropdown-content a {
   background: transparent !important;
@@ -1306,37 +1952,25 @@ html.sca11y .volumebarwrap {
 /* Broadcast tiles follow the video's own aspect ratio: no letterbox bars, the
    name pill sits on the picture. Embeds (#embeddedvideos) keep the fixed box
    because iframes need an explicit height. */
-/* Repurpose the site's aspect-ratio pseudo-element as a drag grip that
-   appears on hover/focus (content.js makes tiles draggable). */
+/* The site uses this pseudo-element as a 4:3 spacer. Tiles take their
+   height from the video itself, so it is not needed; no grip either
+   (cameras are dragged by the picture, or moved with Alt + arrow keys). */
 html.sca11y #regularvideos .video > .video-wrapper:before,
 html.sca11y #regularvideos .video > div:before {
-  content: "\2807\2807" !important; /* ⠇⠇ */
-  display: block !important;
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 2;
-  width: auto !important;
-  height: 24px;
-  padding: 0 7px !important;
-  border-radius: 999px;
-  background: rgba(33, 37, 41, 0.85);
-  color: #ffffff;
-  font-size: 14px;
-  line-height: 24px;
-  letter-spacing: -2px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s;
+  content: none !important;
+  display: none !important;
 }
-html.sca11y #regularvideos .js-video:hover .video > .video-wrapper:before,
-html.sca11y #regularvideos .js-video:focus-visible .video > .video-wrapper:before,
-html.sca11y #regularvideos .js-video:focus-within .video > .video-wrapper:before {
-  opacity: 1;
+/* The picture is the button that opens the camera menu. */
+html.sca11y #regularvideos .video > .video-wrapper:focus-visible {
+  outline: 3px solid var(--sc-focus) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px var(--sc-bg) !important;
 }
 html.sca11y #regularvideos > .js-video {
   cursor: grab;
-  touch-action: none;
+  touch-action: manipulation; /* swipes still scroll; a press-and-hold drags */
+  -webkit-touch-callout: none;
+  user-select: none;
   transition: opacity 0.12s, transform 0.12s;
 }
 html.sca11y #regularvideos.sca11y-drag-active,
@@ -1484,10 +2118,16 @@ html.sca11y.sca11y-reduce-motion .visualizer[volume]:not([volume="0"])::after {
   animation: none !important;
 }
 
-/* Video area: tiles stay dark (video content), surround is light */
+/* Video area: tiles stay dark (video content), surround is light. The site
+   positions it by CSS alone (top 40px = two 19px strips; height leaves room
+   for the 35px taskbar), so it simply moves down under the taller header. */
 html.sca11y #videos-content,
 html.sca11y #videos {
   background: var(--sc-bg) !important;
+}
+html.sca11y:not(.sca11y-compat) #videos-content {
+  top: 74px !important;
+  height: calc(100% - 110px) !important;
 }
 html.sca11y .video > div {
   background-color: var(--sc-bg-dark) !important;
@@ -1687,15 +2327,147 @@ html.sca11y #media-ptt.hidden,
 html.sca11y #media-loading.hidden {
   display: none !important;
 }
+/* Open mic: the site ships a bare 30px checkbox on a green square, easy to
+   miss next to the big Talk button. Turn the wrapper into a labelled toggle
+   pill (outlined = off, filled green + "Mic on" = on) and stretch the real
+   checkbox invisibly over it, so the whole pill is the control and the site's
+   own change handler still fires exactly once per press. */
 html.sca11y #media-openmic:not(.hidden) {
-  border-radius: var(--sc-radius);
-  display: flex;
+  position: relative;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
+  gap: 6px;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  height: 31px;
+  min-width: 0;
+  padding: 0 12px 0 10px !important;
+  background: var(--sc-bg) !important;
+  color: var(--sc-text) !important;
+  border: 2px solid var(--sc-border-strong) !important;
+  border-radius: var(--sc-radius) !important;
+  font: 700 var(--sc-fs-sm) / 1 var(--sc-font) !important;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+html.sca11y #media-openmic:not(.hidden)::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 15a4 4 0 0 0 4-4V5a4 4 0 1 0-8 0v6a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 15a4 4 0 0 0 4-4V5a4 4 0 1 0-8 0v6a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y #media-openmic:not(.hidden)::after {
+  content: "Open mic";
+}
+html.sca11y #media-openmic:not(.hidden):hover {
+  background: var(--sc-bg-muted) !important;
+}
+/* On: amber, not green, so it never reads as part of the Talk button.
+   Amber is the "hot mic" colour: you are live until you switch it off. */
+html.sca11y #media-openmic:has(input:checked) {
+  background: var(--sc-warning) !important;
+  border-color: #997404 !important;
+  color: var(--sc-warning-text) !important;
+  animation: sca11y-hotmic 1.6s ease-in-out infinite;
+}
+html.sca11y #media-openmic:has(input:checked)::after {
+  content: "Mic open";
+}
+html.sca11y #media-openmic:has(input:checked):hover {
+  background: #ffcd39 !important;
+}
+@keyframes sca11y-hotmic {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+  50% { box-shadow: 0 0 0 5px rgba(255, 193, 7, 0); }
+}
+html.sca11y.sca11y-reduce-motion #media-openmic:has(input:checked) {
+  animation: none;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.55) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.sca11y #media-openmic:has(input:checked) {
+    animation: none;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.55) !important;
+  }
+}
+
+/* Talk has three looks: idle (green, press and hold), talking (white with a
+   green frame and moving level bars: "you are live"), and open mic (quiet,
+   because the amber Mic open pill is the control that matters then). */
+html.sca11y #media-ptt::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: -3px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 15a4 4 0 0 0 4-4V5a4 4 0 1 0-8 0v6a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 15a4 4 0 0 0 4-4V5a4 4 0 1 0-8 0v6a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y sc-taskbar.sca11y-talking #media-ptt {
+  background: var(--sc-bg) !important;
+  color: var(--sc-success-text) !important;
+  border: 3px solid var(--sc-success) !important;
+  box-shadow: inset 0 0 0 2px var(--sc-speaking-glow) !important;
+}
+html.sca11y sc-taskbar.sca11y-talking #media-ptt::before {
+  -webkit-mask: none;
+  mask: none;
+  width: 18px;
+  background-color: transparent;
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 1px 50%, 7.5px 50%, 14px 50%;
+  background-size: 3px 8px, 3px 14px, 3px 8px;
+  animation: sca11y-talkbars 0.5s ease-in-out infinite alternate;
+}
+@keyframes sca11y-talkbars {
+  from { background-size: 3px 8px, 3px 14px, 3px 8px; }
+  to { background-size: 3px 14px, 3px 6px, 3px 14px; }
+}
+html.sca11y sc-taskbar.sca11y-openmic #media-ptt {
+  background: var(--sc-bg-subtle) !important;
+  color: var(--sc-text-muted) !important;
+  border: 1px solid var(--sc-border) !important;
+  font-size: 0 !important;
+}
+html.sca11y sc-taskbar.sca11y-openmic #media-ptt::before {
+  display: none;
+}
+html.sca11y sc-taskbar.sca11y-openmic #media-ptt::after {
+  content: "Mic open · everyone can hear you";
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  letter-spacing: 0.01em;
+}
+html.sca11y.sca11y-reduce-motion sc-taskbar.sca11y-talking #media-ptt::before {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.sca11y sc-taskbar.sca11y-talking #media-ptt::before {
+    animation: none;
+  }
+}
+html.sca11y #media-openmic:has(input:focus-visible) {
+  outline: 3px solid var(--sc-focus) !important;
+  outline-offset: 2px;
 }
 html.sca11y #media-openmic > input {
-  accent-color: #ffffff !important;
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 !important;
+  opacity: 0;
+  cursor: pointer;
 }
 html.sca11y #media-loading {
   background: var(--sc-bg-muted) !important;
@@ -2185,9 +2957,9 @@ html.sca11y .privateMessages .unreadpm {
 }
 html.sca11y .closepm {
   visibility: visible !important;
-  width: 22px;
-  height: 22px;
-  line-height: 22px;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
   text-align: center;
   border-radius: var(--sc-radius);
   color: var(--sc-text-muted) !important;
@@ -2342,14 +3114,98 @@ html.sca11y .checkbox > span {
   color: var(--sc-text-muted) !important;
   font-size: var(--sc-fs-sm);
 }
+/* Promote (directory) and Upgrade (settings): a real call-to-action pill,
+   centred, white text forced on every descendant so no page rule can turn it
+   dark on blue, with a lift on hover and a visible focus ring. */
 html.sca11y .upgradebtn,
-html.sca11y .promotebtn {
-  background: var(--sc-primary) !important;
-  margin: 0.5rem 0 1rem 0 !important;
+html.sca11y .promotebtn,
+html.sca11y .wrapper .promotebtn,
+html.sca11y .wrapper .upgradebtn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: auto !important;
+  min-width: 12rem;
+  min-height: 44px;
+  margin: 0.5rem auto 0.25rem auto !important;
+  padding: 0.6rem 1.5rem !important;
+  background: linear-gradient(180deg, var(--sc-primary), var(--sc-primary-hover)) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--sc-primary-hover) !important;
+  border-radius: 999px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 18px rgba(11, 94, 215, 0.35) !important;
+  font-family: var(--sc-font) !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+  line-height: 1.3 !important;
+  text-decoration: none !important;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background-color 0.15s ease-in-out;
+}
+html.sca11y .promotebtn *,
+html.sca11y .upgradebtn * {
+  color: #ffffff !important;
+  text-decoration: none !important;
 }
 html.sca11y .upgradebtn:hover,
-html.sca11y .promotebtn:hover {
-  background: var(--sc-primary-hover) !important;
+html.sca11y .promotebtn:hover,
+html.sca11y .wrapper .promotebtn:hover,
+html.sca11y .wrapper .upgradebtn:hover {
+  background: linear-gradient(180deg, var(--sc-primary-hover), var(--sc-link-hover)) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 10px 24px rgba(11, 94, 215, 0.45) !important;
+}
+html.sca11y .upgradebtn:active,
+html.sca11y .promotebtn:active {
+  transform: none;
+}
+html.sca11y .promotebtn:focus-visible,
+html.sca11y .upgradebtn:focus-visible {
+  outline: 3px solid var(--sc-focus) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px var(--sc-bg) !important;
+}
+/* The "Promoted rooms" section ships with no rooms in it (the site keeps
+   that block commented out), so content.js hides the empty panel and moves
+   the Promote button under the "Public rooms" heading. */
+html.sca11y .wrapper.sca11y-empty-promoted {
+  display: none !important;
+}
+/* Heading panel that holds the Promote CTA: heading, then the pill under it */
+html.sca11y .wrapper:has(> .promotebtn) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 0.75rem !important;
+}
+html.sca11y .wrapper:has(> .promotebtn) > h1 {
+  width: 100%;
+}
+html.sca11y .promotebtn::after {
+  content: "your room to the top of the directory";
+  font-weight: 500 !important;
+  opacity: 0.95;
+}
+@media (max-width: 480px) {
+  html.sca11y .promotebtn,
+  html.sca11y .wrapper .promotebtn {
+    flex-wrap: wrap;
+    row-gap: 0;
+    max-width: 100%;
+    padding: 0.5rem 1.25rem !important;
+  }
+  html.sca11y .promotebtn::after {
+    flex-basis: 100%;
+    font-size: var(--sc-fs-sm) !important;
+    content: "your room to the top";
+  }
+}
+html.sca11y .room-wrap .details:empty {
+  display: none !important;
 }
 html.sca11y .file > label {
   height: auto !important;
@@ -2482,9 +3338,782 @@ html.sca11y .modaction,
 html.sca11y .user-menu-item.modaction {
   background: var(--sc-bg-subtle) !important;
 }
+/* Kick, Ban and Close Broadcast read as destructive: red text, red on hover. */
+html.sca11y .user-menu-link.sca11y-destructive,
+html.sca11y .video-menu-link.sca11y-destructive {
+  color: var(--sc-danger-text) !important;
+}
+html.sca11y .user-menu-link.sca11y-destructive:hover,
+html.sca11y .video-menu-link.sca11y-destructive:hover,
+html.sca11y .user-menu-link.sca11y-destructive:focus-visible,
+html.sca11y .video-menu-link.sca11y-destructive:focus-visible {
+  background: var(--sc-danger) !important;
+  color: #ffffff !important;
+}
+/* The volume row in the camera menu holds a slider, not an action. */
+html.sca11y .video-menu-link[data-action="volume"] {
+  cursor: default;
+}
+html.sca11y .video-menu-link[data-action="volume"]:hover {
+  background: transparent !important;
+}
 html.sca11y .volumebar-video,
 html.sca11y .volumebarwrap-video {
   color: var(--sc-text) !important;
+}
+/* Volume rows (camera menu, and room volume in Options): the site lays the
+   slider absolutely over its 20px speaker icon. Put the icon first and the
+   slider beside it, filling the row. The icon area stays part of the bar,
+   so clicking it does what it did before.
+   The site's speaker is a white image, invisible on a light menu; a filter
+   would invert the slider too. Draw the speaker in the text colour instead,
+   so it follows light, dark and high contrast. */
+html.sca11y .volumebar-video,
+html.sca11y .volumebar {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  width: auto !important;
+  height: 28px !important;
+  padding-left: 30px;
+  box-sizing: border-box;
+  background: none !important;
+}
+html.sca11y .volumebar-video::before,
+html.sca11y .volumebar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  background: var(--sc-text);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+@media (forced-colors: active) {
+  html.sca11y .volumebar-video::before,
+  html.sca11y .volumebar::before {
+    background: CanvasText;
+  }
+}
+html.sca11y .volumebar {
+  margin: 4px 12px !important;
+}
+html.sca11y .volumebarwrap-video,
+html.sca11y .volumebarwrap {
+  position: static !important;
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  width: auto !important;
+  min-width: 0;
+}
+html.sca11y #video-volume,
+html.sca11y .RoomVolume {
+  width: 100% !important;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. Layout at every size
+   The site fixes the chat at 500px and the user list at 210px, then below
+   652px crams both side by side into the bottom 30% of the screen (165px of
+   chat on a phone). Let the panels scale with the window, and on phones put
+   the chat under the video at full width with the user list as a drawer.
+   -------------------------------------------------------------------------- */
+
+/* Users button (content.js puts it first in the taskbar) and drawer backdrop:
+   hidden until a layout below needs them. */
+html.sca11y:not(.sca11y-compat) .sca11y-users-btn {
+  display: none;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 31px;
+  min-width: 44px;
+  padding: 0 10px !important;
+  background: var(--sc-secondary) !important;
+  color: #ffffff !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--sc-radius) !important;
+  font: 700 var(--sc-fs-sm) / 1 var(--sc-font) !important;
+  cursor: pointer;
+}
+html.sca11y:not(.sca11y-compat) .sca11y-users-btn:hover {
+  background: var(--sc-secondary-hover) !important;
+}
+html.sca11y:not(.sca11y-compat) .sca11y-users-btn[aria-expanded="true"] {
+  background: var(--sc-primary) !important;
+}
+html.sca11y:not(.sca11y-compat) .sca11y-users-icon {
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.7 0-8 1.3-8 4v2h9v-2c0-1.1.6-2.3 1.7-3.2A11 11 0 0 0 8 13zm8 0c-.3 0-.7 0-1 .1 1.3.9 2 2.2 2 3.9v3h6v-3c0-2.7-4.3-4-7-4z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.7 0-8 1.3-8 4v2h9v-2c0-1.1.6-2.3 1.7-3.2A11 11 0 0 0 8 13zm8 0c-.3 0-.7 0-1 .1 1.3.9 2 2.2 2 3.9v3h6v-3c0-2.7-4.3-4-7-4z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y:not(.sca11y-compat) .sca11y-users-backdrop {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Wide screens: side panels shrink with the window instead of leaving a
+   1024px laptop 314px for video. No !important on the widths: the site's
+   drag-to-resize handles write an inline width, and that must still win. */
+@media (min-width: 653px) {
+  /* flex-shrink 0: as flex items both panels were being squeezed below their
+     stated width whenever the window got narrow, so the width (ours or the
+     user's drag-resized inline one) is now the width you get. */
+  html.sca11y:not(.sca11y-compat) sc-chat {
+    width: clamp(240px, 30vw, 500px);
+    flex: 0 0 auto !important;
+  }
+  html.sca11y:not(.sca11y-compat) sc-userlist {
+    width: clamp(160px, 16vw, 210px);
+    flex: 0 0 auto !important;
+  }
+  html.sca11y:not(.sca11y-compat) sc-videolist {
+    flex: 1 1 auto !important;
+    min-width: 0;
+  }
+  html.sca11y:not(.sca11y-compat) #userlist {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
+/* Touch screens of any size: taller taskbar so every control is a real
+   thumb target (the video area is sized to leave room for it). */
+@media (pointer: coarse) {
+  html.sca11y:not(.sca11y-compat) sc-taskbar {
+    height: 44px !important;
+  }
+  html.sca11y:not(.sca11y-compat) #videos-content {
+    height: calc(100% - 119px) !important;
+  }
+  html.sca11y:not(.sca11y-compat) #media-broadcast,
+  html.sca11y:not(.sca11y-compat) #media-stop,
+  html.sca11y:not(.sca11y-compat) #media-ptt,
+  html.sca11y:not(.sca11y-compat) #media-screen,
+  html.sca11y:not(.sca11y-compat) #media-settings,
+  html.sca11y:not(.sca11y-compat) #media-loading,
+  html.sca11y:not(.sca11y-compat) #media-openmic:not(.hidden),
+  html.sca11y:not(.sca11y-compat) .sca11y-users-btn {
+    height: 40px !important;
+    font-size: var(--sc-fs) !important;
+  }
+  html.sca11y:not(.sca11y-compat) #media-screen,
+  html.sca11y:not(.sca11y-compat) #media-settings {
+    width: 48px !important;
+  }
+}
+
+/* Phones and short windows: the user list becomes a drawer over the room,
+   opened from the Users button in the taskbar. z-index 3 puts it above the
+   chat (2) and below the site's dialogs (sc-modal, also 3 but later in the
+   DOM) and context menus (10). */
+@media (max-width: 652px), (max-height: 500px) and (max-width: 900px) {
+  html.sca11y:not(.sca11y-compat) .sca11y-users-btn {
+    display: inline-flex;
+  }
+  html.sca11y:not(.sca11y-compat).sca11y-users-open .sca11y-users-backdrop {
+    display: block;
+  }
+  html.sca11y:not(.sca11y-compat) sc-userlist {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    height: 100% !important;
+    width: min(300px, 86vw) !important;
+    display: block !important;
+    z-index: 3 !important;
+    transform: translateX(-102%);
+    visibility: hidden;
+    transition: transform 0.2s ease-out, visibility 0.2s;
+  }
+  html.sca11y:not(.sca11y-compat).sca11y-users-open sc-userlist {
+    transform: none;
+    visibility: visible;
+    box-shadow: var(--sc-shadow-lg);
+  }
+  html.sca11y:not(.sca11y-compat) #userlist {
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
+  html.sca11y:not(.sca11y-compat) sc-userlist .resizeuser {
+    display: none !important;
+  }
+  html.sca11y:not(.sca11y-compat) #modal {
+    max-width: calc(100% - 24px) !important;
+    margin: 12px auto 0 auto !important;
+  }
+  html.sca11y:not(.sca11y-compat) #modal > span {
+    max-height: 70vh !important;
+  }
+}
+@media (max-height: 500px) and (min-width: 653px) and (max-width: 900px) {
+  html.sca11y:not(.sca11y-compat) sc-chat {
+    width: clamp(220px, 38vw, 500px);
+  }
+}
+
+/* Phones (portrait): video on top, chat full width underneath. The taskbar
+   wraps to two rows: the small controls on top, Talk (or Start Broadcast)
+   full width below so it is the easiest thing on the screen to hit. */
+@media (max-width: 652px) {
+  html.sca11y:not(.sca11y-compat) #videos-content {
+    height: calc(56% - 165px) !important;
+    overflow-y: auto;
+  }
+  html.sca11y:not(.sca11y-compat) .sca11y-room-title {
+    display: inline-block;
+    max-width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  html.sca11y:not(.sca11y-compat) .videos-items {
+    align-content: safe center;
+  }
+  html.sca11y:not(.sca11y-compat) sc-taskbar {
+    bottom: 44% !important;
+    width: 100% !important;
+    height: 90px !important;
+    flex-wrap: wrap;
+    align-content: stretch;
+  }
+  html.sca11y:not(.sca11y-compat) #media-broadcast,
+  html.sca11y:not(.sca11y-compat) #media-stop,
+  html.sca11y:not(.sca11y-compat) #media-ptt,
+  html.sca11y:not(.sca11y-compat) #media-screen,
+  html.sca11y:not(.sca11y-compat) #media-settings,
+  html.sca11y:not(.sca11y-compat) #media-loading,
+  html.sca11y:not(.sca11y-compat) #media-openmic:not(.hidden),
+  html.sca11y:not(.sca11y-compat) .sca11y-users-btn {
+    height: 40px !important;
+    font-size: var(--sc-fs) !important;
+  }
+  html.sca11y:not(.sca11y-compat) #media-broadcast,
+  html.sca11y:not(.sca11y-compat) #media-ptt,
+  html.sca11y:not(.sca11y-compat) #media-loading {
+    order: 10;
+    flex: 1 1 100% !important;
+  }
+  html.sca11y:not(.sca11y-compat) #media-stop {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 72px;
+  }
+  html.sca11y:not(.sca11y-compat) #media-openmic:not(.hidden) {
+    flex: 1 1 auto !important;
+  }
+  html.sca11y:not(.sca11y-compat) sc-chat {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    height: 44% !important;
+    display: block !important;
+  }
+  html.sca11y:not(.sca11y-compat) #chat-wrapper {
+    width: 100% !important;
+    border-left: none !important;
+    border-top: 1px solid var(--sc-border) !important;
+  }
+  html.sca11y:not(.sca11y-compat) sc-chat .resizechat {
+    display: none !important;
+  }
+  html.sca11y:not(.sca11y-compat) #input > textarea {
+    height: 44px !important;
+  }
+  /* The site hides message avatars at this width; drop the space kept for them. */
+  html.sca11y:not(.sca11y-compat) #chat-content > .message.common {
+    padding-left: 4px !important;
+  }
+  html.sca11y:not(.sca11y-compat) .header,
+  html.sca11y:not(.sca11y-compat) #userlist {
+    width: 100% !important;
+  }
+  html.sca11y:not(.sca11y-compat) .dropdown-content {
+    right: 0;
+    left: auto !important;
+    max-width: calc(100vw - 16px);
+  }
+}
+/* Phones (landscape): chat beside the video instead of under it. */
+@media (max-width: 652px) and (orientation: landscape) {
+  html.sca11y:not(.sca11y-compat) #videos-content {
+    height: calc(100% - 165px) !important;
+    width: 54% !important;
+  }
+  html.sca11y:not(.sca11y-compat) sc-taskbar {
+    bottom: 0 !important;
+    width: 54% !important;
+  }
+  html.sca11y:not(.sca11y-compat) sc-videolist > .header {
+    width: 54% !important;
+  }
+  html.sca11y:not(.sca11y-compat) sc-chat {
+    top: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    right: 0 !important;
+    width: 46% !important;
+    height: 100% !important;
+  }
+  html.sca11y:not(.sca11y-compat) #chat-wrapper {
+    border-top: none !important;
+    border-left: 1px solid var(--sc-border) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. The room in glass
+   Same look as the directory: a soft gradient behind translucent panels.
+   Chat bubbles, user rows and badges stay solid, so the chat-colour contrast
+   fixer still measures against a real colour.
+   -------------------------------------------------------------------------- */
+html.sca11y.sca11y-glass:has(#room),
+html.sca11y.sca11y-glass:has(#room) body {
+  background: var(--sc-page-bg) !important;
+  background-attachment: fixed !important;
+}
+html.sca11y.sca11y-glass #room,
+html.sca11y.sca11y-glass #room-content,
+html.sca11y.sca11y-glass #videos-content,
+html.sca11y.sca11y-glass #videos {
+  background: transparent !important;
+}
+html.sca11y.sca11y-glass #userlist,
+html.sca11y.sca11y-glass #chat-wrapper,
+html.sca11y.sca11y-glass sc-videolist > .header,
+html.sca11y.sca11y-glass sc-taskbar {
+  background: var(--sc-glass) !important;
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  border-color: var(--sc-glass-border) !important;
+}
+html.sca11y.sca11y-glass sc-videolist > .header.roomdesc {
+  background: var(--sc-glass-strong) !important;
+}
+html.sca11y #userlist .room-name,
+html.sca11y .sca11y-room-title {
+  font-family: var(--sc-font-display) !important;
+  letter-spacing: 0.03em;
+}
+html.sca11y #userlist .room-name {
+  font-size: calc(15px * var(--sc-scale)) !important;
+  font-weight: 700 !important;
+}
+
+/* Join, connecting and permission dialogs: a compact card instead of a
+   half-screen bar saying "VERIFY..." above a button saying "VERIFY". */
+html.sca11y #modal[data-sca11y-kind] {
+  max-width: min(440px, calc(100% - 32px)) !important;
+  min-width: 0 !important;
+  border-radius: 20px !important;
+  background: var(--sc-glass-strong) !important;
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  box-shadow: inset 0 1px 0 var(--sc-glass-highlight), 0 0 0 1px var(--sc-glass-edge), var(--sc-shadow-lg) !important;
+  text-align: center;
+}
+html.sca11y #modal[data-sca11y-kind] > #title {
+  background: transparent !important;
+  border-bottom: none !important;
+  padding: 1.5rem 1.5rem 0.25rem 1.5rem !important;
+}
+html.sca11y #modal[data-sca11y-kind] > #title > p {
+  font-family: var(--sc-font-display) !important;
+  font-size: calc(22px * var(--sc-scale)) !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  overflow-wrap: anywhere;
+}
+html.sca11y #modal[data-sca11y-kind] > span {
+  padding: 0.25rem 1.5rem 1.5rem 1.5rem !important;
+  color: var(--sc-text-muted) !important;
+  text-align: center !important;
+  font-size: var(--sc-fs) !important;
+  line-height: 1.55 !important;
+}
+html.sca11y .sca11y-join-mark {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 0.75rem auto;
+  border-radius: 18px;
+  background: var(--sc-bg-muted) var(--sc-logo-url, none) center 30% / cover no-repeat;
+  box-shadow: 0 0 0 1px var(--sc-glass-edge), var(--sc-shadow);
+}
+html.sca11y .sca11y-join-note {
+  margin: 0 0 1.25rem 0 !important;
+  color: var(--sc-text-muted) !important;
+  font-weight: 400 !important;
+}
+html.sca11y #modal #interact {
+  width: 100% !important;
+  min-height: 48px;
+  border-radius: 999px !important;
+  font-size: var(--sc-fs-md) !important;
+  font-weight: 700 !important;
+  background: linear-gradient(180deg, var(--sc-primary), var(--sc-primary-hover)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 6px 18px rgba(11, 94, 215, 0.3) !important;
+}
+html.sca11y #modal[data-sca11y-kind="connecting"] .lds-roller {
+  margin: 0.5rem auto 0 auto;
+}
+
+/* Narrow phones (320 to 380px): the broadcast controls fit on one row
+   above Talk, and the page footer gets room for its two lines. */
+/* Sized by the control bar's own width, so this also applies when the bar
+   is narrow for other reasons (phone landscape gives it 54% of the screen). */
+html.sca11y:not(.sca11y-compat) sc-taskbar {
+  container-type: inline-size;
+  container-name: sca11y-taskbar;
+}
+@container sca11y-taskbar (max-width: 400px) {
+  html.sca11y:not(.sca11y-compat) sc-taskbar > * {
+    margin: 0 !important;
+  }
+  html.sca11y:not(.sca11y-compat) .sca11y-users-btn {
+    min-width: 44px;
+    padding: 0 6px !important;
+  }
+  html.sca11y:not(.sca11y-compat) #media-screen,
+  html.sca11y:not(.sca11y-compat) #media-settings {
+    width: 40px !important;
+  }
+  html.sca11y:not(.sca11y-compat) #media-stop {
+    min-width: 60px !important;
+    padding: 0 8px !important;
+  }
+  html.sca11y:not(.sca11y-compat) #media-openmic:not(.hidden) {
+    padding: 0 8px !important;
+    gap: 4px;
+    font-size: calc(12px * var(--sc-scale)) !important;
+  }
+}
+@media (max-width: 420px) {
+  html.sca11y .footer {
+    height: 58px !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+  }
+  html.sca11y body > .content {
+    bottom: 58px !important;
+    height: calc(100% - 114px) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Back to top (#scrollup on the room directory). The site shows it once
+   the page scrolls, and scrolls back on "pointerup" only when the button
+   itself is the target, so the arrow is drawn on the button, never in a
+   child element. A frosted round button above the footer; the site's bare
+   triangle character is hidden.
+   -------------------------------------------------------------------------- */
+html.sca11y body > .content {
+  scroll-behavior: smooth; /* the reduce-motion rules above turn this off */
+}
+html.sca11y #scrollup {
+  position: fixed !important;
+  right: max(16px, env(safe-area-inset-right)) !important;
+  bottom: calc(44px + 16px + env(safe-area-inset-bottom)) !important;
+  z-index: 40 !important;
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--sc-glass-border) !important;
+  border-radius: 50% !important;
+  background: var(--sc-glass) !important;
+  -webkit-backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sc-glass-blur)) saturate(160%);
+  box-shadow: inset 0 1px 0 var(--sc-glass-edge), var(--sc-shadow-lg) !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  text-shadow: none !important;
+  cursor: pointer;
+  transition: transform 0.15s ease-out, background-color 0.15s ease-out, border-color 0.15s ease-out, opacity 0.2s ease-out;
+}
+html.sca11y #scrollup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 22px;
+  height: 22px;
+  background: var(--sc-text);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4.6 4.3 12.3l1.4 1.4L11 8.4V20h2V8.4l5.3 5.3 1.4-1.4z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4.6 4.3 12.3l1.4 1.4L11 8.4V20h2V8.4l5.3 5.3 1.4-1.4z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+@media (hover: hover) {
+  html.sca11y #scrollup:hover {
+    background: var(--sc-primary) !important;
+    border-color: var(--sc-primary) !important;
+    transform: translateY(-2px);
+  }
+  html.sca11y #scrollup:hover::before {
+    background: #ffffff;
+  }
+}
+html.sca11y #scrollup:active {
+  transform: scale(0.94);
+}
+html.sca11y #scrollup:focus-visible {
+  outline: 3px solid var(--sc-focus) !important;
+  outline-offset: 3px !important;
+}
+/* Fade and rise in when the site switches it from display: none. */
+@starting-style {
+  html.sca11y #scrollup {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@media (max-width: 420px) {
+  html.sca11y #scrollup {
+    right: max(12px, env(safe-area-inset-right)) !important;
+    bottom: calc(58px + 12px + env(safe-area-inset-bottom)) !important;
+  }
+}
+@media (forced-colors: active) {
+  html.sca11y #scrollup {
+    border: 2px solid ButtonText !important;
+  }
+  html.sca11y #scrollup::before {
+    background: ButtonText;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. The on-page "Display" button (scripts/quick-settings.js)
+   -------------------------------------------------------------------------- */
+html.sca11y .sca11y-qs {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+html.sca11y .sca11y-qs-nav {
+  margin-left: auto;
+  padding-left: 8px;
+}
+/* Signed in: Display sits just before the account button. */
+html.sca11y .sca11y-qs-nav + .navbar-container {
+  margin-left: 8px;
+}
+html.sca11y .sca11y-qs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px 0 10px;
+  border: 1px solid var(--sc-border);
+  border-radius: 999px;
+  background: var(--sc-bg-muted);
+  color: var(--sc-text);
+  font: 600 var(--sc-fs-sm) / 1 var(--sc-font);
+  white-space: nowrap;
+  cursor: pointer;
+}
+html.sca11y .sca11y-qs-btn::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2v16a8 8 0 0 1 0-16z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2v16a8 8 0 0 1 0-16z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html.sca11y .sca11y-qs-btn:hover,
+html.sca11y .sca11y-qs-btn[aria-expanded="true"] {
+  background: var(--sc-primary-subtle-hover);
+  border-color: var(--sc-primary);
+}
+@container sca11y-roombar (max-width: 560px) {
+  html.sca11y .sca11y-qs-btn {
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+  html.sca11y .sca11y-qs-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+html.sca11y .sca11y-qs-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  width: 290px;
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
+  padding: 14px 16px 12px 16px;
+  border: 1px solid var(--sc-border);
+  border-radius: 16px;
+  background: var(--sc-bg);
+  color: var(--sc-text);
+  box-shadow: var(--sc-shadow-lg);
+  text-align: left;
+  font: 400 var(--sc-fs) / 1.45 var(--sc-font);
+}
+html.sca11y .sca11y-qs-panel[hidden] {
+  display: none;
+}
+html.sca11y .sca11y-qs-title {
+  margin: 0 0 10px 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  color: var(--sc-text) !important;
+  font: 700 calc(16px * var(--sc-scale)) / 1.3 var(--sc-font-display) !important;
+  text-align: left !important;
+}
+html.sca11y .sca11y-qs-group {
+  margin: 0 0 12px 0;
+  padding: 0;
+  border: none;
+  min-width: 0;
+}
+html.sca11y .sca11y-qs-group legend {
+  margin: 0 0 4px 0;
+  padding: 0;
+  color: var(--sc-text-muted);
+  font-size: var(--sc-fs-sm);
+  font-weight: 600;
+}
+html.sca11y .sca11y-qs-seg {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--sc-border);
+  border-radius: 999px;
+  background: var(--sc-bg-subtle);
+}
+html.sca11y .sca11y-qs-seg label {
+  position: relative;
+  display: block;
+  margin: 0 !important;
+  cursor: pointer;
+}
+html.sca11y .sca11y-qs-seg input {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  opacity: 0;
+  cursor: pointer;
+}
+html.sca11y .sca11y-qs-seg span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  border-radius: 999px;
+  color: var(--sc-text);
+  font-weight: 600;
+  font-size: var(--sc-fs-sm);
+}
+html.sca11y .sca11y-qs-seg input:checked + span {
+  background: var(--sc-primary);
+  color: #ffffff;
+  box-shadow: var(--sc-shadow);
+}
+html.sca11y .sca11y-qs-seg input:focus-visible + span {
+  outline: 3px solid var(--sc-focus);
+  outline-offset: 1px;
+}
+html.sca11y .sca11y-qs-switch {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 8px 0 !important;
+  color: var(--sc-text) !important;
+  font-size: var(--sc-fs) !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+}
+html.sca11y .sca11y-qs-switch span {
+  order: 1;
+}
+html.sca11y .sca11y-qs-switch input[type="checkbox"] {
+  order: 2;
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  position: relative;
+  width: 40px !important;
+  height: 22px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  border: 1px solid var(--sc-toggle-off);
+  border-radius: 22px;
+  background: var(--sc-toggle-off);
+  cursor: pointer;
+}
+html.sca11y .sca11y-qs-switch input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.15s;
+}
+html.sca11y .sca11y-qs-switch input[type="checkbox"]:checked {
+  background: var(--sc-success);
+  border-color: var(--sc-success);
+}
+html.sca11y .sca11y-qs-switch input[type="checkbox"]:checked::before {
+  transform: translateX(18px);
+}
+html.sca11y .sca11y-qs-more {
+  display: block;
+  width: 100%;
+  min-height: 36px;
+  margin: 10px 0 0 0;
+  border: 1px solid var(--sc-primary);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sc-link);
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  cursor: pointer;
+}
+html.sca11y .sca11y-qs-more:hover {
+  background: var(--sc-primary);
+  color: #ffffff;
+}
+html.sca11y .sca11y-qs-hint {
+  margin: 8px 0 0 0 !important;
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-xs) !important;
+  line-height: 1.45 !important;
 }
 
 /* Misc */

@@ -43,6 +43,7 @@ function show(name) {
 const q = new URLSearchParams(location.search);
 if (q.get("tab")) show(q.get("tab"));
 if (q.has("menu")) document.getElementById("accdrop").classList.add("show");
-document.getElementById("accbtn").addEventListener("click", () => document.getElementById("accdrop").classList.toggle("show"));
+// nav-bar.js: the account menu toggles on pointerup of #accbtn.
+document.getElementById("accbtn").addEventListener("pointerup", () => document.getElementById("accdrop").classList.toggle("show"), { passive: true });
 </script>
 </body></html>

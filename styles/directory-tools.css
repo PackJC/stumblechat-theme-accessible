@@ -1,0 +1,382 @@
+/* StumbleChat Accessible — directory tools (see scripts/directory-tools.js) */
+
+/* ------------------------------------------------------------------------
+   Toolbar under "Public rooms": search, count, recent rooms.
+   ------------------------------------------------------------------------ */
+html.sca11y .sca11y-dirbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 14px;
+  width: 100%;
+  max-width: 980px;
+  margin: 12px auto 0 auto;
+  text-align: left;
+}
+html.sca11y .sca11y-dir-search {
+  position: relative;
+  flex: 1 1 280px;
+  max-width: 460px;
+}
+html.sca11y .sca11y-dir-search svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  fill: var(--sc-text-muted);
+  pointer-events: none;
+}
+html.sca11y .sca11y-dir-search input {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 16px 0 40px;
+  border: 1px solid var(--sc-border-strong);
+  border-radius: 999px;
+  background: var(--sc-bg);
+  color: var(--sc-text);
+  font: 400 var(--sc-fs-md) var(--sc-font);
+}
+html.sca11y .sca11y-dir-search input::placeholder {
+  color: var(--sc-placeholder);
+  opacity: 1;
+}
+html.sca11y .sca11y-dir-search input:focus-visible {
+  outline: none !important;
+  border-color: var(--sc-focus) !important;
+  box-shadow: 0 0 0 0.25rem var(--sc-focus-ring) !important;
+}
+@media (max-width: 420px) {
+  html.sca11y .sca11y-dir-search {
+    flex-basis: 100%;
+  }
+}
+html.sca11y .sca11y-dir-count {
+  flex: 1 1 100%;
+  margin: 0 !important;
+  text-align: center;
+  color: var(--sc-text-muted) !important;
+  font-size: var(--sc-fs-sm) !important;
+}
+/* Recently visited */
+html.sca11y .sca11y-recent {
+  flex: 1 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 10px;
+}
+html.sca11y .sca11y-recent[hidden] {
+  display: none;
+}
+html.sca11y .sca11y-recent-title {
+  margin: 0 !important;
+  color: var(--sc-text-muted) !important;
+  font: 600 var(--sc-fs-sm) var(--sc-font) !important;
+  letter-spacing: 0 !important;
+  padding: 0 !important;
+}
+html.sca11y .sca11y-recent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+html.sca11y .sca11y-recent-list > li {
+  flex: 0 0 auto;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  font-size: inherit !important;
+}
+html.sca11y .sca11y-recent-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--sc-border);
+  border-radius: 999px;
+  background: var(--sc-bg);
+  color: var(--sc-link) !important;
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  text-decoration: none !important;
+}
+html.sca11y .sca11y-recent-chip:hover {
+  background: var(--sc-primary-subtle-hover);
+  border-color: var(--sc-primary);
+}
+
+/* Hidden rooms, in plain sight: a row of chips under the toolbar. */
+html.sca11y .sca11y-hidden-row {
+  flex: 1 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 10px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: var(--sc-bg-subtle);
+  border: 1px solid var(--sc-border);
+}
+html.sca11y .sca11y-hidden-row.sca11y-hr-empty {
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+}
+html.sca11y .sca11y-hr-label {
+  color: var(--sc-text-muted);
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+}
+html.sca11y .sca11y-hr-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+html.sca11y .sca11y-hr-list > li {
+  flex: 0 0 auto;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+}
+html.sca11y .sca11y-hr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 8px 0 12px;
+  border: 1px solid var(--sc-border-strong);
+  border-radius: 999px;
+  background: var(--sc-bg);
+  color: var(--sc-text);
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  cursor: pointer;
+}
+html.sca11y .sca11y-hr-chip span {
+  max-width: 14em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: line-through;
+  text-decoration-color: var(--sc-text-muted);
+}
+html.sca11y .sca11y-hr-chip svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+html.sca11y .sca11y-hr-chip:hover,
+html.sca11y .sca11y-hr-chip:focus-visible {
+  background: var(--sc-primary-subtle-hover);
+  border-color: var(--sc-primary);
+}
+html.sca11y .sca11y-hr-chip:hover span {
+  text-decoration: none;
+}
+html.sca11y .sca11y-hr-link {
+  min-height: 32px;
+  padding: 0 6px;
+  border: none;
+  background: none;
+  color: var(--sc-link);
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  text-decoration: underline;
+  cursor: pointer;
+}
+html.sca11y .sca11y-hidden-row .sca11y-kw-form {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin: 0 !important;
+}
+html.sca11y .sca11y-hidden-row .sca11y-kw-form label {
+  margin: 0 !important;
+  color: var(--sc-text) !important;
+  font: 600 var(--sc-fs-sm) var(--sc-font) !important;
+}
+html.sca11y .sca11y-hr-add {
+  height: 36px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--sc-primary);
+  color: #ffffff;
+  font: 600 var(--sc-fs-sm) var(--sc-font);
+  cursor: pointer;
+}
+html.sca11y .sca11y-hr-add:hover {
+  background: var(--sc-primary-hover);
+}
+
+/* Undo notice after hiding a room */
+html.sca11y .sca11y-undo {
+  position: fixed;
+  left: 50%;
+  bottom: 64px;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 10px 10px 18px;
+  border-radius: 999px;
+  background: #212529;
+  color: #ffffff;
+  box-shadow: var(--sc-shadow-lg);
+  font: 500 var(--sc-fs) var(--sc-font);
+}
+html.sca11y .sca11y-undo[hidden] {
+  display: none;
+}
+html.sca11y .sca11y-undo button {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  background: transparent;
+  color: #ffffff;
+  font: 700 var(--sc-fs-sm) var(--sc-font);
+  cursor: pointer;
+}
+html.sca11y .sca11y-undo button:hover {
+  background: #ffffff;
+  color: #212529;
+}
+html.sca11y .sca11y-undo button:focus-visible {
+  outline: 3px solid #6ea8fe !important;
+  outline-offset: 2px !important;
+}
+
+/* ------------------------------------------------------------------------
+   Favourite and hide buttons on each card.
+   ------------------------------------------------------------------------ */
+/* On the preview's top-right corner, so the room name keeps its full width. */
+html.sca11y .thumbnail {
+  position: relative;
+}
+html.sca11y .sca11y-card-ctl {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  gap: 4px;
+}
+html.sca11y .sca11y-card-ctl button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(33, 37, 41, 0.78);
+  color: #ffffff;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+html.sca11y .sca11y-card-ctl button svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+html.sca11y .sca11y-card-ctl button:hover {
+  background: rgba(11, 94, 215, 0.95);
+}
+html.sca11y .sca11y-card-ctl button:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 1px !important;
+  box-shadow: 0 0 0 5px #0b5ed7 !important;
+}
+html.sca11y .sca11y-card-ctl .sca11y-fav[aria-pressed="true"] {
+  background: #ffc107;
+  border-color: #ffc107;
+  color: #212529;
+}
+/* Favourite and hide stay out of the way until the card is hovered or
+   reached with the keyboard (favourites keep their gold frame as the
+   mark). :focus-visible, not :focus-within: a mouse click leaves focus on
+   the star, and the buttons must still fade once the pointer leaves. On
+   touch screens, which cannot hover, they are always shown. */
+html.sca11y .sca11y-card-ctl button {
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+html.sca11y .room-wrap:hover .sca11y-card-ctl button,
+html.sca11y .room-wrap:has(:focus-visible) .sca11y-card-ctl button,
+html.sca11y .sca11y-hidden-room .sca11y-card-ctl .sca11y-hide {
+  opacity: 1;
+}
+@media (pointer: coarse) {
+  html.sca11y .sca11y-card-ctl button {
+    opacity: 1;
+  }
+}
+/* Favourites get a gold frame */
+html.sca11y .sca11y-fav-room .room-wrap {
+  box-shadow: inset 0 1px 0 var(--sc-glass-highlight), 0 0 0 2px #ffc107, var(--sc-glass-shadow) !important;
+}
+/* Filtered out by search, hidden, or muted by keyword */
+html.sca11y .publicrooms > .centered > .grid-item.sca11y-filtered {
+  display: none !important;
+}
+html.sca11y .grid-item.sca11y-hidden-room .room-wrap {
+  opacity: 0.55;
+}
+html.sca11y .sca11y-dir-none {
+  margin: 24px auto !important;
+  max-width: 520px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: var(--sc-glass-strong);
+  color: var(--sc-text) !important;
+  text-align: center;
+  font-size: var(--sc-fs-md) !important;
+}
+
+/* ------------------------------------------------------------------------
+   The site's own messages ("rate limits", "something went wrong") as cards.
+   ------------------------------------------------------------------------ */
+html.sca11y .publicrooms > h1.sca11y-dir-status {
+  display: block;
+  max-width: 560px;
+  margin: 24px auto !important;
+  padding: 16px 20px !important;
+  border-radius: 16px !important;
+  font: 500 var(--sc-fs-md) / 1.5 var(--sc-font) !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  border: 1px solid transparent !important;
+}
+html.sca11y .publicrooms > h1.sca11y-dir-warn {
+  background: var(--sc-alert-warn-bg) !important;
+  color: var(--sc-alert-warn-text) !important;
+  border-color: var(--sc-alert-warn-border) !important;
+}
+html.sca11y .publicrooms > h1.sca11y-dir-error {
+  background: var(--sc-alert-danger-bg) !important;
+  color: var(--sc-alert-danger-text) !important;
+  border-color: var(--sc-alert-danger-border) !important;
+}
+html.sca11y .publicrooms > h1.sca11y-dir-info {
+  background: var(--sc-glass-strong) !important;
+  color: var(--sc-text) !important;
+}
